@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-hozen.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-hozen.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-hozen.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="baidu-site-verification" content="code-LldkZLajw">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Muse","version":"8.5.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="思路   插入排序的基本思路是，每次将一个待排序的记录按照其关键码的大小插入到已经排好序的有序序列中，直到记录全部有序。 ## 直接排序   直接排序是思路最简单直接的插入排序，类似我们玩扑克牌时整理纸牌的过程。   比如我们按大小顺序排列以下纸牌（数字） 1K 10 J 2 4 A 4 3 5 Q 2   首先，我们以第一张牌为一个有序序列，然后将第二张牌插入到该有序序列的合适位置： 110">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序算法（一）——插入排序（直接插入+希尔排序）">
+<meta property="og:url" content="http://github.com/hooozen/archives/11/index.html">
+<meta property="og:site_name" content="李浩然的博客">
+<meta property="og:description" content="思路   插入排序的基本思路是，每次将一个待排序的记录按照其关键码的大小插入到已经排好序的有序序列中，直到记录全部有序。 ## 直接排序   直接排序是思路最简单直接的插入排序，类似我们玩扑克牌时整理纸牌的过程。   比如我们按大小顺序排列以下纸牌（数字） 1K 10 J 2 4 A 4 3 5 Q 2   首先，我们以第一张牌为一个有序序列，然后将第二张牌插入到该有序序列的合适位置： 110">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-01T09:33:49.000Z">
+<meta property="article:modified_time" content="2021-04-03T05:28:21.345Z">
+<meta property="article:author" content="李浩然">
+<meta property="article:tag" content="直接插入排序">
+<meta property="article:tag" content="希尔排序">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://github.com/hooozen/archives/11/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://github.com/hooozen/archives/11/","path":"archives/11/","title":"排序算法（一）——插入排序（直接插入+希尔排序）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>排序算法（一）——插入排序（直接插入+希尔排序） | 李浩然的博客</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">李浩然的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">痛饮狂歌空度日</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-friends"><a href="/friends/" rel="section"><i class="link fa-fw"></i>friends</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.0.1.</span> <span class="nav-text">算法分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.0.2.</span> <span class="nav-text">代码示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">希尔排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90-1"><span class="nav-number">2.0.1.</span> <span class="nav-text">算法分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.0.2.</span> <span class="nav-text">代码示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">李浩然</p>
+  <div class="site-description" itemprop="description">半醉半醒日复日，花开花落年复年</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hooozen" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hooozen"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hozen@live.com" title="E-Mail → mailto:hozen@live.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://codepen.io/Hozen/" title="CodePen → https:&#x2F;&#x2F;codepen.io&#x2F;Hozen&#x2F;" rel="noopener" target="_blank"><i class="codepen fa-fw"></i>CodePen</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Accenzer" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;Accenzer" rel="noopener" target="_blank"><i class="weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://oathkeeper.hozen.site/" title="http:&#x2F;&#x2F;oathkeeper.hozen.site" rel="noopener" target="_blank">OathKeeper</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.zhangck.com/" title="http:&#x2F;&#x2F;www.zhangck.com&#x2F;" rel="noopener" target="_blank">上午茶</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://chenwenke.cn/blog/" title="http:&#x2F;&#x2F;chenwenke.cn&#x2F;blog&#x2F;" rel="noopener" target="_blank">陈文科的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://yangtiancoder.github.io/" title="https:&#x2F;&#x2F;yangtiancoder.github.io" rel="noopener" target="_blank">YangTian</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.bugwz.com/" title="http:&#x2F;&#x2F;www.bugwz.com&#x2F;" rel="noopener" target="_blank">咕咕</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://github.com/hooozen/archives/11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="李浩然">
+      <meta itemprop="description" content="半醉半醒日复日，花开花落年复年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李浩然的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          排序算法（一）——插入排序（直接插入+希尔排序）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-01 17:33:49" itemprop="dateCreated datePublished" datetime="2018-04-01T17:33:49+08:00">2018-04-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-03 13:28:21" itemprop="dateModified" datetime="2021-04-03T13:28:21+08:00">2021-04-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <span id="more"></span>
+<h2 id="思路">思路</h2>
+<p>  插入排序的基本思路是，每次将一个待排序的记录按照其关键码的大小插入到已经排好序的有序序列中，直到记录全部有序。 ## 直接排序   直接排序是思路最简单直接的插入排序，类似我们玩扑克牌时整理纸牌的过程。</p>
+<p>  比如我们按大小顺序排列以下纸牌（数字） <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">K 10 J 2 4 A 4 3 5 Q 2</span><br></pre></td></tr></table></figure>   首先，我们以第一张牌为一个有序序列，然后将第二张牌插入到该有序序列的合适位置： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10 K J 2 4 A 4 3 5 Q 2</span><br></pre></td></tr></table></figure>   这样就完成了第一次插入。此时，有序序列变为 <code>10 K</code>。我们继续将下一张牌插入到该有序序列中。这对于纸牌玩家来说，顺理成章，直接将 <code>J</code> 插到 <code>10</code> 和 <code>K</code> 之间。但对于计算机来说，可能需要进行以下过程： * 首先将 <code>J</code> 和 <code>K</code> 比较，<code>K</code> &gt; <code>J</code>，所以将 <code>K</code> 的位置往后移动一位（数组索引加 1）。 * 继续往前比较，发现 <code>10</code> &lt; <code>J</code>，所以将 <code>J</code> 放在 <code>10</code> 后面（将 <code>10</code> 元素索引 + 1 的位置赋值为 <code>J</code>）。 * 完成该次插入，有序序列变为 <code>10 J K</code>。</p>
+<p>  依照上述思路，不停的将接下来的元素插入到前面的有序序列中去，直至数组的结尾。</p>
+<h4 id="算法分析">算法分析</h4>
+<p>  从上面的例子我们大概可得直接插入的大体算法为： * 以第一个元素为有序序列 * 将有序序列的后一个元素插入到有序序列中去，构成新的有序序列。 * 继续插入下一个元素，直至数组结尾。</p>
+<p>  从上面的思路，我们需要注意的是“插入”的操作。</p>
+<p>  首先我们需要找到插入的合适位置，因为该算法从有序序列的后面往前查找。所以每当遇到元素大于带插入元素时，就把该元素向后移动一位，以便为插入元素“空”出位置。直到遇到小于带插入元素的元素时，合适的位置被找到，将元素插入即完成此次插入操作。</p>
+<h4 id="代码示例">代码示例</h4>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> insertionSort = <span class="function"><span class="params">arr</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">        <span class="keyword">let</span> tmp = arr[i]  <span class="comment">// 暂存该元素，因为在移动操作时会覆盖掉该位置的值</span></span><br><span class="line">        <span class="keyword">let</span> j = i - <span class="number">1</span> <span class="comment">// 从有序序列的后面向前查找插入位置</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 把有序序列中所有大于待插入的元素向后移动一位。</span></span><br><span class="line">        <span class="keyword">for</span> (; a[j] &gt; tmp; j--) &#123;</span><br><span class="line">            arr[j + <span class="number">1</span>] = arr[j]</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 循环结束，插入位置被找到，插入该值，完成该次插入</span></span><br><span class="line">        arr[j + <span class="number">1</span>] = tmp</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="希尔排序">希尔排序</h2>
+<p>  直接插入排序算法面临一个问题，当待排序数组基本无序，且长度比较长时，要进行大量的位置移动操作。性能较低。</p>
+<p>  希尔排序试图解决上述问题。</p>
+<p>  希尔排序首先将数组分割为若干个序列，首先将每个序列进行直接插入排序。然后重新分割序列，减少序列的个数，再次对每个序列分别进行直接插入排序。然后再次减少序列的个数，分别进行直接插入排序，直至序列被减少为一个，对整个数组进行一个直接插入排序即可。</p>
+<p>  通过以上算法，开始每个序列的长度很小，位置移动对性能的影响。随着序列个数的减少，序列长度的增加的同时，序列开始慢慢变得有序，使得插入插入操作减少。提高了性能。</p>
+<h4 id="算法分析-1">算法分析</h4>
+<p>  关于如何划分序列，尚未有人求得一个最好的方案。希尔最早提出的方案是，开始每隔 <code>length / 2</code> 构成一个子序列。然后每次将间隔缩小一倍，构成新的子序列，对这些子序列进行直接插入排序。直至最后间隔变为 <code>1</code> 则子序列变为整个序列。</p>
+<p>  任然一上面的序列为例： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">K 10 J 2 4 A 4 3 5 Q 2</span><br></pre></td></tr></table></figure> * 第一次每隔 <code>5</code> 构成一个子序列，则有 5 个子序列，分别为： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">A  2  K</span><br><span class="line">10 4</span><br><span class="line">J  3</span><br><span class="line">2  5</span><br><span class="line">4  Q</span><br></pre></td></tr></table></figure>   对上面子序列进行插入排序，则序列变为： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">A  2  K</span><br><span class="line">4  10</span><br><span class="line">3  J</span><br><span class="line">2  5</span><br><span class="line">4  Q</span><br></pre></td></tr></table></figure>   则第一次对子序列进行插入排序后，原序列变为： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A 4 3 2 4 2 10 J 5 Q K</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>然后将间隔缩小为 <code>5 / 2 = 2</code> ，则子序列变为： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A 3 4 10 5 K</span><br><span class="line">4 2 2 J Q</span><br></pre></td></tr></table></figure>   分别对子序列直接插入排序后，原序列变为： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A 2 3 2 4 4 5 J 10 Q K</span><br></pre></td></tr></table></figure></p></li>
+<li><p>最后一次间隔缩小为 <code>1</code>，则子序列就变为序列本身，此时序列基本有序，直接进行直接插入排序完成排序。</p></li>
+</ul>
+<h4 id="代码示例-1">代码示例</h4>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> shellSort = <span class="function"><span class="params">arr</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 初始间隔为 length / 2，每次缩小一倍，直到间隔变为 1</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> d = <span class="built_in">Math</span>.floor(arr.length / <span class="number">2</span>); d &gt;= <span class="number">1</span>; d = <span class="built_in">Math</span>.floor(d / <span class="number">2</span>)) &#123;</span><br><span class="line">    </span><br><span class="line">        <span class="comment">// 对子序列进行直接插入排序</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = d; i &lt; arr.length; i++) &#123;</span><br><span class="line">            <span class="keyword">let</span> tmp = arr[i]</span><br><span class="line">            <span class="keyword">let</span> j = i - d</span><br><span class="line">            <span class="keyword">for</span> (; j &gt;=<span class="number">0</span> &amp;&amp; arr[j] &gt; tmp; j -= d) &#123;</span><br><span class="line">                arr[j + d] = arr[j]</span><br><span class="line">            &#125;</span><br><span class="line">            arr[j + d] = tmp</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>  直接插入排序时间复杂为 O(n^2)，是稳定的排序算法。</p>
+<p>  希尔排序的时间复杂度在 O(n^2) 和 O(nlog2n)，约为 O(n^1.3)，是不稳定的排序算法。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.jpg" alt="李浩然 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+        <a target="_blank" class="social-link" href="/images/wechat_channel.jpg">
+          <span class="icon">
+            <i class="fab fa-weixin"></i>
+          </span>
+
+          <span class="label">WeChat</span>
+        </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%9B%B4%E6%8E%A5%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" rel="tag"># 直接插入排序</a>
+              <a href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" rel="tag"># 希尔排序</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/archives/12/" rel="prev" title="排序算法（二）——交换排序（冒泡排序+快速排序）">
+                  <i class="fa fa-chevron-left"></i> 排序算法（二）——交换排序（冒泡排序+快速排序）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/archives/10/" rel="next" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书">
+                  CentOS 下使用 certbot 配置 Let's Encrypt SSL证书 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">www.hozen.site</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-mml-chtml.js","integrity":"sha256-ncNI9OXOS5Ek4tzVYiOMmN/KKCPZ6V0Cpv2P/zHntiA="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"hooozen","admin_user":"hooozen","repo":"hooozen.github.io","client_id":"2dd3e808150d02b6810b","client_secret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"ef13c0d2ba7eb3ae0b53cdeb0e305d15"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

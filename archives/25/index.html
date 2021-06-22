@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-hozen.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-hozen.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-hozen.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="baidu-site-verification" content="code-LldkZLajw">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Muse","version":"8.5.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="概述   在前端开发中，终止一个已经开始的网路请求是有一定应用场景的。尤其是在 SPA (Signal Page Web Application) 单页面 Web 应用中，路由的跳转或场景的切换并不会像多页面跳转一样终止之前未被响应的网络请求。此时就可能会发生数据请求发生时的场景已经不存在，而网络请求成功后，数据被不正确的渲染在新的场景中的问题。因此应确保这些网络请求在场景变化后被终止或不被处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web 开发中如何终止一个 Http 请求">
+<meta property="og:url" content="http://github.com/hooozen/archives/25/index.html">
+<meta property="og:site_name" content="李浩然的博客">
+<meta property="og:description" content="概述   在前端开发中，终止一个已经开始的网路请求是有一定应用场景的。尤其是在 SPA (Signal Page Web Application) 单页面 Web 应用中，路由的跳转或场景的切换并不会像多页面跳转一样终止之前未被响应的网络请求。此时就可能会发生数据请求发生时的场景已经不存在，而网络请求成功后，数据被不正确的渲染在新的场景中的问题。因此应确保这些网络请求在场景变化后被终止或不被处理">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-27T02:57:24.000Z">
+<meta property="article:modified_time" content="2021-04-03T05:28:21.348Z">
+<meta property="article:author" content="李浩然">
+<meta property="article:tag" content="XHR">
+<meta property="article:tag" content="Fetch API">
+<meta property="article:tag" content="Axios">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://github.com/hooozen/archives/25/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://github.com/hooozen/archives/25/","path":"archives/25/","title":"Web 开发中如何终止一个 Http 请求"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Web 开发中如何终止一个 Http 请求 | 李浩然的博客</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">李浩然的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">痛饮狂歌空度日</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-friends"><a href="/friends/" rel="section"><i class="link fa-fw"></i>friends</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E4%B8%80%E4%B8%AA-xhr-%E8%AF%B7%E6%B1%82"><span class="nav-number">2.</span> <span class="nav-text">终止一个 XHR 请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E4%B8%80%E4%B8%AA-fetch-%E8%AF%B7%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">终止一个 Fetch 请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-abortcontroller-%E7%BB%88%E6%AD%A2-fetch-%E8%AF%B7%E6%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">使用 AbortController 终止 Fetch 请求。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-promise.race-%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E5%8F%AF%E7%BB%88%E6%AD%A2%E7%9A%84-fetch"><span class="nav-number">3.2.</span> <span class="nav-text">使用 Promise.race() 封装一个可“终止”的 Fetch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E4%B8%80%E4%B8%AA-axios-%E8%AF%B7%E6%B1%82"><span class="nav-number">4.</span> <span class="nav-text">终止一个 Axios 请求</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">李浩然</p>
+  <div class="site-description" itemprop="description">半醉半醒日复日，花开花落年复年</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hooozen" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hooozen"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hozen@live.com" title="E-Mail → mailto:hozen@live.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://codepen.io/Hozen/" title="CodePen → https:&#x2F;&#x2F;codepen.io&#x2F;Hozen&#x2F;" rel="noopener" target="_blank"><i class="codepen fa-fw"></i>CodePen</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Accenzer" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;Accenzer" rel="noopener" target="_blank"><i class="weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://oathkeeper.hozen.site/" title="http:&#x2F;&#x2F;oathkeeper.hozen.site" rel="noopener" target="_blank">OathKeeper</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.zhangck.com/" title="http:&#x2F;&#x2F;www.zhangck.com&#x2F;" rel="noopener" target="_blank">上午茶</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://chenwenke.cn/blog/" title="http:&#x2F;&#x2F;chenwenke.cn&#x2F;blog&#x2F;" rel="noopener" target="_blank">陈文科的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://yangtiancoder.github.io/" title="https:&#x2F;&#x2F;yangtiancoder.github.io" rel="noopener" target="_blank">YangTian</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.bugwz.com/" title="http:&#x2F;&#x2F;www.bugwz.com&#x2F;" rel="noopener" target="_blank">咕咕</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://github.com/hooozen/archives/25/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="李浩然">
+      <meta itemprop="description" content="半醉半醒日复日，花开花落年复年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李浩然的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Web 开发中如何终止一个 Http 请求
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-08-27 10:57:24" itemprop="dateCreated datePublished" datetime="2018-08-27T10:57:24+08:00">2018-08-27</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-03 13:28:21" itemprop="dateModified" datetime="2021-04-03T13:28:21+08:00">2021-04-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ClientScript/" itemprop="url" rel="index"><span itemprop="name">ClientScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <span id="more"></span>
+<h2 id="概述">概述</h2>
+<p>  在前端开发中，终止一个已经开始的网路请求是有一定应用场景的。尤其是在 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Single-page_application">SPA (Signal Page Web Application)</a> 单页面 Web 应用中，路由的跳转或场景的切换并不会像多页面跳转一样终止之前未被响应的网络请求。此时就可能会发生数据请求发生时的场景已经不存在，而网络请求成功后，数据被不正确的渲染在新的场景中的问题。因此应确保这些网络请求在场景变化后被终止或不被处理，以避免数据的混乱，提升部分性能。</p>
+<p>  本文介绍如何终止一个 XHR、Fetch 或 <a href="https://github.com/axios/axios">Axios</a> 请求。（Axios 是一个基于 XHR 和 Promise 封装的 HTTP 库，可用于 Web 和 Node.js，如果你不使用它，则不必关心 Axios 的部分。)</p>
+<p>  本文的完整 Demo 代码见于 GitHub: <a href="https://github.com/hooozen/web-demo">hooozen/web-demo</a>。</p>
+<h2 id="终止一个-xhr-请求">终止一个 XHR 请求</h2>
+<p>  <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a> （本文中 XHR 为其简写）被浏览器广泛支持，功能完整，稳定性强，在 Ajax 中大量使用。</p>
+<p>  XHR 终止一个请求的操作是非常简单的，只需要调用该 XHR 实例对象的 <code>abort</code> 方法即可阻断当前未被响应的请求。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 发送 XHR 请求</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendXHRRequest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  xhr.open(<span class="string">&#x27;POST&#x27;</span>, url);</span><br><span class="line">  xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)  </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (xhr.readyState === <span class="number">4</span> &amp;&amp; xhr.status === <span class="number">200</span>) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;XHR: &#x27;</span>, xhr.responseText);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  xhr.send();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 终止 XHR 请求</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">abortXHRRequest</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;尝试终止 XHR 请求&#x27;</span>);</span><br><span class="line">  xhr.abort();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>   XMLHttpRequest 代理有 4 种状态，XHR 的当前状态由 <code>readyState</code> 属性记录。XHR 总处于下列状态之一：</p>
+<table>
+<thead>
+<tr class="header">
+<th>值</th>
+<th>状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>UNSET</td>
+<td>代理被创建，但尚未调用 <code>open()</code> 方法。</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>OPENED</td>
+<td><code>open()</code> 方法已经被调用</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>HEADERS_RECEIVED</td>
+<td>send() 方法已经被调用，并且头部和状态已经可获得。</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>LOADING</td>
+<td>下载中，responseText 属性已经包含部分数据。</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>DONE</td>
+<td>下载操作已完成。</td>
+</tr>
+</tbody>
+</table>
+<p>  当调用 <code>abort()</code> 方法时，<code>readyState</code> 会被置为 DONE，然后该请求被终止，状态变为 UNSET 状态。因此，在调用 <code>abort()</code> 方法后，再次调用 XHR 发送请求，仍然可以正常响应（除非再次调用了 <code>abort()</code> 方法终止了请求），这一点和 Fetch API 终止请求是不一样的。</p>
+<h2 id="终止一个-fetch-请求">终止一个 Fetch 请求</h2>
+<p>  Fetch 请求返回一个 Promise 对象，而 Promise 有一个缺点就是一旦被“许诺”，要么被 <code>resolve</code> 要么被 <code>reject</code>，不可被终止。所以一开始 Fetch 是不支持被终止的，所以开发者们不得不使用其他的方法来达到“终止”的效果。后来新的标准增加了 <code>AbortController</code> 接口，来终止 DOM 请求，但该接口目前仍处于“实验中”，不建议在生产中使用。</p>
+<p>  接下来分别介绍这两种方法：</p>
+<h3 id="使用-abortcontroller-终止-fetch-请求">使用 AbortController 终止 Fetch 请求。</h3>
+<p>   AbortController 是一个实验中的标准接口，提供 <code>abort</code> 方法来终止指定的 DOM 请求。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 开始 fetch 请求</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">startFetch</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> options = &#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">    signal,</span><br><span class="line">  &#125;</span><br><span class="line">  fetch(url, options).then(<span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">    res.text().then(<span class="function"><span class="keyword">function</span> (<span class="params">text</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;Fetch: &#x27;</span>, text);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;).catch(<span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 终止 fetch 请求</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">abortFetch</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;尝试终止 fetch 请求&#x27;</span>);</span><br><span class="line">  controller.abort();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  AbortController 实例化对象提供一个 <code>signal</code> 标记，当创建 Fetch 请求时，把该标记作为参数传入 Fetch 方法，则可以调用该实例化对象的 <code>abort()</code> 方法来终止被“标记”的 Fetch 请求。</p>
+<p>  与 XHR 的 <code>abort()</code> 方法不同的是，AbortController.abort() 方法一旦被调用，则被标记的 Fetch 不可再次发起请求，这一点和 Axios 中终止请求的机制是一致的。</p>
+<h3 id="使用-promise.race-封装一个可终止的-fetch">使用 Promise.race() 封装一个可“终止”的 Fetch</h3>
+<p>  因为 Promise 不能被终止，而 AbortController 接口稳定性和兼容性又很差，所以更多情况下需要采取其他方法来模拟“终止”Fetch请求。使用 <code>Promise.race()</code> 方法在需要时跳过对 Fetch 请求结果的处理来达到“终止”请求的效果。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise/race"><code>Promise.race(iterable)</code></a> 方法返回一个 promise，一旦迭代器中的某个 promise 解决或拒绝，返回的 promise 就会解决或拒绝。)</p>
+</blockquote>
+<p>  利用 <code>Promise.race</code> 的“竞速”特性，封装一个可以被“终止”的 _Fetch 接口： <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 封装一个模拟 abort 的 fetch</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;接口地址&#125;</span> </span>url </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;fetch 选项&#125;</span> </span>options </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_fetch</span>(<span class="params">url, options</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> abort = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">var</span> abortPromise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    abort = reject;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">var</span> fetchPromise = fetch(url, options);</span><br><span class="line">  <span class="keyword">var</span> promise = <span class="built_in">Promise</span>.race([abortPromise, fetchPromise]);</span><br><span class="line">  promise.abort = abort;</span><br><span class="line">  <span class="keyword">return</span> promise;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fetchAPI;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 开始 fetch 请求</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_startFetch</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  fetchAPI = _fetch(url, &#123; <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span> &#125;);</span><br><span class="line">  fetchAPI.then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">    res.text().then(<span class="function"><span class="keyword">function</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">&#x27;_fetch: &#x27;</span>, text);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;).catch(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 跳过请求处理</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_abortFetch</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;&quot;终止&quot;_fetch请求&#x27;</span>);</span><br><span class="line">  fetchAPI.abort(<span class="string">&#x27;abort 竞速成功&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  上面代码封装了一个 <code>_fetch</code> 方法来进行网络请求，在<code>_fetch().then()</code> 中对网络请求进行处理。<code>_fetch</code> 方法返回了一个 <code>Promise.race()</code> Promise，并在该 <code>race()</code> 中使用了一个 <code>abortPromise</code> Promse 来与 <code>fetch</code> Promise“竞速”。并将 <code>abortPromise</code> 的 <code>reject</code> 方法暴露出来。所以当调用被暴露出的 <code>reject</code> 方法时，如果此时 fetch 请求还没有完成（即没有被 resolve，或 reject），那么由于 <code>Promise.race()</code> 的“竞速”特性，<code>_fetch</code> 将返回 <code>abortPromise</code> 的 <code>reject</code>，fetch Promise 将被忽略。</p>
+<p>  需要明确的是，上述方法并没有真正意义上终止一个网络请求，实际上网络请求没有受到任何影响，只不过通过封装的方法“跳过”了对希望被终止的请求的处理。这一点是和 XHR 和 AbortController 的 <code>abort()</code> 方法不同的。</p>
+<h2 id="终止一个-axios-请求">终止一个 Axios 请求</h2>
+<p>  Axios 提供了终止网络请求的方法，具体介绍可见官方文档中的 <a href="https://github.com/axios/axios/blob/master/README.md#cancellation">cancellation</a> 部分，下面提供一个例子并对文档中未介绍的内容进行一些补充。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> CancelToken = axios.CancelToken;</span><br><span class="line"><span class="keyword">var</span> source = CancelToken.source();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 开始一个 Axios Post 请求</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">axiosPost</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  axios.post(url, <span class="literal">undefined</span>, &#123;</span><br><span class="line">    <span class="attr">cancelToken</span>: source.token,</span><br><span class="line">  &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Axios: &#x27;</span>, res.data);</span><br><span class="line">  &#125;).catch(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Axios error: &#x27;</span>, e);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 终止一个 Axios 请求</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">abortAxios</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;尝试终止 axios 请求&#x27;</span>);</span><br><span class="line">  source.cancel(<span class="string">&#x27;axios 被终止&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  Axios 的 <code>cancel()</code> 方法实现的效果类似于 AbortController 接口的 <code>abort()</code> 方法，即一旦该方法被调用，则该实例就不再被允许再次发送网络请求。但 Axios 网络请求是基于 XHR 实现的，终止网络请求的方法也是调用了 XHR 的 <code>abort()</code> 方法。之所以其效果和 <code>XHR.abort()</code> 终止后仍可再次请求的效果不一致，是因为 Axios 基于 Promise 进行了封装，一旦调用了 <code>cancel()</code> 方法，Promise 就会抛出异常，并且被记录。下次再次调用该实例进行请求时，会直接抛出异常，不会发起网络请求。具体实现方法请查阅 <a href="https://github.com/axios/axios">Axios 源码</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.jpg" alt="李浩然 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+        <a target="_blank" class="social-link" href="/images/wechat_channel.jpg">
+          <span class="icon">
+            <i class="fab fa-weixin"></i>
+          </span>
+
+          <span class="label">WeChat</span>
+        </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/XHR/" rel="tag"># XHR</a>
+              <a href="/tags/Fetch-API/" rel="tag"># Fetch API</a>
+              <a href="/tags/Axios/" rel="tag"># Axios</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/archives/26/" rel="prev" title="秋天的味道">
+                  <i class="fa fa-chevron-left"></i> 秋天的味道
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/archives/24/" rel="next" title="webpack4 打包“块”的分离">
+                  webpack4 打包“块”的分离 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">www.hozen.site</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-mml-chtml.js","integrity":"sha256-ncNI9OXOS5Ek4tzVYiOMmN/KKCPZ6V0Cpv2P/zHntiA="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"hooozen","admin_user":"hooozen","repo":"hooozen.github.io","client_id":"2dd3e808150d02b6810b","client_secret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"ea6bcd1eb985a77c53565fe9a4a26c8c"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

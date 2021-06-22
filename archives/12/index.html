@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-hozen.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-hozen.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-hozen.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="baidu-site-verification" content="code-LldkZLajw">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Muse","version":"8.5.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="冒泡排序 算法分析   冒泡排序可能是排序算法中最简单最好理解的算法了。   以正序排序为例，该算法从序列头部开始，每次将当前元素与下一个元素进行比较，若下一个元素小于该元素，则交换位置。依次递增迭代指针，直至序列尾部。这“一趟”操作过后，序列中最大的值就冒到了序列尾部。   以下列序列为例： 150 13 55 97 27 38 49 65   从下标为 0 的元素 50 开始，与 13 进行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序算法（二）——交换排序（冒泡排序+快速排序）">
+<meta property="og:url" content="http://github.com/hooozen/archives/12/index.html">
+<meta property="og:site_name" content="李浩然的博客">
+<meta property="og:description" content="冒泡排序 算法分析   冒泡排序可能是排序算法中最简单最好理解的算法了。   以正序排序为例，该算法从序列头部开始，每次将当前元素与下一个元素进行比较，若下一个元素小于该元素，则交换位置。依次递增迭代指针，直至序列尾部。这“一趟”操作过后，序列中最大的值就冒到了序列尾部。   以下列序列为例： 150 13 55 97 27 38 49 65   从下标为 0 的元素 50 开始，与 13 进行">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-04T09:52:00.000Z">
+<meta property="article:modified_time" content="2021-04-03T05:28:21.345Z">
+<meta property="article:author" content="李浩然">
+<meta property="article:tag" content="冒泡排序">
+<meta property="article:tag" content="快速排序">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://github.com/hooozen/archives/12/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://github.com/hooozen/archives/12/","path":"archives/12/","title":"排序算法（二）——交换排序（冒泡排序+快速排序）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>排序算法（二）——交换排序（冒泡排序+快速排序） | 李浩然的博客</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">李浩然的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">痛饮狂歌空度日</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-friends"><a href="/friends/" rel="section"><i class="link fa-fw"></i>friends</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">冒泡排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="nav-number">1.0.1.</span> <span class="nav-text">算法分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.0.2.</span> <span class="nav-text">代码示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F"><span class="nav-number">2.</span> <span class="nav-text">快速排序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90-1"><span class="nav-number">2.1.</span> <span class="nav-text">算法分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E5%88%92%E5%88%86%E7%AE%97%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">一次划分算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E5%88%92%E5%88%86%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">2.2.1.</span> <span class="nav-text">一次划分示例代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">快速排序算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">李浩然</p>
+  <div class="site-description" itemprop="description">半醉半醒日复日，花开花落年复年</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hooozen" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hooozen"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hozen@live.com" title="E-Mail → mailto:hozen@live.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://codepen.io/Hozen/" title="CodePen → https:&#x2F;&#x2F;codepen.io&#x2F;Hozen&#x2F;" rel="noopener" target="_blank"><i class="codepen fa-fw"></i>CodePen</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Accenzer" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;Accenzer" rel="noopener" target="_blank"><i class="weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://oathkeeper.hozen.site/" title="http:&#x2F;&#x2F;oathkeeper.hozen.site" rel="noopener" target="_blank">OathKeeper</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.zhangck.com/" title="http:&#x2F;&#x2F;www.zhangck.com&#x2F;" rel="noopener" target="_blank">上午茶</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://chenwenke.cn/blog/" title="http:&#x2F;&#x2F;chenwenke.cn&#x2F;blog&#x2F;" rel="noopener" target="_blank">陈文科的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://yangtiancoder.github.io/" title="https:&#x2F;&#x2F;yangtiancoder.github.io" rel="noopener" target="_blank">YangTian</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.bugwz.com/" title="http:&#x2F;&#x2F;www.bugwz.com&#x2F;" rel="noopener" target="_blank">咕咕</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://github.com/hooozen/archives/12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="李浩然">
+      <meta itemprop="description" content="半醉半醒日复日，花开花落年复年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李浩然的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          排序算法（二）——交换排序（冒泡排序+快速排序）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-04 17:52:00" itemprop="dateCreated datePublished" datetime="2018-04-04T17:52:00+08:00">2018-04-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-03 13:28:21" itemprop="dateModified" datetime="2021-04-03T13:28:21+08:00">2021-04-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <span id="more"></span>
+<h2 id="冒泡排序">冒泡排序</h2>
+<h4 id="算法分析">算法分析</h4>
+<p>  冒泡排序可能是排序算法中最简单最好理解的算法了。</p>
+<p>  以正序排序为例，该算法从序列头部开始，每次将当前元素与下一个元素进行比较，若下一个元素小于该元素，则交换位置。依次递增迭代指针，直至序列尾部。这“一趟”操作过后，序列中最大的值就冒到了序列尾部。</p>
+<p>  以下列序列为例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">50 13 55 97 27 38 49 65</span><br></pre></td></tr></table></figure>
+<p>  从下标为 0 的元素 <code>50</code> 开始，与 <code>13</code> 进行比较，<code>13 &lt; 50 == true</code>，则交换位置。序列变为： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">13 50 55 97 27 38 49 65</span><br></pre></td></tr></table></figure>   下标加 1，继续上述操作：<code>55 &lt; 13 == false</code>，则不执行交换操作。下标加 1，重复上述操作，直至序列尾部，则完成“一趟”冒泡。序列变为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">13 50 55 27 38 49 65 97</span><br></pre></td></tr></table></figure>
+<p>  继续从头进行冒泡操作，每次都将剩余元素中最大的元素冒泡到尾部。直至一趟下来未发生位置交换，则说明序列已有序。</p>
+<h4 id="代码示例">代码示例</h4>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bubbleSort = <span class="function"><span class="params">array</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 使用 exchange 记录发生交换的位置</span></span><br><span class="line">    <span class="keyword">let</span> exchange = array.length - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 若上一趟未发生交换，则说明序列已有序，算法结束</span></span><br><span class="line">    <span class="keyword">while</span> (exchange !== <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 暂存上次交换位置，交换位置之后的序列已经有序，则跳过比较。</span></span><br><span class="line">        <span class="keyword">let</span> end = exchange;</span><br><span class="line">        exchange = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">0</span>; j &lt; end; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (array[j] &gt; array[j + <span class="number">1</span>]) &#123;</span><br><span class="line">                [array[j], array[j + <span class="number">1</span>]] = [array[j + <span class="number">1</span>], array[j]];  <span class="comment">// 交换位置</span></span><br><span class="line">                exchange = j; <span class="comment">// 记录交换位置</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  上述代码对冒泡算法的基本算法进行了一些优化。使用一个变量记录上一趟冒泡的最后交换位置，该位置之后的元素未发生交换，即说明该位置之后的序列已经有序。则在此趟冒泡中不需要对后面有序的子序列进行操作了。当上一躺未发生交换时，则说明序列已经有序，结束循环。</p>
+<h2 id="快速排序">快速排序</h2>
+<h3 id="算法分析-1">算法分析</h3>
+<p>  快速排序（快排）着眼于解决冒泡排序位置交换次数太多的问题。希望通过一次进行长距离的交换从而减少交换次数。</p>
+<p>  快排又称为分区交换排序，其基本思想是：首先选一个轴值（pivot，即比较的基准值），每次都将序列划分为两部分，左侧记录的关键码均小于基准值，右侧记录的关键码均大于基准值。然后对左右两部分分别重复上述划分操作，直至序列整体有序。</p>
+<p>  显然快排是一个递归的过程。</p>
+<h3 id="一次划分算法">一次划分算法</h3>
+<p>  由于快排是一个递归过程，我们先分析对序列进行一次划分的一种算法思路。</p>
+<p>  该示例算法，选取序列第一个元素为基准值。从序列两侧交替与该基准值比较，进行相应的位置移动。直至所有的值都移动到了合适的位置（小于基准值的移动到基准值左侧，反之右侧）。</p>
+<p>  以下面序列为例，具体解释一下算法过程。</p>
+<p>  <strong>23</strong> 13 49 6 31 19 28</p>
+<p>  首先选取第一个元素 <code>23</code> 作为基准值。先从右侧进行比较，令右侧指针为 <code>j = 6</code>，<code>28 &gt; 23 == true</code> 且该值处于基准值右侧，则无序移动。<code>j--</code>，继续比较下一个值。<code>19 &gt; 23 == false</code>，则将该值与基准值交换，使得该值位于基准值的左侧，且同时保证了基准值的右侧都是大于基准值的元素。此时，序列变为：</p>
+<p>  19 13 49 6 31 <strong>23</strong> 28</p>
+<p>  基准值被移动到右侧，进行进行左侧元素的比较。令左侧指针为 <code>i = 0</code>，<code>19 &lt; 23 == true</code>，且位于基准值左侧，无需操作。<code>i++</code>，<code>13 &lt; 23 == true</code>，无需操作。继续比较下一个值，<code>49 &lt; 23 == false</code>，则将 <code>49</code> 与基准值交换，使得该值位于基准值的右侧，且保证了基准值左侧都是小于基准值的元素。此实，序列变为：</p>
+<p>  19 13 <strong>23</strong> 6 31 49 28</p>
+<p>  交替进行右侧扫描，上次 <code>j = 5</code>，则对 <code>j = 4</code> 的元素进行比较，<code>31 &gt; 23 == true</code>，无需操作。<code>j--</code>，<code>6 &gt; 23 == false</code>，则交换位置，序列变为：</p>
+<p>  19 13 6 <strong>23</strong> 31 49 28</p>
+<p>  此时，基准值左侧的值均小于基准值，右侧的值均大于基准值，完成一次划分。</p>
+<h4 id="一次划分示例代码">一次划分示例代码</h4>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> partition = <span class="function">(<span class="params">arr, first, end</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> i = first</span><br><span class="line">    <span class="keyword">let</span> j = end</span><br><span class="line">    <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; j &amp;&amp; arr[i] &lt;= arr[j]) j--</span><br><span class="line">        <span class="keyword">if</span> (i &lt; j) &#123;</span><br><span class="line">            [arr[i], arr[j]] = [arr[j], arr[i]]</span><br><span class="line">            i++</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; j &amp;&amp; arr[i] &lt;= arr[j]) i++</span><br><span class="line">        <span class="keyword">if</span> (i &lt; j) &#123;</span><br><span class="line">            [arr[i], arr[j]] = [arr[j], arr[i]]</span><br><span class="line">            j--</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  该示例代码，左右依次与基准值进行比较并交换位置，以保证每次交换后都能使得操作过的值处于合适的位置。同时当左右指针指向同一个值时，说明循环结束。</p>
+<h3 id="快速排序算法">快速排序算法</h3>
+<p>  快排算法是一个递归的过程。首先将序列进行一次划分，然后分别对左右子序列进行递归的划分。直到子序列被划分为最小的长度，则所有的子序列都有序，则整个序列有序。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> quickSort = <span class="function">(<span class="params">arr, first, end</span>) =&gt;</span> &#123;</span><br><span class="line">    first = first === <span class="literal">undefined</span> ? <span class="number">0</span> : first</span><br><span class="line">    end = end === <span class="literal">undefined</span> ? arr.length - <span class="number">1</span> : end</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (first &lt; end) &#123;</span><br><span class="line">        <span class="keyword">let</span> pivot = partition(arr, first, end)</span><br><span class="line">        quickSort(arr, first, pivot - <span class="number">1</span>)</span><br><span class="line">        quickSort(arr, pivot + <span class="number">1</span>, end)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>  冒泡排序的时间复杂度为 O(n)，是稳定的排序方法。</p>
+<p>  快速排序的时间复杂度为 O(nlog2n)，是不稳定的排序方法。</p>
+<p>  正如其名，快排是迄今为止所有内排序算法中最好的一种，尤其适用于待排序记录个数很大且原始记录随机排列的情况。快排算法得到广泛应用，如 UNIX 系统的库函数中的 <code>qsort</code> 函数。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.jpg" alt="李浩然 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+        <a target="_blank" class="social-link" href="/images/wechat_channel.jpg">
+          <span class="icon">
+            <i class="fab fa-weixin"></i>
+          </span>
+
+          <span class="label">WeChat</span>
+        </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" rel="tag"># 冒泡排序</a>
+              <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="tag"># 快速排序</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/archives/13/" rel="prev" title="我与明二">
+                  <i class="fa fa-chevron-left"></i> 我与明二
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/archives/11/" rel="next" title="排序算法（一）——插入排序（直接插入+希尔排序）">
+                  排序算法（一）——插入排序（直接插入+希尔排序） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">www.hozen.site</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-mml-chtml.js","integrity":"sha256-ncNI9OXOS5Ek4tzVYiOMmN/KKCPZ6V0Cpv2P/zHntiA="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"hooozen","admin_user":"hooozen","repo":"hooozen.github.io","client_id":"2dd3e808150d02b6810b","client_secret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"e42a62fec290abc404404ff91460e564"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-hozen.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-hozen.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-hozen.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="baidu-site-verification" content="code-LldkZLajw">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"github.com","root":"/","images":"/images","scheme":"Muse","version":"8.5.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="居中的实现是 CSS 布局中很典型（poster child）的问题。本文试图从不同的应用场景（水平居中、垂直居中、水平垂直居中）入手，尽可能列举常见的解决方案。  [参考] 《Centering in CSS: A Complete Guide》 《Absolute Horizontal And Vertical Centering In CSS》 水平居中 行内元素（inline elem">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS 实现水平垂直居中布局">
+<meta property="og:url" content="http://github.com/hooozen/archives/27/index.html">
+<meta property="og:site_name" content="李浩然的博客">
+<meta property="og:description" content="居中的实现是 CSS 布局中很典型（poster child）的问题。本文试图从不同的应用场景（水平居中、垂直居中、水平垂直居中）入手，尽可能列举常见的解决方案。  [参考] 《Centering in CSS: A Complete Guide》 《Absolute Horizontal And Vertical Centering In CSS》 水平居中 行内元素（inline elem">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-09-16T10:47:13.000Z">
+<meta property="article:modified_time" content="2021-04-03T05:28:21.349Z">
+<meta property="article:author" content="李浩然">
+<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="layout">
+<meta property="article:tag" content="布局">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://github.com/hooozen/archives/27/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://github.com/hooozen/archives/27/","path":"archives/27/","title":"CSS 实现水平垂直居中布局"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CSS 实现水平垂直居中布局 | 李浩然的博客</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7"></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">李浩然的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">痛饮狂歌空度日</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-friends"><a href="/friends/" rel="section"><i class="link fa-fw"></i>friends</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E5%B1%85%E4%B8%AD"><span class="nav-number">1.</span> <span class="nav-text">水平居中</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0inline-elements"><span class="nav-number">1.1.</span> <span class="nav-text">行内元素（inline elements）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0"><span class="nav-number">1.2.</span> <span class="nav-text">块级元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0%E7%9A%84%E5%B1%85%E4%B8%AD"><span class="nav-number">1.3.</span> <span class="nav-text">多个块级元素的居中</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD"><span class="nav-number">2.</span> <span class="nav-text">垂直居中</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0"><span class="nav-number">2.1.</span> <span class="nav-text">行内元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E8%A1%8C"><span class="nav-number">2.2.</span> <span class="nav-text">单行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E8%A1%8C"><span class="nav-number">2.2.1.</span> <span class="nav-text">多行</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%97%E7%BA%A7%E5%85%83%E7%B4%A0-1"><span class="nav-number">2.3.</span> <span class="nav-text">块级元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%B2%E7%9F%A5%E9%AB%98%E5%BA%A6"><span class="nav-number">2.3.1.</span> <span class="nav-text">已知高度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AA%E7%9F%A5%E9%AB%98%E5%BA%A6"><span class="nav-number">2.3.2.</span> <span class="nav-text">未知高度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#flex-%E5%B8%83%E5%B1%80"><span class="nav-number">2.3.3.</span> <span class="nav-text">flex 布局</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD"><span class="nav-number">3.</span> <span class="nav-text">水平垂直居中</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A%E5%AE%BD%E9%AB%98"><span class="nav-number">3.1.</span> <span class="nav-text">固定宽高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E9%80%82%E5%BA%94%E5%AE%BD%E9%AB%98"><span class="nav-number">3.2.</span> <span class="nav-text">自适应宽高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flex-%E5%B8%83%E5%B1%80-1"><span class="nav-number">3.3.</span> <span class="nav-text">flex 布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#table-%E5%B8%83%E5%B1%80"><span class="nav-number">3.4.</span> <span class="nav-text">table 布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E5%85%83%E7%B4%A0"><span class="nav-number">3.5.</span> <span class="nav-text">伪元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grid-%E5%B8%83%E5%B1%80"><span class="nav-number">3.6.</span> <span class="nav-text">grid 布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#absolute-centering"><span class="nav-number">3.7.</span> <span class="nav-text">Absolute Centering</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">李浩然</p>
+  <div class="site-description" itemprop="description">半醉半醒日复日，花开花落年复年</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/hooozen" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;hooozen"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:hozen@live.com" title="E-Mail → mailto:hozen@live.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://codepen.io/Hozen/" title="CodePen → https:&#x2F;&#x2F;codepen.io&#x2F;Hozen&#x2F;" rel="noopener" target="_blank"><i class="codepen fa-fw"></i>CodePen</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Accenzer" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;Accenzer" rel="noopener" target="_blank"><i class="weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://oathkeeper.hozen.site/" title="http:&#x2F;&#x2F;oathkeeper.hozen.site" rel="noopener" target="_blank">OathKeeper</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.zhangck.com/" title="http:&#x2F;&#x2F;www.zhangck.com&#x2F;" rel="noopener" target="_blank">上午茶</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://chenwenke.cn/blog/" title="http:&#x2F;&#x2F;chenwenke.cn&#x2F;blog&#x2F;" rel="noopener" target="_blank">陈文科的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://yangtiancoder.github.io/" title="https:&#x2F;&#x2F;yangtiancoder.github.io" rel="noopener" target="_blank">YangTian</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.bugwz.com/" title="http:&#x2F;&#x2F;www.bugwz.com&#x2F;" rel="noopener" target="_blank">咕咕</a>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://github.com/hooozen/archives/27/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="李浩然">
+      <meta itemprop="description" content="半醉半醒日复日，花开花落年复年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李浩然的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSS 实现水平垂直居中布局
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-09-16 18:47:13" itemprop="dateCreated datePublished" datetime="2017-09-16T18:47:13+08:00">2017-09-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-04-03 13:28:21" itemprop="dateModified" datetime="2021-04-03T13:28:21+08:00">2021-04-03</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CSS/" itemprop="url" rel="index"><span itemprop="name">CSS</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <span id="more"></span>
+<blockquote>
+<p>居中的实现是 CSS 布局中很典型（poster child）的问题。本文试图从不同的应用场景（水平居中、垂直居中、水平垂直居中）入手，尽可能列举常见的解决方案。</p>
+</blockquote>
+<p><strong>[参考]</strong></p>
+<p><a target="_blank" rel="noopener" href="https://css-tricks.com/centering-css-complete-guide/">《Centering in CSS: A Complete Guide》</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.smashingmagazine.com/2013/08/absolute-horizontal-vertical-centering-css/">《Absolute Horizontal And Vertical Centering In CSS》</a></p>
+<h2 id="水平居中">水平居中</h2>
+<h3 id="行内元素inline-elements">行内元素（inline elements）</h3>
+<p>  行内元素（包括 <code>inline-block</code>）的水平居中很容易实现，只需要在其父级 <code>block</code> 元素中添加 <code>text-align: cneter</code> 属性即可：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father-block</span> &#123;</span><br><span class="line">    <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<iframe height="265" scrolling="no" title="单行行内元素水平居中" src="//codepen.io/Hozen/embed/PQgmGP/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/PQgmGP/'>单行行内元素水平居中</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>  当父级元素设置了以上属性后，所有行内子元素都会居中，即使有多个子元素。</p>
+<h3 id="块级元素">块级元素</h3>
+<p>  块级元素的水平居中只需要给该元素的 <code>margin-left</code> 和 <code>margin-right</code> 属性的值设置为 <code>auto</code>。当然此时该元素需要设置宽度，不然默认是占满整行的不需要水平居中处理。通常使用简写方式：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.center-block</span> &#123;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="多个块级元素的居中">多个块级元素的居中</h3>
+<p>  当有多个块级元素排布在一行或多行，需要水平居中时。可以将这些块级元素设置为行内元素 <code>display: inline-block</code>，然后在父元素中设置 <code>text-align: center</code>：</p>
+<iframe height="400" scrolling="no" title="GQLmWJ" src="//codepen.io/Hozen/embed/GQLmWJ/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/GQLmWJ/'>GQLmWJ</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>  可以看到这三个子元素水平居中了。由于它们的高度不同，我们可以看出行内元素默认是底部对齐的。我们可以通过设置子元素 <code>vertical-align: middle</code> 使得三个子元素以高度中线对齐。</p>
+<p>  使用 flex 弹性布局是个更好的选择：</p>
+<p><iframe height='400' scrolling='no' title='GQLmEp' src='//codepen.io/Hozen/embed/GQLmEp/?height=265&theme-id=light&default-tab=result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/GQLmEp/'>GQLmEp</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>. </iframe></p>
+<p>  使用 flex 布局子元素的高度被统一。</p>
+<h2 id="垂直居中">垂直居中</h2>
+<p>  垂直居中的实现相对水平居中要复杂一些。我们依旧分类讨论:</p>
+<h3 id="行内元素">行内元素</h3>
+<h3 id="单行">单行</h3>
+<p>  如果需要垂直居中的元素排布在一行上，可以通过设置父元素的 <code>padding-top</code> 和 <code>padding-bottom</code> 属性的值相等来使它的子元素垂直居中（其实上面水平居中的例子中，我们已经使用了这种方式使得子元素垂直居中了）。当然这种情况只能适用于父元素的高度未显式指定，而是自动适应的。</p>
+<p>  如果父元素的 <code>height</code> 被指定且大于子元素的高度时，上面的方法是不起作用的。这时可以通过设置父元素的 <code>line-height</code> 属性的值使它等于父元素的 <code>height</code>，也能达到垂直居中的效果。</p>
+<iframe height="460" scrolling="no" title="YeMVEz" src="//codepen.io/Hozen/embed/YeMVEz/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/YeMVEz/'>YeMVEz</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<h4 id="多行">多行</h4>
+<p>  通过上面的例子我们可以发现，当行内元素仅仅是单行显示的话，可以很简单的设置父元素 <code>line-height</code> 等于父元素的高或上下 <code>padding</code> 值相等的方法使子元素垂直居中。</p>
+<p>  在子元素包含多行文本时，通过设置父元素上下 <code>padding</code> 值相等的方法依然能够生效，不过还是会有同样的限制条件。不过设置子元素 <code>line-height</code> 的方法就行不通了。</p>
+<p>  这时我们可以使用 table 布局或通过 CSS 模拟 table 布局实现垂直居中：</p>
+<p>  table 布局实现垂直居中:</p>
+<iframe height="460" scrolling="no" title="EQJmeM" src="//codepen.io/Hozen/embed/EQJmeM/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/EQJmeM/'>EQJmeM</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>  通过 CSS 模拟设置父元素 display 为 table，设置子元素为 table-cell，那么子元素中的元素将垂直居中。不过这种方法的一个缺点是需要用到三层嵌套。</p>
+<iframe height="460" scrolling="no" title="YeMVEz" src="//codepen.io/Hozen/embed/YeMVEz/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/YeMVEz/'>YeMVEz</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>  table 布局已经不常用了，取而代之的是 flex 布局，在能使用 flex 的时候，flex 大概是最好的选择了。</p>
+<iframe height="460" scrolling="no" title="aqxVgB" src="//codepen.io/Hozen/embed/aqxVgB/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/aqxVgB/'>aqxVgB</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>  除了 table 布局和 flex 布局，还可以使用“ghost element”技术，给父元素添加一个全高度的伪元素 <code>:before</code>，使内部的文本与它垂直中线对齐。</p>
+<iframe height="460" scrolling="no" title="ghost element 垂直居中" src="//codepen.io/Hozen/embed/RQOxRB/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/RQOxRB/'>ghost element 垂直居中</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<h3 id="块级元素-1">块级元素</h3>
+<h4 id="已知高度">已知高度</h4>
+<p>  如果子元素的高度是固定的，或可预知的，则可以使用绝对定位 + 负外边距的方法实现垂直居中：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.parent</span>&#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.child</span>&#123;</span><br><span class="line">   <span class="attribute">position</span>: absolute;</span><br><span class="line">   <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">   <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">   <span class="attribute">margin-top</span>: -<span class="number">50px</span>; <span class="comment">/* account for padding and border if not using box-sizing: border-box; */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  这种情况很好理解，不再举例。</p>
+<h4 id="未知高度">未知高度</h4>
+<p>  使用绝对定位 + 2D变换（Y轴平移）的方法在未知高度的情况下也可以正常工作。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.parent</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translateY</span>(-<span class="number">50%</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<iframe height="460" scrolling="no" title="translate 垂直水平居中" src="//codepen.io/Hozen/embed/ddLJNm/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/ddLJNm/'>translate 垂直水平居中</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<h4 id="flex-布局">flex 布局</h4>
+<p>  毫无疑问像之前一样我们可以使用 flex 布局解决这个问题：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.parent</span>&#123;</span><br><span class="line">    <span class="attribute">display</span>: flex;</span><br><span class="line">    <span class="attribute">align-items</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="水平垂直居中">水平垂直居中</h2>
+<p>  将上面分别实现水平和垂直居中的方法相结合就能同时实现水平和垂直居中了，其实在上面的例子中已经这么做了，所以下面简单总结，不再举例。</p>
+<h3 id="固定宽高">固定宽高</h3>
+<p>  固定宽高的情况，我们可以直接使用绝对定位 + 负外边距修正的方式实现水平垂直居中。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">400px</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">margin-top</span>: -<span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">margin-left</span>: -<span class="number">200px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="自适应宽高">自适应宽高</h3>
+<p>  与实现块级元素的垂直居中思路一致，当元素宽高不固定时，可以使用位置变换修正绝对定位的位置。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">    <span class="attribute">position</span>: absolute;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">    <span class="attribute">transform</span>: <span class="built_in">translate</span>(-<span class="number">50%</span>, -<span class="number">50%</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="flex-布局-1">flex 布局</h3>
+<p>  flex 布局总能轻松地解决各种情形下的居中问题。</p>
+<p>  另外，需要注意的是 flex 中 <code>align-items</code> 和 <code>align-content</code> 属性的不同效果。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.father</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: flex;</span><br><span class="line">    <span class="attribute">justify-content</span>: center;</span><br><span class="line">    <span class="attribute">align-items</span>: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="table-布局">table 布局</h3>
+<p>  像通过 table 布局实现垂直居中一样，我们可以在此基础上通过 <code>margin: 0 auto</code> 等手段再使得元素水平居中即可。</p>
+<h3 id="伪元素">伪元素</h3>
+<p>  首先我们将需要居中的元素设置为 <code>inline-block</code>，然后给父元素添加满高伪元素，通过 <code>vertical-align: center</code> 的方法使元素垂直居中。只需要再在父元素总添加 <code>text-align: center</code> 属性即可实现水平居中。</p>
+<h3 id="grid-布局">grid 布局</h3>
+<p>  grid 布局在兼容性允许下好像是一个完美的布局方案，请参照 MDN 官方文档。</p>
+<h3 id="absolute-centering">Absolute Centering</h3>
+<p>  这个一个基于绝对定位的居中处理方案，并且适用于宽高未知（百分比）的情况，可以实现多种常见布局，具有不错的兼容性。这里只简单介绍如果使用该技术实现垂直水平居中，更多应用场景和详细介绍请查看<a target="_blank" rel="noopener" href="https://www.smashingmagazine.com/2013/08/absolute-horizontal-vertical-centering-css/">《Absolute Horizontal And Vertical Centering In CSS》</a></p>
+<iframe height="460" scrolling="no" title="absolute centering" src="//codepen.io/Hozen/embed/RQOQGb/?height=265&amp;theme-id=light&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/RQOQGb/'>absolute centering</a> by Hozen (<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation" data-cites="Hozen">@Hozen</span></a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>  其实，这个布局的关键在于设置局对定位后，将 <code>top</code> <code>right</code> <code>bottom</code> <code>left</code> 的值全设置为0，在指定宽高后，同时设置 <code>margin: auto</code>，（不可设置为0）后就可以实现了水平垂直居中。</p>
+<h2 id="总结">总结</h2>
+<p>  我们可以看到实现水平居中往往是一件简单的事情，可以使用 <code>margin: 0 auto</code>，和行内元素的 <code>text-align: center</code> 设置实现水平居中。</p>
+<p>  垂直居中通常是一件麻烦的事，我们往往需要根据应用场景来选择合适的方法。我们将垂直居中和垂直水平居中的实现一起总结：</p>
+<p>  当元素的高度是固定值时，可以通过绝对定位 + 负外边距修正的方法实现垂直居中，然后通过 <code>margin: 0 auto</code> 再将元素水平居中。甚至当父元素的宽高也固定，我们可以直接计算子元素的居中定位的坐标即可，但实际开发中这种情况很少见。</p>
+<p>  元素高度不定时，可以通过绝对定位 + translate 的方法实现居中，思路和负外边距一致。在不知道元素宽高时，可以通过 <code>translate</code> 的百分比值自动获取元素宽高的一半。而 <code>margin</code> 的百分比值是根据父元素的 width 值计算的，我们无法获取子元素的宽高的一半，这就是这里为什么不能通过指定 <code>margin-top: -50%; margin-left: -50%</code> 实现修正的原因。</p>
+<p>  元素高度不定时，table 布局也是一个不错的解决方法，它利用了 <code>table-cell</code> 元素会沾满 <code>table</code> 父元素，并且可以使用 <code>vertical-align: middle</code> 使内部元素垂直居中对齐的特点。不过这种方法需要嵌套三层盒子。</p>
+<p>  伪元素居中方法，该方法给父元素设置一个满高的伪元素，子元素设置为 <code>inline-block</code>。设置伪元素 <code>vertical-align: middle</code> 使得子元素与伪元素中线对齐，实现垂直居中。设置父元素 <code>text-align: center</code>，实现水平居中。不过这种情况可能需要给伪元素一个负的外边距，因为伪元素占了一定的宽度，导致子元素并非真正的水平居中。同时，子元素的宽度不能太宽（达到100%），不然可能使得子元素与伪元素分列两行。</p>
+<p>　　当高度不是固定（通过百分比指定）的时候，我们还可以采用绝对定位 + margin: auto 的方法实现垂直水平居中。详见最后一个实例。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>Buy me a coffee</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.jpg" alt="李浩然 微信">
+        <span>微信</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+        <a target="_blank" class="social-link" href="/images/wechat_channel.jpg">
+          <span class="icon">
+            <i class="fab fa-weixin"></i>
+          </span>
+
+          <span class="label">WeChat</span>
+        </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+              <a href="/tags/layout/" rel="tag"># layout</a>
+              <a href="/tags/%E5%B8%83%E5%B1%80/" rel="tag"># 布局</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/archives/8/" rel="prev" title="谨以此文祭奠我的前博客">
+                  <i class="fa fa-chevron-left"></i> 谨以此文祭奠我的前博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/archives/28/" rel="next" title="CSS3 制作常见几何图形">
+                  CSS3 制作常见几何图形 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">www.hozen.site</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdn.jsdelivr.net/npm/mathjax@3.1.4/es5/tex-mml-chtml.js","integrity":"sha256-ncNI9OXOS5Ek4tzVYiOMmN/KKCPZ6V0Cpv2P/zHntiA="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"hooozen","admin_user":"hooozen","repo":"hooozen.github.io","client_id":"2dd3e808150d02b6810b","client_secret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":null,"js":{"url":"https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"b2344064b4694564d288a3ec595c3c6a"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
