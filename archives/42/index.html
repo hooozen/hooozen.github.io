@@ -29,7 +29,7 @@
 <meta property="og:description" content="本文主要结合公式和定义解释了信息熵（Entropy）和信息量（Quantities of information）的含义和联系.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-06-22T02:06:11.000Z">
-<meta property="article:modified_time" content="2021-06-22T07:38:34.885Z">
+<meta property="article:modified_time" content="2021-06-23T13:37:02.948Z">
 <meta property="article:author" content="李浩然">
 <meta property="article:tag" content="熵">
 <meta property="article:tag" content="信息熵">
@@ -152,7 +152,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AB%E4%B9%89"><span class="nav-number">3.</span> <span class="nav-text">含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">定量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">5.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E9%87%8Fquantities-of-information"><span class="nav-number">6.</span> <span class="nav-text">信息量（Quantities of information）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%86%B5%E4%B8%8E%E4%BF%A1%E6%81%AF%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">熵与信息量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">定量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">5.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E9%87%8Fquantities-of-information"><span class="nav-number">6.</span> <span class="nav-text">信息量（Quantities of information）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -278,10 +278,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-06-22 10:06:11 / 修改时间：15:38:34" itemprop="dateCreated datePublished" datetime="2021-06-22T10:06:11+08:00">2021-06-22</time>
+      <time title="创建时间：2021-06-22 10:06:11" itemprop="dateCreated datePublished" datetime="2021-06-22T10:06:11+08:00">2021-06-22</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-06-23 21:37:02" itemprop="dateModified" datetime="2021-06-23T21:37:02+08:00">2021-06-23</time>
+      </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -306,33 +312,37 @@
 <span id="more"></span>
 <h3 id="背景">背景</h3>
 <p>信息熵是由信息论之父，克劳德·艾尔伍德·香农（Claude Elwood Shannon）于 1948 年发表的论文《通信的数学理论》（<a target="_blank" rel="noopener" href="https://web.archive.org/web/19980715013250/http://cm.bell-labs.com/cm/ms/what/shannonday/shannon1948.pdf">A Mathematical Theory of Communication</a>）中提出.</p>
-<p>熵这个词是香农从热力学中借用的：热力学中的热熵是表示分子状态的论乱程度的物理量，香农则使用信息熵来描述信源的<strong>不确定度</strong>.</p>
+<p>熵这个词是香农从热力学中借用的：热力学中的热熵是表示分子状态的混乱程度的物理量，香农则使用信息熵来描述信源的<strong>不确定度</strong>.</p>
 <p><strong>信息熵的提出解决了对信息的量化度量问题</strong>.（应注意，信息量不等同于信息熵）</p>
 <h3 id="定义">定义</h3>
 <p><strong>熵</strong>（Entropy）：对于给定的离散随机变量 <span class="math inline">\(X\)</span>，以可能性 <span class="math inline">\(P(x_1), \cdots, P(x_n)\)</span> 取值为 <span class="math inline">\(x_1, \cdots, x_n\)</span>，则 <span class="math inline">\(X\)</span> 的熵为：</p>
 <p><span class="math display">\[ H(X) = -\sum_{i=1}^nP(x_i)\log_2 P(x_i) \]</span></p>
 <p>上述定义可以看出，熵是对于随机变量而言的，那么又是如何与信息量联系起来的呢？</p>
-<h3 id="含义">含义</h3>
-<p>虽然我们有了信息熵的公式，但抽象且不容易理解. 应该如何理解信息熵呢？下面维基百科中给出的一句解释：</p>
+<h3 id="熵与信息量">熵与信息量</h3>
+<p>虽然我们有了信息熵的公式，但抽象且不容易理解. 应该如何理解信息熵呢？下面是维基百科中给出的一句解释：</p>
 <blockquote>
 <p>In information theory, the entropy of a random variable is the average level of "information", "surprise", or "uncertainty" inherent in the variable's possible outcomes.</p>
 </blockquote>
 <p>也就是说，一个随机变量的熵是指该变量可能的结果所蕴含的<strong>不确定性</strong>的平均水平.</p>
 <p>举个例子，对于一枚不均衡的硬币，抛掷它时以概率 <span class="math inline">\(p\)</span> 正面朝上，以概率 <span class="math inline">\(1-p\)</span> 反面朝上. 则容易理解，当 <span class="math inline">\(p=1/2\)</span> 时，抛出一枚硬币的不确定性最大，即很难判断抛出后哪一面朝上；当 <span class="math inline">\(p\)</span> 接近 <span class="math inline">\(1\)</span>（或 <span class="math inline">\(0\)</span>）时，这种不确定性减小，直到 <span class="math inline">\(p=1\)</span>（或 <span class="math inline">\(p=0\)</span>）时不确定性最小，这时即使不抛该硬币，我们也确定的知道哪一面朝上.</p>
 <p>我们就用熵来定量衡量这种随机事件的不确定性，至于如何定量先不讨论，先来看看熵与信息量有什么联系.</p>
-<p>信息论中有一句常见的口诀：“不确定性越多（概率越低），信息量越大；不确定性越低（概率越高），信息量越小“，也就是对信源来说，所发出的信号对于接受者可以看作随机变量，接受者在接受前对该变量的不确定性越大，则接收到后所“消除”的不确定越大，则其信息量越大.</p>
+<p>信息论中有一句常见的口诀：“不确定性越多（概率越低），信息量越大；不确定性越低（概率越高），信息量越小“，也就是对信源来说，所发出的信号对于接受者可以看作随机变量，接受者在接受前对该变量的不确定性越大，则接收到后所“消除”的不确定越大，则获得的信息量越大.</p>
 <p>举个例子：你<strong>知道</strong>你每天起床后你妈<strong>一定</strong>会对你说：“你看你像猪一样起这么晚！”，这句话对你来说没有任何不确定性（概率为 <span class="math inline">\(1\)</span>），那么你听到这句话后也就不会消除任何不确定性，也即没有获得信息量. 然后你还知道，你妈接下来会告诉你早餐吃什么，虽然不是包子就是油条. 这时你妈开口了：“还不快点起，包子都凉了！”，在你听到这句话前对于你妈这句话说什么是有不确定性的，你不知道是“包子都凉了”还是“油条都软了”，因此你妈的这句话消除了你对于吃包子还是吃油条的不确定性，你因此获得了一定的信息量.</p>
-<p>以上通俗的解释了“熵”、“信息量”的概念，但需要注意的是信息熵不等同于信息量，但在量上是相等的. 即，“熵”度量了不确定性，而接受信息后所消除的不确定性即为该信息的量.</p>
+<p>以上通俗的解释了“熵”、“信息量”的概念，但需要注意的是信息熵不等同于信息量，但它们在量上是相等的. 即，“熵”度量了不确定性，而接受信息后所消除的不确定性即为该信息的“量”.</p>
 <p>信息量和熵都是相对于某一主体来说的，即同一个信息对于不同的人而言信息量不同，同一件不确定的事情对于不同的人所蕴含的熵也不同.</p>
 <h3 id="定量">定量</h3>
 <p>以上定性的解释了“熵”的含义，那么公式中熵的值是怎么确定的呢？</p>
-<p>类似于质量等物理量，信息熵同样作为物理量也需要有一个基本度量单位. 类似于光年作为长度单位被定义为光行驶一年的长度，熵的基本单位被定义为等概率 <span class="math inline">\(0-1\)</span> 分布随机变量的不确定性，记作 <span class="math inline">\(1\mathrm{bit}\)</span>. 也就是说抛一枚均匀的硬币，对于哪面朝上这一事件包含的不确定性的量是 <span class="math inline">\(1\ \mathrm{bit}\)</span> 熵.</p>
+<p>类似于质量、长度等物理量，信息熵同样作为物理量也需要有一个基本度量单位. 类似于光年作为长度单位被定义为光行驶一年的长度，熵的基本单位被定义为等概率 <span class="math inline">\(0-1\)</span> 分布随机变量的不确定性，记作 <span class="math inline">\(1\mathrm{bit}\)</span>. 也就是说抛一枚均匀的硬币，对于哪面朝上这一事件包含的不确定性的量是 <span class="math inline">\(1\ \mathrm{bit}\)</span> 熵.</p>
 <p>有了基本单位，衡量其他随机变量的熵就有了基准，类似于光行驶 <span class="math inline">\(3\)</span> 年的距离为 <span class="math inline">\(3\)</span> 光年，那么抛掷 <span class="math inline">\(2\)</span> 均匀枚硬币结果的不确定性即为 <span class="math inline">\(2\ \mathrm{bit}\)</span>. 容易理解，对于抛掷 <span class="math inline">\(n\)</span> 枚硬币而言，其熵为 <span class="math inline">\(n\ \mathrm{bit}\)</span>. 因此，所有与抛掷硬币分布相同的随机变量其熵都可以被类似的计算.</p>
-<p>对于等概率事件仍可以类似量化，比如对于猜一道有四个选项的选择题的答案，那么四个答案的概率均等分布，与先后掷两枚硬币的分布是等同的，因此其熵为 <span class="math inline">\(2\ \mathrm{bit}\)</span>. 类似地，对于有 <span class="math inline">\(8 = 2^3\)</span> 个等可能结果的分布，与掷 <span class="math inline">\(3\)</span> 枚硬币等同，其熵为 <span class="math inline">\(\log_2 8 = 3\ \mathrm{bit}\)</span>. 将其<strong>推广</strong>至有 <span class="math inline">\(n\)</span> 个可能结果的等概率分布，其熵为 <span class="math inline">\(\log_2n = \log_2\frac1{p} \ \mathrm{bit}\)</span>，其中 <span class="math inline">\(p = \frac 1n\)</span> 为每个结果发生的概率.</p>
+<p>对于等概率事件仍可以类似量化，比如对于猜一道有四个选项的选择题的答案，那么四个答案的概率均等分布，与先后掷两枚硬币的分布是等同的，因此其熵为 <span class="math inline">\(2\ \mathrm{bit}\)</span>. 类似地，对于有 <span class="math inline">\(8 = 2^3\)</span> 个等可能结果的分布，与掷 <span class="math inline">\(3\)</span> 枚硬币等同，其熵为 <span class="math inline">\(\log_2 8 = 3\ \mathrm{bit}\)</span>. 将其<strong>推广</strong>至有 <span class="math inline">\(n\)</span> 个等可能结果的概率分布，其熵为</p>
+<p><span class="math display">\[
+\log_2n = \log_2\frac1{p} \ \mathrm{bit}
+\]</span></p>
+<p>其中 <span class="math inline">\(p = \frac 1n\)</span> 为每个结果发生的概率.</p>
 <p>至此，已经解决了等概率分布的随机变量的熵的计算，那么对于不等概率的分布将如何计算呢？公式中展示出了加权的思想，即把每一个结果都看作等可能事件中的一个结果，按照其发生的概率加权求和.</p>
 <p>例如，通过某些“手段”答题人得知选项 A、B、C、D 为正确答案的概率分别为 <span class="math inline">\(\frac12,\frac14,\frac18,\frac18\)</span>，那么此时如何求熵呢？首先把 A 选项看作投掷一枚硬币某一面朝上，对应的熵为 <span class="math inline">\(1\ \mathrm{bit}\)</span>，但 A 为正确答案的可能性只有 <span class="math inline">\(\frac 12\)</span>，因此将 <span class="math inline">\(\frac12\)</span> 作为 <span class="math inline">\(1\ \mathrm{bit}\)</span> 的权值. 类似地，得到 B、C、D 对应的数值项：<span class="math inline">\(\frac14 \log_24\)</span>，<span class="math inline">\(\frac18\log_2 8\)</span>，<span class="math inline">\(\frac18\log_28\)</span>. 将以上各项相加就得到此时正确答案 <span class="math inline">\(X\)</span> 的熵：</p>
 <p><span class="math display">\[ \begin{aligned}
-H(X) &amp;= \frac12\log_2 2 + \frac14\log_24+\frac18log_28 + \frac18\log_28 \\
+H(X) &amp;= \frac12\log_2 2 + \frac14\log_24+\frac18\log_28 + \frac18\log_28 \\
 &amp; = -\frac12\log_2\frac12 - \frac14\log_2\frac14- \frac18\log_2\frac18 - \frac18\log_2\frac18 \\
 &amp; = -\sum_{i=1}^4P(x_i)\log_2P(x_i)
 \end{aligned}
@@ -351,14 +361,14 @@ H(X) &amp; = \sum_{i=1}^nP(x_i)\log_2\frac1{P(x_i)} \\
 <li>非负性，即信息熵不能为负.</li>
 <li>累加性，即多随机事件同时发生的的总不确定性的度量可以表示为各事件不确定性的度量的和，也即：</li>
 </ol>
-<p>对于相互独立的随机变量 <span class="math inline">\(X,Y\)</span>： <span class="math display">\[ P(X=1, Y=B) = P(X=A)\dot P(Y=B) \]</span> 有: <span class="math display">\[ H(XY) = H(X) + H(Y) \]</span></p>
+<p>对于相互独立的随机变量 <span class="math inline">\(X,Y\)</span>： <span class="math display">\[ P(X=A, Y=B) = P(X=A)\cdot P(Y=B) \]</span> 有: <span class="math display">\[ H(XY) = H(X) + H(Y) \]</span></p>
 <p>香农从数学上，严格证明了满足上述三个条件的随机变量不确定度量具有唯一的形式：</p>
-<p><span class="math display">\[ H(X) = -C\sum_{x\in \mathcal{X}} P(x)log_2P(x) \]</span></p>
+<p><span class="math display">\[ H(X) = -C\sum_{x\in \mathcal{X}} P(x)\log_2P(x) \]</span></p>
 <h3 id="信息量quantities-of-information">信息量（Quantities of information）</h3>
 <p>信息量是衡量信息多少的度量，其值等于获得该信息后减少的随机变量不确定性量.</p>
 <p>例如，对于一个有四个选项的选择题，我根本不会做，则正确答案对应的随机变量 <span class="math inline">\(X\)</span> 的熵 <span class="math inline">\(H_1(X)\)</span> 为</p>
 <p><span class="math display">\[ 
--\sum_{i=1}^4 P(x_i)\log_2P(x_i) = -4\times\frac14\times log_2\frac14 = 2\ \mathrm{bit}
+-\sum_{i=1}^4 P(x_i)\log_2P(x_i) = -4\times\frac14\times \log_2\frac14 = 2\ \mathrm{bit}
 \]</span></p>
 <p>若此时老师说 A 选项是错的，不选，根据公式则有 <span class="math display">\[
 H_2(X) = -3\times\frac13\times\log_2\frac13 \approx 1.5850\ \mathrm{bit}
