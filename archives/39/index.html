@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        数据结构基础（4）线性表的顺序存储结构——顺序表 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">数据结构基础（4）线性表的顺序存储结构——顺序表</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
+  
+    <a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" class="post-tag">#线性表</a>
+  
+    <a href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" class="post-tag">#顺序表</a>
+  
+    <a href="/tags/C/" class="post-tag">#C++</a>
+  
+
+
+          <span class="post-date">2021-03-13</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>本文主要介绍了线性表的顺序存储结构，以及基于 C++ 的具体实现.</p>
+<span id="more"></span>
+<p><strong><em>目录（更新中）</em></strong></p>
+<ul>
+<li><p>第一章 绪论</p>
+<p><a href="https://www.hozen.site/archives/36/">(1)
+数据结构的基本概念</a></p>
+<p><a href="https://www.hozen.site/archives/37/">(2)
+算法及算法分析</a></p></li>
+<li><p>第二章 线性表</p>
+<p><a href="https://www.hozen.site/archives/38/">(3)
+线性表的逻辑结构</a></p>
+<p><strong>(4) 线性表的顺序存储结构——顺序表</strong></p></li>
+</ul>
+<p><em>参考资料</em></p>
+<p>[1] 王红梅编著. 数据结构（C++版本）（第2版）.
+北京：清华大学出版社，2011.</p>
+<p>[2] 钱能著. C++ 程序设计教程（第二版）.
+北京：清华大学出版社，2005.</p>
+<hr />
+<h3 id="顺序表sequential-list">顺序表（sequential list）</h3>
+<p><strong>线性表</strong>的顺序存储结构称为<strong>顺序表</strong>.</p>
+<p>需要辨析的是，线性表的链接存储结构被称为<strong>链表</strong>，链表又分为<strong>单链表</strong>、<strong>循环链表</strong>、<strong>双链表</strong>等，他们都是<strong>线性表</strong>属于<strong>线性结构</strong>的分类.
+本文讨论的是顺序表.</p>
+<figure>
+<img src="/assets/images/39-1-n.png" alt="图 4-1 数据结构的分类" />
+<figcaption aria-hidden="true">图 4-1 数据结构的分类</figcaption>
+</figure>
+<p>顺序表是用一段<strong>地址连续</strong>的存储单元依次存储线性表的数据元素.
+由于线性表中每个数据元素的类型相同，通常用一维数组来实现顺序表，也就是把线性表中相邻的元素存储在数组中相邻的位置.</p>
+<h3 id="顺序表的实现">顺序表的实现</h3>
+<p>将线性表的抽象数据类型定义用 C++
+的类实现，由于线性表的数据元素类型不确定，所以采用 C++
+的<strong>模板机制</strong>.</p>
+<p>这里我们规定顺序表序号从 <span class="math inline">\(1\)</span>
+开始，因此与数组的下标相差 <span class="math inline">\(1\)</span>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">const</span> <span class="hljs-type">int</span> MaxSize = <span class="hljs-number">100</span>;<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SeqList</span> &#123;<br> <span class="hljs-keyword">public</span>:<br>  <span class="hljs-built_in">SeqList</span>();<br>  <span class="hljs-built_in">SeqList</span>(DataType a[], <span class="hljs-type">int</span> n);<br>  ~<span class="hljs-built_in">SeqList</span>()&#123;&#125;;<br>  <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">getLength</span><span class="hljs-params">()</span></span>;<br>  <span class="hljs-function">DataType <span class="hljs-title">get</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>;<br>  <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">locate</span><span class="hljs-params">(DataType x)</span></span>;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">insert</span><span class="hljs-params">(<span class="hljs-type">int</span> i, DataType x)</span></span>;<br>  <span class="hljs-function">DataType <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>;<br>  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">printList</span><span class="hljs-params">()</span></span>;<br><br> <span class="hljs-keyword">private</span>:<br>  DataType data[MaxSize];<br>  <span class="hljs-type">int</span> length = <span class="hljs-number">0</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>下面实现成员函数：</p>
+<h4 id="构造函数">构造函数</h4>
+<ul>
+<li><p>无参构造函数 <code>SeqList()</code></p>
+<p>创建一个空顺序表.</p>
+<p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br>SeqList&lt;DataType&gt;::<span class="hljs-built_in">SeqList</span>() &#123;<br>    length = <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure></p></li>
+<li><p>有参构造函数 <code>Seqlist(DataType a[], int n)</code></p>
+<p>使用传入的数组构造顺序表，并指定顺序表长度.</p>
+<p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br>SeqList&lt;DataType&gt;::<span class="hljs-built_in">SeqList</span>(DataType a[], <span class="hljs-type">int</span> n) &#123;<br>    <span class="hljs-keyword">if</span> (n &gt; MaxSize) <span class="hljs-keyword">throw</span> <span class="hljs-string">&quot;参数非法&quot;</span>;<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>    data[i] = a[i];<br><br>    length = n;<br>&#125;<br></code></pre></td></tr></table></figure></p></li>
+</ul>
+<h4 id="求线性表的长度">求线性表的长度</h4>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br><span class="hljs-type">int</span> SeqList&lt;DataType&gt;::<span class="hljs-built_in">getLength</span>() &#123;<br>    <span class="hljs-keyword">return</span> length;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="查找操作">查找操作</h4>
+<ul>
+<li><p>按位查找 <code>get(int i)</code></p>
+<p>由于使用数组存储数据，则查找第 <code>i</code> 个元素直接返回数组
+<code>data[]</code> 中的第 <code>i - 1</code> 个元素. 时间复杂度为 <span
+class="math inline">\(O(1)\)</span>.</p>
+<p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br>DataType SeqList&lt;DataType&gt;::<span class="hljs-built_in">get</span>(<span class="hljs-type">int</span> i) &#123;<br>  <span class="hljs-keyword">if</span> (i &lt; <span class="hljs-number">1</span> &amp;&amp; i &gt; length)<br>    <span class="hljs-keyword">throw</span> <span class="hljs-string">&quot;查找位置非法&quot;</span>;<br>  <span class="hljs-keyword">return</span> data[i - <span class="hljs-number">1</span>];<br>&#125;<br></code></pre></td></tr></table></figure></p></li>
+<li><p>按值查找 <code>locate(DataType x)</code></p>
+<p>对顺序表进行遍历，返回第一个匹配元素的序号（注意不是数组下标）；如果查找不到该值则返回失败的标志
+<code>0</code>.</p>
+<p><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br><span class="hljs-type">int</span> SeqList&lt;DataType&gt;::<span class="hljs-built_in">locate</span>(DataType x) &#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; length; i++)<br>    <span class="hljs-keyword">if</span> (data[i] == x) <span class="hljs-keyword">return</span> i + <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure></p>
+<p>平均情况下，假设数据平均分布，时间复杂度为 <span
+class="math inline">\(O(n)\)</span>.</p></li>
+</ul>
+<h4 id="插入操作">插入操作</h4>
+<p>注意插入位置的合法性.
+同时由于插入后元素的逻辑关系发生改变，所以应由存储关系反应这一变化，即调整相应元素在数组中的位置.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br><span class="hljs-type">void</span> SeqList&lt;DataType&gt;::<span class="hljs-built_in">insert</span>(<span class="hljs-type">int</span> i, DataType x) &#123;<br>    <span class="hljs-keyword">if</span> (length &gt; MaxSize - <span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">throw</span> <span class="hljs-string">&quot;顺序表已满，无法插入&quot;</span>;<br>    <span class="hljs-keyword">if</span> (i &lt; <span class="hljs-number">1</span> || i &gt; length + <span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">throw</span> <span class="hljs-string">&quot;非法位置&quot;</span>;<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = length; j &gt; i - <span class="hljs-number">1</span>; j--)<br>    data[j] = data[j - <span class="hljs-number">1</span>];<br><br>    length++;<br>    data[i - <span class="hljs-number">1</span>] = x;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>同理考虑时间复杂度，为 <span class="math inline">\(O(n)\)</span>.</p>
+<h4 id="删除操作">删除操作</h4>
+<p>同理考虑位置的合理性，并且通过调整存储关系来反映逻辑关系的变化.</p>
+<p>时间复杂度为 <span class="math inline">\(O(n)\)</span>.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br>DataType SeqList&lt;DataType&gt;::<span class="hljs-built_in">remove</span>(<span class="hljs-type">int</span> i) &#123;<br>    <span class="hljs-keyword">if</span> (i &lt; <span class="hljs-number">1</span> || i &gt; length)<br>    <span class="hljs-keyword">throw</span> <span class="hljs-string">&quot;非法位置&quot;</span>;<br><br>    DataType temp = data[i - <span class="hljs-number">1</span>];<br><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = i - <span class="hljs-number">1</span>; j &lt; length; j++)<br>    data[j] = data[j + <span class="hljs-number">1</span>];<br><br>    length--;<br>    <span class="hljs-keyword">return</span> temp;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="遍历操作">遍历操作</h4>
+<p>按顺序打印顺序表中的元素. 以可直接打印的数据类型为例.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> DataType&gt;<br><span class="hljs-type">void</span> SeqList&lt;DataType&gt;::<span class="hljs-built_in">printList</span>() &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; length; i++)<br>    std::cout &lt;&lt; data[i] &lt;&lt; <span class="hljs-string">&quot; --&gt; &quot;</span>;<br><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;end&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>显然时间复杂度为 <span class="math inline">\(O(n)\)</span></p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/41/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Swift 函数作为参数的写法</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/38/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      数据结构基础（3）线性表的逻辑结构
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
+  
+    <a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" class="post-tag">#线性表</a>
+  
+    <a href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" class="post-tag">#顺序表</a>
+  
+    <a href="/tags/C/" class="post-tag">#C++</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/38/" title="数据结构基础（3）线性表的逻辑结构" rel="bookmark">数据结构基础（3）线性表的逻辑结构</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/36/" title="数据结构基础（1）数据结构的基本概念" rel="bookmark">数据结构基础（1）数据结构的基本概念</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/37/" title="数据结构基础（2）算法及算法分析" rel="bookmark">数据结构基础（2）算法及算法分析</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

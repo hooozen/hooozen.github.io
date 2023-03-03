@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        数据结构基础（1）数据结构的基本概念 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">数据结构基础（1）数据结构的基本概念</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
+  
+
+
+          <span class="post-date">2021-03-05</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>本文主要讲述了数据结构的基本概念及相关的理论基础，是“由远及近”认识数据结构的简要浏览.</p>
+<span id="more"></span>
+<p><strong><em>目录（更新中）</em></strong></p>
+<ul>
+<li><p>第一章 绪论</p>
+<p><strong>(1) 数据结构的基本概念</strong></p>
+<p><a href="https://www.hozen.site/archives/37/">(2)
+算法及算法分析</a></p></li>
+<li><p>第二章 线性表</p>
+<p><a href="https://www.hozen.site/archives/38/">(3)
+线性表的逻辑结构</a></p>
+<p><a href="https://www.hozen.site/archives/39/">(4)
+线性表的顺序存储结构——顺序表</a></p></li>
+</ul>
+<p><em>参考资料</em></p>
+<p>[1] 王红梅编著. 数据结构（C++版本）（第2版）.
+北京：清华大学出版社，2011.</p>
+<hr />
+<h2 id="程序设计与数据结构">程序设计与数据结构</h2>
+<p>计算机不能分析问题并产生解决问题的方案，必须由人（程序设计者）分析问题，确定问题的解决方案，编写程序，让计算机执行从而获得问题的解.
+从问题的给出到计算机程序的编写执行，便是程序设计的一般过程.</p>
+<p>分析问题的过程中，需要抽象出具体的数据模型（待处理的数据以及数据之间的关系，即数据结构），形成问题求解的基本思路.</p>
+<p><span class="math display">\[ 数据结构 + 算法 = 程序 \]</span></p>
+<p>这个由图灵奖获得者沃思给出的，广为流传的公式，说明了程序设计的核心.</p>
+<p>具体来讲，数据结构到底是什么呢？如何从问题中抽象呢？</p>
+<h3 id="非数值问题">非数值问题</h3>
+<p>计算机能够求解的问题一般可分为数值和非数值问题.</p>
+<p>数值问题抽象出的数据模型通常是数学方程，这一过程对于做过数学应用题的人来讲都是容易理解的，如小学用方程组解“鸡兔同笼”问题，其中线性方程组便是对问题中数据的抽象模型.</p>
+<p>非数值问题抽象出的数据模型通常是<strong>线性表</strong>、<strong>树</strong>、<strong>图</strong>等数据结构，其抽象过程虽然仍然有其数学理论基础，但对大多数人来说并不了解、或有难度，故一般而言，数据结构教程通常着重于分析和解决<strong>非数值问题</strong>，即重点在于线性表、树和图这三种数据结构.
+例如学籍管理、人机对弈、教学计划编排问题可以分别抽象出线性结构、树结构、图结构.</p>
+<h2 id="数据结构的基本概念">数据结构的基本概念</h2>
+<h3 id="数据结构">数据结构</h3>
+<p><strong>数据</strong>（data)
+是信息的载体，在计算机科学中是指所有能输入到计算机中并能被计算机程序识别和处理的符号集合.</p>
+<p><strong>数据元素</strong>（data element）是数据的基本单位.</p>
+<p><strong>数据结构</strong>（data
+structure）是指相互之间存在一定关系的数据元素的集合.</p>
+<p>按照视点不同，数据结构分为逻辑结构和存储结构.</p>
+<h4 id="数据的逻辑结构logical-structrue">数据的逻辑结构（logical
+structrue)</h4>
+<p>数据的逻辑结构是指数据元素之间逻辑关系的<strong>整体</strong>。数据的逻辑结构在形式上可以定义为一个<a
+target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%A4%9A%E5%85%83%E7%BB%84">二元组</a>(<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Tuple">2-tuple</a>)：</p>
+<p><span class="math display">\[ Data\_Structure = (D, R) \]</span></p>
+<p>其中 <span class="math inline">\(D\)</span>
+是数据元素的有限集合，<span class="math inline">\(R\)</span> 是 <span
+class="math inline">\(D\)</span> 上关系的集合.</p>
+<p>根据数据元素之间逻辑关系的不同，数据结构分为以下四类：</p>
+<ol type="1">
+<li>集合：数据元素之间就是“属于同一个集合”，除此之外，<strong>没有任何关系</strong>.</li>
+<li>线性结构：数据元素之间存在着<strong>一对一</strong>的线性关系.</li>
+<li>树结构：数据元素之间存在着<strong>一对多</strong>的层次关系.</li>
+<li>图结构：数据之间存在着<strong>多对多</strong>的任意关系.</li>
+</ol>
+<p>树结构和图结构也称为非线性结构.</p>
+<p>数据的逻辑结构常用逻辑关系图来描述：</p>
+<ol type="1">
+<li>将每一个数据元素看作一个结点，用圆圈表示；</li>
+<li>元素间的逻辑关系用结点之间的连线表示;</li>
+<li>如果强调关系的方向性，则用带箭头的连线表示.</li>
+</ol>
+<figure>
+<img src="/assets/images/36-1.jpg" alt="图 1-1 数据结构的逻辑关系图" />
+<figcaption aria-hidden="true">图 1-1 数据结构的逻辑关系图</figcaption>
+</figure>
+<h4 id="数据的存储结构storage-structure">数据的存储结构（storage
+structure）</h4>
+<p>数据的存储结构又称为物理结构，是数据及其逻辑结构在计算机中的表示.
+存储结构除了存储数据元素外，必须隐式或显式的存储数据元素之间的逻辑关系.</p>
+<p>通常有两种存储结构：顺序存储结构和链接存储结构.</p>
+<p>顺序存储结构：用一组<strong>连续</strong>的存储单元<strong>依次</strong>存储数据元素，数据源之间的逻辑关系由元素的存储位置（隐式）表示.</p>
+<p>链接存储结构：用一组<strong>任意</strong>的存储单元存储数据元素，数据元素之间的逻辑关系用指针（显式）来表示.</p>
+<p>例如，分别使用顺序和链接存储结构存储线性表 <span
+class="math inline">\((bat, cat, eat)\)</span>：</p>
+<figure>
+<img src="/assets/images/36-2.jpg"
+alt="图 1-2 线性表的两种存储结构示意图" />
+<figcaption aria-hidden="true">图 1-2
+线性表的两种存储结构示意图</figcaption>
+</figure>
+<h4 id="再谈数据的逻辑结构和存储结构">再谈数据的逻辑结构和存储结构</h4>
+<p>数据的逻辑结构是从具体问题抽象出来的数据模型，是<strong>面向问题</strong>的，反映了数据元素之间的关联方式或邻接关系。</p>
+<p>数据的存储结构是<strong>面向计算机的</strong>，其基本目标是将数据及其逻辑关系存储到计算机的内存中。</p>
+<p>因此，有必要强调，除非同时提到数据的逻辑结构和物理结构，一般的情况下“数据结构”指的即是数据的<strong>逻辑结构</strong>。如“线性表是一种数据结构”，即指线性表是一种逻辑结构——无论它采用了何种存储结构（顺序或链接）.</p>
+<h3 id="抽象数据类型abstract-data-type">抽象数据类型（Abstract Data
+Type)</h3>
+<h4 id="数据类型data-type">数据类型（Data Type）</h4>
+<p>数据类型是一组值的集合以及定义在这个集合上的一组操作的总称.</p>
+<p>于是数据类型规定了该类型数据的取值范围和对这些数据所能采取的操作.</p>
+<p>例如，C++
+语言中整型是一种数据类型，则规定了整型变量只能取计算机所能表示的最小负整数和最大正整数之间的任意一个整数，并只允许进行算术运算、关系运算和逻辑运算等.</p>
+<h4 id="抽象abstract">抽象（Abstract）</h4>
+<p>所谓抽象就是抽出问题本质的特征而忽略非本质的细节，是对具体事物的一个概括.</p>
+<p>比如地图是对它所描述地域的一种抽象，物体受力分析图是对真实世界中某具体物体的抽象.</p>
+<p>很显然，使用数学知识解决实际问题时，我们提取关键因素，忽略非关键的因素，来建立对应的数学模型，这是典型的抽象过程.</p>
+<p>抽象的原因在于：一旦一个抽象的问题得到解决，则很多同类的具体问题便可迎刃而解.</p>
+<p>算法的设计需要抽象，同时在编程语言层面，抽象的思想仍然发挥作用：实现封装和信息的隐藏.</p>
+<p>例如，我们常把能够完成某种功能并可重复执行的一段代码抽象为函数，在需要执行这种功能时调用这个函数，从而将“做什么”抽象出来，与“怎么做”相分离，实现了算法细节和数据内部结构的隐藏.</p>
+<h4 id="抽象数据类型">抽象数据类型</h4>
+<p>抽象数据类型简称
+ADT，是一个<strong>数据结构</strong>以及定义在该结构上的<strong>一组操作</strong>的总称.</p>
+<p>ADT 可理解为对编程语言本身提供的基本数据类型进行的进一步抽象，因此
+ADT 和数据类型的区别仅在于：数据类型是高级编程语言支持的基本数据类型，而
+ADT 指的是自定义的数据类型.</p>
+<p>在设计 ADT 时，把 ADT 的定义和实现分开.
+定义部分只包含数据的逻辑结构和所允许的操作集合：一方面，使用者依据这些定义来使用
+ADT；另一方面，实现者依据这些定义完成该 ADT 的各种操作的具体实现.</p>
+<p>ADT 提供了定义和实现的不同试图，实现了封装和信息隐藏.
+例如各种语言都提供了整数类型和具体实现，尽管它们的实现方法各有不同，但由于其
+ADT 相同，在用户看来都是相同的.</p>
+<p>一个 ADT 的定义不涉及实现细节，形式上可简可繁. 如下例中对 ADT
+的定义包括抽象数据类型名、数据元素之间的逻辑关系的定义、每种基本操作的接口：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs ADT">ADT 抽象数据类型名<br>Data<br>  数据元素之间逻辑关系的定义<br><br>Operation<br>  Operation_1<br>    前置条件：执行该操作前数据所必需的状态<br>    输入：执行该操作需要的输入<br>    功能：该操作将完成的功能<br>    输出：执行该操作后产生的输出<br>    后置条件：执行该操作后数据的状态<br>  <br>  Operation_2<br>    ... ...<br><br>  ... ...<br><br>  Operation_n<br>    ... ...<br><br>endADT<br></code></pre></td></tr></table></figure>
+<p>以上定义体现了<strong>契约式编程</strong>的思想.</p>
+<p>容易体会，面向对象语言的“类”体现了抽象数据类型的思想.</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/37/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>数据结构基础（2）算法及算法分析</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/35/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      冬天
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/37/" title="数据结构基础（2）算法及算法分析" rel="bookmark">数据结构基础（2）算法及算法分析</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/38/" title="数据结构基础（3）线性表的逻辑结构" rel="bookmark">数据结构基础（3）线性表的逻辑结构</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/39/" title="数据结构基础（4）线性表的顺序存储结构——顺序表" rel="bookmark">数据结构基础（4）线性表的顺序存储结构——顺序表</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

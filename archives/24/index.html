@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        webpack4 打包“块”的分离 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">webpack4 打包“块”的分离</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/Node-js/" class="post-tag">#Node.js</a>
+  
+    <a href="/tags/webpack4/" class="post-tag">#webpack4</a>
+  
+    <a href="/tags/splitChunksPlugin/" class="post-tag">#splitChunksPlugin</a>
+  
+
+
+          <span class="post-date">2018-07-26</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>当不使用外部插件时，webpack 会把 <code>webpack.config.js</code>
+配置文件里每个入口打包一个 <code>[entry].js</code>
+文件，这意味着单页面应用（单入口）最终只会打包生成一个 <code>js</code>
+文件。而很多情况下，这种处理并不是最佳的处理方式。比如会造成单个
+<code>js</code> 文件体积过大，并且每次项目迭代都会造成全量
+<code>js</code>
+的更新，不能充分利用缓存。所以我们需要按照一些规则，对打包输出的“块”进行拆分，已达到优化性能的目的。
+<span id="more"></span></p>
+<p>webpack4 中 SplitChunksPlugin
+插件提供了对打包文件进行拆分的功能。</p>
+<p>为了对打包后生成的所有文件有全面的了解，本文第一小节先讲解了
+<code>runtimeChunk</code> 配置的作用。</p>
+<blockquote>
+<p>Originally, chunks (and modules imported inside them) were connected
+by a parent-child relationship in the internal webpack graph. The
+CommonsChunkPlugin was used to avoid duplicated dependencies across
+them, but further optimizations were not possible</p>
+</blockquote>
+<p>以上为 <a
+target="_blank" rel="noopener" href="https://webpack.js.org/plugins/split-chunks-plugin/">Webpack官方文档</a>
+对为什么在 webpack4 后移除了 <code>CommonsChunkPlugin</code>
+而使用全新的 <code>splitChunksPlugin</code> 插件的解释。</p>
+<p>本文以 <code>webpack v4.16.2</code>
+为例，一些配置选项在低版本中可能无效。</p>
+<h2 id="runtimechunk">runtimeChunk</h2>
+<p>设置 <code>optimization.runtimeChunk</code> 为 <code>true</code>
+能为每一个入口添加一个额外的“块”，该块是应用“运行时”（runtime）依赖块。</p>
+<p>该配置有两个配置选项：</p>
+<ul>
+<li><code>single</code>：为所有的块创建一个共享的“运行时”（runtime）文件。</li>
+<li><code>multiple</code> 为通用的块创建多个运行时文件。</li>
+</ul>
+<p>默认值为 <code>false</code>，即每个入口块嵌入 runtime
+依赖，而不是单独将它分离成一个独立的块。</p>
+<h2 id="splitchunksplugin">SplitChunksPlugin</h2>
+<h3 id="默认配置">默认配置</h3>
+<p>若不加以配置，webpack4 会自动使用 <code>splitChunks</code>
+对资源块进行拆分，默认拆分规则如下（来源 <a
+target="_blank" rel="noopener" href="https://webpack.js.org/plugins/split-chunks-plugin/#defaults">Webpack
+官方文档</a>）：</p>
+<ul>
+<li><p>块被多处引用<strong>或者</strong>来自 <code>node_modules</code>
+目录</p></li>
+<li><p>块大小大于 30kb（压缩前）</p></li>
+<li><p>按需加载的块并行请求数不能大于 5 个</p></li>
+<li><p>初始化加载的块并行请求数不能大于 3 个</p></li>
+</ul>
+<p>也就是说 splitChunks 只会拆分被多次引用的块，或者该块来自于
+<code>node_modules</code> 目录；并且该块在压缩前的大小应大于
+30kb，否则不拆离。同时，最后两个条件对并行请求数做出了限制，这就意味着为了满足后两个条件，可能会产生体积较大的块。</p>
+<h3 id="默认配置的例子">默认配置的例子</h3>
+<p>当不对 <code>optimization.splitChunks</code>
+进行任何自定义配置，将<code>optimization.runtimeChunk</code> 设置为
+<code>true</code> 时，对一个单页面多路由应用进行打包时，产生了如下
+<code>js</code> 文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">total 941<br> 24 chunk.0.dec7f9a819944483d79d.js<br>  4 chunk.1.eae64cbc2aa0f9e4e783.js<br>  4 chunk.10.f8750d707c27b95bae13.js<br> 24 chunk.11.2aef84c3ff12c183b072.js<br>  4 chunk.2.21418087238bcf98e494.js<br>  4 chunk.3.545ceaa63e410a4b2d59.js<br>  4 chunk.4.8ca9fe6ed85d546daba4.js<br>  8 chunk.5.1fa9e53fb286828383a7.js<br>  4 chunk.6.50e9186b6024c98d9f30.js<br>  1 chunk.7.a737ccfe76e044e4e6e7.js<br>  8 chunk.8.af950ea9507f49c156e4.js<br>  4 chunk.9.238ddb8be097a6200372.js<br>800 chunk.app.7c6ddec2161a37416ecb.js<br> 44 chunk.main.c54944c0d51e726f5c37.js<br>  4 runtime.26028abb8f1fadc57c34.js<br></code></pre></td></tr></table></figure>
+<p><code>css</code>文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">  4 chunk.1.b853c7844b6e82e97c6b.css<br>  4 chunk.10.ece96fde52d6f0024d0a.css<br>  8 chunk.11.3917cb3b5334910b2ca9.css<br>  1 chunk.2.e9364a9f3d011dd5312b.css<br>  4 chunk.5.d93fa41defa698bc9435.css<br>  4 chunk.6.e52a594a36b4ef3fe490.css<br>  1 chunk.7.52ac776fd2423a0a7c72.css<br>  8 chunk.8.04f1836d396f81ffec4c.css<br>  4 chunk.9.52d5fcfb3d22a54ccf0b.css<br>320 chunk.app.eea3b0fe4cd81c07d6d8.css<br> 20 chunk.main.f451462a7e2cced31c33.css<br></code></pre></td></tr></table></figure>
+<p>入口文件 <code>index.html</code> 如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">html</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">zh-CN</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">UTF-8</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>惠税-助手<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">viewport</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width,initial-scale=1&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">SYART_TIME</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">getTime</span>();</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">href</span>=<span class="hljs-string">./static/css/chunk.app.eea3b0fe4cd81c07d6d8.css</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">stylesheet</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">app</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">text/javascript</span> <span class="hljs-attr">src</span>=<span class="hljs-string">./static/js/runtime.26028abb8f1fadc57c34.js</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">text/javascript</span> <span class="hljs-attr">src</span>=<span class="hljs-string">./static/js/chunk.app.7c6ddec2161a37416ecb.js</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"><span class="hljs-variable language_">window</span>.<span class="hljs-property">LOAD_TIME</span> = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() - <span class="hljs-variable language_">window</span>.<span class="hljs-property">startTime</span>;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>其中，<code>chunk.[number].[hash]</code>
+文件是各个路由页面的块，他们将在需要时被按需加载。<code>chunk.app.[hash]</code>
+块则是入口文件初始化加载所依赖的块，<code>chunk.main.[hash]</code> 是
+splitChunks
+将整个应用中被多次引用的公共内容分离出来，这样能避免相同的文件被多次请求。</p>
+<p><code>runtime.[hash].js</code>
+文件即是第一节中提到的“运行时”依赖块，当把
+<code>optimization.runtimeChunk</code> 设置为 <code>false</code>
+时则不会生成该块。</p>
+<h3 id="小结">小结</h3>
+<blockquote>
+<p>Default configuration was chosen to fit web performance best
+practices but the optimum strategy for your project might defer
+depending on the nature of it.</p>
+</blockquote>
+<p>官方文档中建议使用默认配置，认为默认配置是最佳实践。然而有些时候默认配置并不能完全满足项目需求，可能需要一些自定义的配置。</p>
+<h3 id="自定义配置">自定义配置</h3>
+<p><code>splitChunksPlugin</code>
+插件提供了配置参数，使得开发者能够对包进行自定义配置和拆分块。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = &#123;<br>  <span class="hljs-comment">//...</span><br>  <span class="hljs-attr">optimization</span>: &#123;<br>    <span class="hljs-attr">splitChunks</span>: &#123;<br>      <span class="hljs-attr">chunks</span>: <span class="hljs-string">&#x27;async&#x27;</span>,  <span class="hljs-comment">// all async initial 选择对哪些块进行优化</span><br>      <span class="hljs-attr">minSize</span>: <span class="hljs-number">30000</span>,  <span class="hljs-comment">// 被拆分的最小大小（压缩前）</span><br>      <span class="hljs-attr">minChunks</span>: <span class="hljs-number">1</span>,  <span class="hljs-comment">// 被共享的最小次数</span><br>      <span class="hljs-attr">maxAsyncRequests</span>: <span class="hljs-number">5</span>,  <span class="hljs-comment">// 最大按需求并行请次数</span><br>      <span class="hljs-attr">maxInitialRequests</span>: <span class="hljs-number">3</span>,  <span class="hljs-comment">// 最大初始化并行请求数</span><br>      <span class="hljs-attr">automaticNameDelimiter</span>: <span class="hljs-string">&#x27;~&#x27;</span>,  <span class="hljs-comment">// 自动命名分隔符</span><br>      <span class="hljs-attr">name</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 自动为块命名</span><br>      <span class="hljs-attr">cacheGroups</span>: &#123;<br>        <span class="hljs-attr">vendors</span>: &#123;<br>          <span class="hljs-attr">test</span>: <span class="hljs-regexp">/[\\/]node_modules[\\/]/</span>,<br>          <span class="hljs-attr">priority</span>: -<span class="hljs-number">10</span><br>        &#125;,<br>        <span class="hljs-attr">default</span>: &#123;<br>          <span class="hljs-attr">minChunks</span>: <span class="hljs-number">2</span>,<br>          <span class="hljs-attr">priority</span>: -<span class="hljs-number">20</span>,<br>          <span class="hljs-attr">reuseExistingChunk</span>: <span class="hljs-literal">true</span><br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>其中 <code>cacheGroups</code>
+选项支持对块进行进一步的自定义分割，其中的配置默认继承于
+<code>splitChunksPlugin.*</code>
+配置，在内部进行配置将覆盖继承配置。其中 <code>test</code>
+<code>priority</code> 和 <code>reuseExistingChunk</code> 是
+<code>cacheGroups</code> 特有的配置。</p>
+<p><code>test</code>
+选项对要打包的文件进行选择，一般是一个正则表达式。类似
+<code>loaders</code> 配置里的 <code>test</code>。</p>
+<p><code>priority</code> 设置该配置组的优先级。一个模块可能属于多个
+<code>cacheGroups</code>，这时优先将其打包入高优先级的块中。</p>
+<p><code>reuseExistingChunk</code>
+如果该块已经从主块中分离出来了，则将直接重用该块，而不是重新生成，不过可能会影响块的命名。</p>
+<h2 id="总结">总结</h2>
+<p>以上就是 Webpack4
+中打包分离“块”的配置方法。之所以要进行“块”的分离，是因为一些代码可以被公用，将他们分离出来可以避免重复加载；同时，一些基本不会改动的基础支持被分离出来时，当项目迭代时，这些基础块可以从缓存中获取，减少流量费用。另外，适当的将较大的“块”拆成多个较小的“块”有利于发挥现代浏览器并行下载资源的优势，提高资源加载速度。</p>
+<p>除了适当的对“块”进行拆分，充分利用缓存、模块按需加载、开启 Web
+服务器的 Gzip 压缩等方法也是提高 Web 应用加载和响应速度的常用方法。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/25/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Web 开发中如何终止一个 Http 请求</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/23/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      Git 子模块 submodule 的使用
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/Node-js/" class="post-tag">#Node.js</a>
+  
+    <a href="/tags/webpack4/" class="post-tag">#webpack4</a>
+  
+    <a href="/tags/splitChunksPlugin/" class="post-tag">#splitChunksPlugin</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/32/" title="编写一个自动推送 Git Page 的 nodejs 脚本" rel="bookmark">编写一个自动推送 Git Page 的 nodejs 脚本</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

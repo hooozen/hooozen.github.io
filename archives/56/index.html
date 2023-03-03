@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        JS探幽——移位运算符 <<，>> 和 >>>  | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">JS探幽——移位运算符 <<，>> 和 >>> </div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/ECMAScript/" class="post-tag">#ECMAScript</a>
+  
+    <a href="/tags/JS%E6%8E%A2%E5%B9%BD/" class="post-tag">#JS探幽</a>
+  
+    <a href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" class="post-tag">#移位运算符</a>
+  
+
+
+          <span class="post-date">2022-09-09</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>移位运算符在数据结构与算法中有着重要的作用，很多时候可以大大提高算法性能，简化问题求解。同时也是高级语言连接计算机机器码的工具。本文介绍了
+JavaScript 中移位运算符 &lt;&lt;，&gt;&gt; 和 &gt;&gt;&gt;
+的规范和表现。</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>可能很多前端开发者对位运算并不感冒，觉得过于接近于 C、C++
+等语言的风格以至于与 JavaScript
+简单易用的风格所不符。事实确实如此，大多数情况下位运算都可以用普通的数值操作符替代实现，并且前端开发者对于接近于底层的性能优化并不敏感。诸多有关位运算的优化算法又过于晦涩<a
+href="#ref1"><sup>1</sup></a>，深入了解又不免过于消耗精力。但有时稍花费一点时间了解一些常用的位操作技巧，能够提升编码的效率和性能。例如，在
+JavaScript 中求两数中间的整数，即可使用移位操作简化代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> a = <span class="hljs-number">0</span>, b = <span class="hljs-number">11</span>, mid<br><br>mid = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((a + b) / <span class="hljs-number">2</span>)  <span class="hljs-comment">// 使用四则运算并调用函数</span><br>mid = (a + b) &gt;&gt; <span class="hljs-number">1</span>  <span class="hljs-comment">// 求和后直接向右移位</span><br></code></pre></td></tr></table></figure>
+<p>既然要用，那么就要对其规范和表现有一个准确的了解，使用时遇到意外的表现也可快速定位问题。</p>
+<h2 id="引例">引例</h2>
+<p>照例，在阅读本文前请思考下面的代码，考虑它们的预期处理结果是什么。如果你能完全预料和理解这种表现，那么无需拨冗阅读本文了。如果一些表现使你疑惑，也许能从本文得到答案。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs javaScript"><span class="hljs-comment">/*-- part 1 --*/</span><br><span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">31</span> === <span class="hljs-number">2</span> &lt;&lt; <span class="hljs-number">30</span> <span class="hljs-comment">// true</span><br><span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">32</span> === <span class="hljs-number">2</span> &lt;&lt; <span class="hljs-number">31</span> <span class="hljs-comment">// false</span><br><br><span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">30</span> === <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(<span class="hljs-number">2</span>, <span class="hljs-number">30</span>)  <span class="hljs-comment">// true</span><br><span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">31</span> === <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(<span class="hljs-number">2</span>, <span class="hljs-number">31</span>)  <span class="hljs-comment">// false</span><br><br><span class="hljs-number">2</span> &lt;&lt; <span class="hljs-number">29</span> === <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(<span class="hljs-number">2</span>, <span class="hljs-number">30</span>)  <span class="hljs-comment">// true</span><br><span class="hljs-number">2</span> &lt;&lt; <span class="hljs-number">30</span> === <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(<span class="hljs-number">2</span>, <span class="hljs-number">31</span>)  <span class="hljs-comment">// false</span><br><br><br><span class="hljs-comment">/*-- part 2 --*/</span><br><span class="hljs-number">1</span> &gt;&gt; <span class="hljs-number">31</span> === <span class="hljs-number">0</span> <span class="hljs-comment">// true</span><br><span class="hljs-number">1</span> &gt;&gt; <span class="hljs-number">32</span> === <span class="hljs-number">1</span> <span class="hljs-comment">// true</span><br><span class="hljs-number">1</span> &gt;&gt; <span class="hljs-number">33</span> === <span class="hljs-number">0</span> <span class="hljs-comment">// true</span><br><span class="hljs-number">2</span> &gt;&gt; <span class="hljs-number">31</span> === <span class="hljs-number">0</span> <span class="hljs-comment">// true</span><br><span class="hljs-number">2</span> &gt;&gt; <span class="hljs-number">32</span> === <span class="hljs-number">2</span> <span class="hljs-comment">// true</span><br><br><span class="hljs-comment">/*-- part 4 --*/</span><br>-<span class="hljs-number">1</span> &gt;&gt; <span class="hljs-number">1</span> === -<span class="hljs-number">1</span> <span class="hljs-comment">// true</span><br>-<span class="hljs-number">1</span> &gt;&gt; <span class="hljs-number">2</span> === -<span class="hljs-number">1</span> <span class="hljs-comment">// true</span><br>-<span class="hljs-number">1</span> &gt;&gt; <span class="hljs-number">32</span> === -<span class="hljs-number">1</span> <span class="hljs-comment">// true</span><br><br>-<span class="hljs-number">2</span> &gt;&gt; <span class="hljs-number">1</span> === -<span class="hljs-number">1</span> <span class="hljs-comment">// true</span><br>-<span class="hljs-number">2</span> &gt;&gt; <span class="hljs-number">31</span> === -<span class="hljs-number">1</span> <span class="hljs-comment">// true</span><br>-<span class="hljs-number">2</span> &gt;&gt; <span class="hljs-number">32</span> === -<span class="hljs-number">2</span> <span class="hljs-comment">// true</span><br>-<span class="hljs-number">2</span> &gt;&gt; <span class="hljs-number">33</span> === -<span class="hljs-number">1</span> <span class="hljs-comment">// true</span><br><br><span class="hljs-comment">/*-- part 5 --*/</span><br><br>-<span class="hljs-number">1</span> &gt;&gt;&gt; <span class="hljs-number">1</span> === <span class="hljs-number">2147483647</span> <span class="hljs-comment">// true</span><br><br></code></pre></td></tr></table></figure>
+<h2 id="js-的移位运算符">JS 的移位运算符</h2>
+<p>其实引例中的表现均可用以下几个规则来解释：</p>
+<ol type="1">
+<li>位运算符将被操作数视作由 0 和 1 构成 32 位的二进制数串<a
+href="#ref2"><sup>2</sup></a></li>
+<li>按照第一条规则转换数字时使用 32 位二进制补码表示</li>
+<li>移位操作的移动位数为右操作数对 32 取模后的值，例如 <code>a &lt;&lt;
+33 === a &lt;&lt; 1</code>，<code>a &lt;&lt; -31 === a &lt;&lt;
+1</code></li>
+</ol>
+<p>根据以上规则，再结合 <code>&lt;&lt;</code> <code>&gt;&gt;</code> 和
+<code>&gt;&gt;&gt;</code> 3 种运算符的具体规则<a
+href="#ref2"><sup>2</sup></a>：</p>
+<ul>
+<li><code>&lt;&lt;</code> 左移位运算符，将左操作数的 32
+位补码每个数位的数都向左移动指定位数，左溢出的数字舍弃，右侧补
+<code>0</code></li>
+<li><code>&gt;&gt;</code> 有符号右移位运算符，将左操作数的 32
+位补码每个数位的数都向右移动指定位数，右溢出的数字舍弃，左侧根据原操作数的最高位补
+<code>0</code> 或 <code>1</code></li>
+<li><code>&gt;&gt;&gt;</code> 无符号右移位运算符，将左操作数的 32
+位补码每个数位的数都向右移动指定位数，右溢出的数字舍弃，左侧补
+<code>0</code></li>
+</ul>
+<p>有了以上规则，JavaScript
+的移位操作符的运算结果就都能正确判断了。至此文章的核心内便已经结束，如果你已经熟悉其它语言的移位运算，那么只需要参考以上规则即可。下面结合具体例子进行解释。</p>
+<h3 id="计算机的补码">计算机的补码</h3>
+<p>在开始介绍具体的运算符前，先简单回顾下计算机的补码。计算机的补码是为了简化整数间的减法运算而设计的一种非常巧妙地编码方式，这里只简单的介绍补码的编码规则，以备后用。</p>
+<p>对于 32 位整数来说，正数的补码与原码一致，由于最高位为符号位固定为
+<code>0</code> 表示正数，故 32 个数位所能表示的正整数范围为 <span
+class="math inline">\([1, 2^{31} - 1]\)</span>。数字 <code>0</code>
+的补码则表示为 32 个 <code>0</code>。对于负数来说，首先最高位固定为
+<code>1</code> 表示负数，剩余数位则在其原码的基础上“取反加1”。例如
+<code>-1</code> 的原码为
+<code>10000000000000000000000000000001</code>，则先对其非符号位取反得到
+<code>11111111111111111111111111111110</code>，然后再加 1，得到
+<code>-1</code> 的补码为
+<code>11111111111111111111111111111111</code>。容易验证“-0”的原码在补码下表示
+<span class="math inline">\(-2^{31}\)</span>，故负整数的取值范围为 <span
+class="math inline">\([-2^{31}, -1]\)</span>。</p>
+<h3 id="运算符"><code>&lt;&lt;</code> 运算符</h3>
+<p>根据规定，左移位运算符无非就是将所有数位左移，并在右侧补零。对于正整数来说，左移几位就是在原来的数乘上
+2 的几次（对 32 取模后）幂：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">num &lt;&lt; n === num * <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(<span class="hljs-number">2</span>, n mod <span class="hljs-number">32</span>)<br></code></pre></td></tr></table></figure>
+<p>当然，上述公式基于所有数值对于 32
+位整数来说没有溢出。当溢出时，将按照 32 位补码溢出处理。例如引例中
+<code>2 &lt;&lt; 31</code>，即将二进制 <code>10</code> 所有数位向左移动
+31 位，显然第 2 位的 <code>1</code> 最终会移至（从右到左数）第 “33”
+位，导致溢出被舍弃，最终所有数位皆为 <code>0</code>，因此 <code>2
+&lt;&lt; 31 === 0</code>。而对于 <code>1 &lt;&lt;
+32</code>，由于右操作数对 32 取模后为 0，故并不移位 <code>1 &lt;&lt; 32
+=== 1</code>。</p>
+<p>同理，当左操作数对于 32
+位整数溢出时，仍然先处理溢出后在进行移位操作。此处，仅举例：<code>(Math.pow(2,32)
++ 1) &lt;&lt; 1 === 2</code>。</p>
+<p>另外需注意，左移操作时虽然限制了右操作数对 32
+取模，但仍无法避免左侧溢出数位被舍弃。这就可能导致当操作数较大时，正数左移位后变为负数。例如，<code>2
+&lt;&lt; 30 === -2147483648  // -2^31</code>。</p>
+<h3 id="运算符-1"><code>&gt;&gt;</code> 运算符</h3>
+<p>右移位运算符和 <code>&lt;&lt;</code>
+左移位运算符对于溢出和取模的处理一致，不再赘述。但 <code>&gt;&gt;</code>
+在补位的处理上略有不同，<code>&lt;&lt;</code> 运算符在右侧直接补
+<code>0</code>。而 <code>&gt;&gt;</code> 运算符视被操作数的最高位选择补
+<code>0</code> 或 <code>1</code>。具体地，当被操作数最高位为
+<code>0</code>（即为正数或零）则补 <code>0</code>，反之补
+<code>1</code>。也就说右移运算符保证了操作前后的符号。并且也解释了为什么对于
+<code>-1 &gt;&gt; n</code> 无论 <code>n</code> 为多少结果都为
+<code>-1</code>。因为 <code>-1</code> 的补码在各个数位上为
+<code>1</code>，则右侧被移除多少个
+<code>1</code>，左侧就会被补进来多少个
+<code>1</code>，故并不改变数值大小。</p>
+<h3 id="运算符-2"><code>&gt;&gt;&gt;</code> 运算符</h3>
+<p>介绍完前两个运算符，无符号的右移运算符就一目了然了。该运算符与
+<code>&lt;&lt;</code>
+除了在移动方向上不同外，其余溢出、补零等规则都一致，不再赘述。仅解释引例中
+<code>-1 &gt;&gt;&gt; 1 === 2147483647</code>。由于 <code>-1</code>
+的补码为 <code>111...111</code>，故右移一位后，右侧被舍弃一个
+1，左侧最高位补 0，则变为 <code>0111...111</code>，显然该值为 <span
+class="math inline">\(2^{31-1}\)</span>。与 <code>&lt;&lt;</code>
+运算符一致，<code>&gt;&gt;&gt;</code> 也可能使操作数发生符号变化。</p>
+<hr />
+<p><em>有关对于 32
+取模的规则未找到官方文档支持，仅实验推断，并且未发现反例，读者可自测。</em></p>
+<h2 id="参考资料"><em>参考资料</em></h2>
+<div id="ref1">
+
+</div>
+<p>[1] HENRY S. WARREN J. 算法心得：高效算法的奥秘（原书第2版）[M/OL].
+爱飞翔, 译. 机械工业出版社, 2014[2022-09-09]. <a
+target="_blank" rel="noopener" href="https://book.douban.com/subject/25837031/"
+class="uri">https://book.douban.com/subject/25837031/</a>.</p>
+<div id="ref2">
+
+</div>
+<p>[2] Expressions and operators - JavaScript | MDN[EB/OL].
+[2022-09-09]. <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#bitwise_operators"
+class="uri">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#bitwise_operators</a>.</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/60/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Wallpaper Enginner 创意工坊更新</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/55/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      JS探幽——从数据类型到包装器对象
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/ECMAScript/" class="post-tag">#ECMAScript</a>
+  
+    <a href="/tags/JS%E6%8E%A2%E5%B9%BD/" class="post-tag">#JS探幽</a>
+  
+    <a href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" class="post-tag">#移位运算符</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/55/" title="JS探幽——从数据类型到包装器对象" rel="bookmark">JS探幽——从数据类型到包装器对象</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/17/" title="JavaScript设计模式(1)——单例模式" rel="bookmark">JavaScript设计模式(1)——单例模式</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

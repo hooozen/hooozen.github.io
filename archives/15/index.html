@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        requestAnimationFrame——HTML5动画利器 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">requestAnimationFrame——HTML5动画利器</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
+  
+    <a href="/tags/HTML5/" class="post-tag">#HTML5</a>
+  
+    <a href="/tags/requestAnimationFrame/" class="post-tag">#requestAnimationFrame</a>
+  
+
+
+          <span class="post-date">2018-04-07</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p><code>requestAnimationFrame</code> 是 <code>window</code>
+对象中的一个新方法，是专门为了网页动画而生的。</p>
+<span id="more"></span>
+<h2 id="优点">优点</h2>
+<p>在该方法没有实现之前，在操作 DOM 动画时，几乎只能通过
+<code>setInterval</code> 定时器来实现。而 <code>setInterval</code>
+方法实现动画的缺点是显而易见的：</p>
+<ol type="1">
+<li>时间计算不精准。由于 <code>setInterval</code> 处于
+<code>JavaScript</code> 的异步执行阶段，基于
+<code>JavaScript</code>单线程的特点，为其设定执行时间无法保证准确。</li>
+<li>性能浪费。使用 <code>setInterval</code>
+方法，我们需要考虑为其设定合适的间隔值，以保证动画流畅。而过低的间隔将造成事件频繁的触发降低代码性能。</li>
+<li>不合预期的表现。使用 <code>setInterval</code>
+设置动画时，当用户切换至其他页面或最小化时，<code>setInterval</code>
+会暂时进入“休眠”状态,但是并不是不执行程序,它会把需要执行的操作放在队列中
+，等到下次窗口一打开的一瞬间把队列里面的全部执行。这样就造成了动画效果混乱，不合预期。</li>
+</ol>
+<p>而 <code>requestAnimationFrame</code> 则很好的避免了以上几点：</p>
+<ol type="1">
+<li>动画的调用时间是浏览器通过系统时间设定，是浏览器级别的操作，保证了时间的精确。</li>
+<li>该方法只接受一个回掉函数作为参数，由浏览器设置合适的时间间隔（浏览器厂商根据屏幕刷新率来设定，通常为<code>1/60</code>秒）。同时浏览器会把该时刻所有的
+DOM
+操作集中起来完成（优化），在一次重绘或回流中完成。在复杂动画情况下，性能极大提升。并且该方法会忽略不可见元素的动画操作。</li>
+<li>如果页面不处于激活状态，会自动暂停动画的执行。</li>
+</ol>
+<h2 id="语法">语法</h2>
+<p><code>requestAnimationFrame</code>
+方法的语法非常简单，只需要传入一个回调函数即可：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">requestAnimationFrame</span>(callback);<br><span class="hljs-keyword">function</span> <span class="hljs-title function_">callback</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-comment">/* some animation code */</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>该方法返回一个 long 非零整数，请求 ID
+，也是回调列表中唯一的标识。</p>
+<p>需要注意的是，该方法的使用和 <code>setTimeout</code>
+的时候略有不同。<a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame">MDN</a>
+中对该方法的解释如下： &gt;window.requestAnimationFrame()
+方法告诉浏览器您希望执行动画并请求浏览器在下一次重绘之前调用指定的函数来更新动画。该方法使用一个回调函数作为参数，这个回调函数会在浏览器重绘之前调用。</p>
+<p>也就是说，传入的回调函数只会在下一次重绘中被调用，仅此一次，而不是像
+<code>setTimeout</code> 一次设置，循环调用。所以 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame">MDN</a>
+中给出了这样的提示：
+&gt;注意：若您想要在下次重绘时产生另一个动画画面，您的回调例程必须调用
+requestAnimationFrame()。</p>
+<p>另外需要注意，该方法会为 <code>callback</code>
+方法传入一个默认参数，该参数是一个时间戳，用以计算该动画从开始到该次回调之间的毫秒数。如果不注意，当需要对回调函数绑定参数并且参数缺省时可能会产生误解。</p>
+<h2 id="例子">例子</h2>
+<iframe height="600" scrolling="no" title="自由落体小球" src="//codepen.io/Hozen/embed/jZrpWE/?height=265&amp;theme-id=0&amp;default-tab=result&amp;embed-version=2" frameborder="no" allowtransparency="true" allowfullscreen="true" style="width: 100%;">
+</iframe>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> ball = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ball&#x27;</span>);<br><br><span class="hljs-keyword">let</span> x = <span class="hljs-number">5</span>;  <span class="hljs-comment">// 初始高度</span><br><span class="hljs-keyword">let</span> t = <span class="hljs-number">1</span>;  <span class="hljs-comment">// 时间间隔</span><br><span class="hljs-keyword">let</span> a = <span class="hljs-number">0.5</span>  <span class="hljs-comment">// 加速度</span><br><span class="hljs-keyword">let</span> v = <span class="hljs-number">0</span>;  <span class="hljs-comment">// 初速度</span><br><span class="hljs-keyword">let</span> maxX = <span class="hljs-number">400</span>;  <span class="hljs-comment">// 最大位移（反弹位置）</span><br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">drop</span>(<span class="hljs-params"></span>) &#123;<br>  ball.<span class="hljs-property">style</span>.<span class="hljs-property">top</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(x) + <span class="hljs-string">&#x27;px&#x27;</span>;<br>  <span class="hljs-keyword">if</span> (x &gt; maxX)&#123;<br>    v = -v;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    v += a *t;<br>  &#125;<br>x += v* t;<br>  <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">requestAnimationFrame</span>(drop);<br>&#125;<br><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">requestAnimationFrame</span>(drop);<br><span class="hljs-comment">//drop();</span><br><br></code></pre></td></tr></table></figure>
+<p>上面的例子模拟了一个小球的无能量损耗的自由落体及反弹运动（HTML 和 CSS
+代码未给出）。其中动画函数是
+<code>drop</code>，在该函数中计算小球的位移并复制给小球 DOM 的
+<code>top</code> 属性。</p>
+<p>我们希望动画循环执行，至调用一次
+<code>window.requestAnimationFrame(drop)</code>
+是不行的，因为这只会<strong>在下一次重绘时</strong>更新。所以我们在
+<code>drop</code> 函数末尾再次调用
+<code>window.requestAnimation(drop)</code>
+保证每次都有下一次，即实现了动画循环。</p>
+<p>如果希望动画在特定条件下停止，在函数中调用
+<code>window.requestAnimationFrame</code> 前 <code>return</code>
+即可。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/17/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>JavaScript设计模式(1)——单例模式</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/14/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      为DOM2级事件函数传参——bind的应用
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
+  
+    <a href="/tags/HTML5/" class="post-tag">#HTML5</a>
+  
+    <a href="/tags/requestAnimationFrame/" class="post-tag">#requestAnimationFrame</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/14/" title="为DOM2级事件函数传参——bind的应用" rel="bookmark">为DOM2级事件函数传参——bind的应用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/2/" title="IndexedDB 中文教程（2）基本使用" rel="bookmark">IndexedDB 中文教程（2）基本使用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

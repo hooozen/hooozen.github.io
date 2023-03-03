@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        IndexedDB 中文教程（2）基本使用 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">IndexedDB 中文教程（2）基本使用</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
+  
+    <a href="/tags/indexedDB/" class="post-tag">#indexedDB</a>
+  
+
+
+          <span class="post-date">2018-11-26</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p><a href="https://www.hozen.site/archives/1/">IndexedDB
+中文教程（1）介绍</a></p>
+<p><a href="https://www.hozen.site/archives/2/">IndexedDB
+中文教程（2）基本使用</a> <span id="more"></span></p>
+<hr />
+<p>教程持续更新中……</p>
+<p>本文将基于一些代码实例对于 IndexedDB
+的基本用法进行介，为了教程的连贯性，一些原理性的内容和容易有疑问的地方并未展开，在文末将会对这些疑问进行解释和说明。</p>
+<h2 id="连接数据库">连接数据库</h2>
+<p>使用 <code>indexedDB.open()</code>
+方法打开本地数据库，如果该数据库不存在，则创建该数据库。该方法接受两个参数：数据库名、数据库版本（可选的）。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> openRequest = <span class="hljs-variable language_">window</span>.<span class="hljs-property">indexedDB</span>.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;hozen.site&#x27;</span>);<br><span class="hljs-keyword">var</span> db;<br>openRequest.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    db = <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>; <br>    <span class="hljs-comment">// db = event.target.result;</span><br>    <span class="hljs-comment">// db = openRequest.result;</span><br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;打开数据库成功&quot;</span>);<br>&#125;<br>openRequest.<span class="hljs-property">onupgradeneeded</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-keyword">var</span> objStore = <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>.<span class="hljs-title function_">createObjectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>, &#123;<span class="hljs-attr">keyPath</span>: <span class="hljs-string">&#x27;url&#x27;</span>&#125;);<br>    objStore.<span class="hljs-title function_">createIndex</span>(<span class="hljs-string">&#x27;category&#x27;</span>, <span class="hljs-string">&#x27;category&#x27;</span>); <span class="hljs-comment">// 创建索引</span><br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;创建对象仓库完成&#x27;</span>);<br>&#125;<br>openRequest.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;打开数据库失败&#x27;</span>, event);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>open</code> 方法是异步的，当打开成功时触发
+<code>onsuccess</code> 事件，失败时触发 <code>onerror</code>
+事件。当数据库升级时，触发 <code>onupgradeneeded</code>
+事件。升级是指该数据库首次被创建，或调用 <code>open()</code>
+方法时指定的数据库的版本号高于本地已有的版本。</p>
+<p><code>onupgradeneeded</code>
+处理函数对于创建数据库和修改数据库结构是很重要的，因为 IndexedDB
+只允许在该函数内创建和删除 <code>ObjectStore</code>
+或创建删除索引。一旦错过这个机会就无法在当前版本数据库中对数据库结构进行修改了。</p>
+<p><code>db</code>
+变量保存了打开数据库请求的结果，当打开数据库成功时将获取一个对象。该对象是对
+IndexedDB
+进行数据操作的基础，因此要及时保存它，并保证在需要的地方能调用得到。</p>
+<p><code>createObjectStore</code>
+方法创建了一个对象仓库，该方法接受两个参数：仓库名、配置对象（可选的）。该例中，使用配置对象指定了
+'url'
+为对象仓库的<strong>内键</strong>，其作用类似关系型数据库中的主键，需具有唯一标识性。该方法返回新创建的对象仓库。</p>
+<h2 id="添加一条数据">添加一条数据</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> data = &#123;<br>    <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;IndexedDB 教程（1）简介&#x27;</span>,<br>    <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://www.hozen.site/archives/6/&#x27;</span>,<br>    <span class="hljs-attr">categories</span>: <span class="hljs-string">&#x27;clientScript&#x27;</span>,<br>&#125;;<br><span class="hljs-keyword">var</span> transaction = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>, <span class="hljs-string">&#x27;readwrite&#x27;</span>);<br><span class="hljs-keyword">var</span> objectStore = transaction.<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> addReq = objectStore.<span class="hljs-title function_">add</span>(data);<br>addReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;添加数据成功&#x27;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>);<br>&#125;<br>addReq.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;添加数据失败&#x27;</span>, event)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里我们直接将一个 JavaScript 对象 <code>data</code>
+未加任何处理的存入了数据库。在该例中由于我们使用了内键，因此我们只能存储
+JavaScript 对象（或者是因为我们只会存储对象，所以才使用了内键），并且其
+<code>url</code> 属性是必须且唯一的。</p>
+<p>首先，通过 <code>transaction()</code>
+方法获取一个事务，该方法接受两个参数。第一个参数作为事务的<strong>作用域</strong>，表示该事务跨越的对象仓库；第二个参数表示事务权限，这里需要一个读写权限。该方法返回一个事务对象。</p>
+<p><code>objectStore()</code>
+方法获取指定对象仓库，该方法一次只能获取一个对象仓库。</p>
+<p>使用对象仓库的 <code>add()</code>
+方法像数据库添加数据，这同样是一个异步方法，触发响应事件处理函数。</p>
+<h2 id="取出一条数据">取出一条数据</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> transaction = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> objectStore = transaction.<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> getReq = objectStore.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;https://www.hozen.site/archives/6/&#x27;</span>);<br>getReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;读取数据成功: &#x27;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>);<br>&#125;<br>getReq.<span class="hljs-property">oerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;读取数据失败&#x27;</span>, event);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>类似的，我们启动一个事务，然后获取一个对象仓库，调用它的
+<code>get()</code>
+方法读取数据，然后对成功和失败的情况做处理。但这里稍有不同的是，我们只需要一个“只读”事务即可（最小权限原则不仅是优秀的代码习惯，在
+IndexedDB 对于跨作用域的情况也是有积极作用的，见文末）。</p>
+<p><code>get()</code>
+方法接受数据的键（key）作为参数，从数据库中查询对应的数据。如果查询成功，其结果会返回至请求对象的
+<code>result</code> 属性中。数据为空返回 <code>undefined</code>。</p>
+<h2 id="修改一条数据">修改一条数据</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> dataNew = &#123;<br>    <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;IndexedDB 教程（1）简介&#x27;</span>,<br>    <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://www.hozen.site/archives/6/&#x27;</span>,<br>    <span class="hljs-attr">categories</span>: <span class="hljs-string">&#x27;clientScript&#x27;</span>,<br>    <span class="hljs-attr">alias</span>: <span class="hljs-string">&#x27;indexDB introduction&#x27;</span>,<br>&#125;;<br><span class="hljs-keyword">var</span> transaction = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>, <span class="hljs-string">&#x27;readwrite&#x27;</span>);<br><span class="hljs-keyword">var</span> objectStore = transaction.<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> addReq = objectStore.<span class="hljs-title function_">put</span>(dataNew);<br>addReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;修改数据成功&#x27;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>);<br>&#125;<br>addReq.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;修改数据失败&#x27;</span>, event)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里的代码基本上和添加数据的代码一致，只不过我们向数据中新增了一个
+<code>alias</code> 字段。然后调用了 <code>put()</code> 方法而非
+<code>add()</code> 方法向数据库插入数据。如果这里我们再次使用
+<code>add()</code>
+方法将修改后的数据插入数据库时，请求会失败，因为已经存在一个
+<code>url</code> 相同的数据。而 <code>put()</code>
+则是不关心数据库是否已存在该数据（具备相同键的数据），总是把数据插入数据库，进而覆盖掉以前的数据，达到更新数据的目的。</p>
+<p>因此，在 IndexedDB
+中更新数据实际上相当于用一个新的数据覆盖掉原来的数据，所以当我们只更新部分数据时，会先从数据库中取出原来的数据，然后修改该数据的属性，最后将该数据“put”进数据库。这和关系型数据库中
+<code>UPDATE</code> 语法不太一样。</p>
+<h2 id="删除一条数据">删除一条数据</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> transaction = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>, <span class="hljs-string">&#x27;readwrit&#x27;</span>);<br><span class="hljs-keyword">var</span> objectStore = transaction.<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> delReq = objectStore.<span class="hljs-title function_">delete</span>(<span class="hljs-string">&#x27;https://www.hozen.site/archives/6/&#x27;</span>);<br>delReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;删除数据成功&#x27;</span>);<br>&#125;<br>delReq.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;删除数据失败&#x27;</span>, event);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>同样我们需要启动一个事务来进行删除操作，<code>delete</code>
+方法接受一个参数来删除对应的数据，该参数可以是一条数据的键，也可以是一个代表键范围的对象
+<a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/IDBKeyRange">IDBKeyRange</a>。删除成功时触发
+<code>onsuccess</code> 事件，删除一个不存在的数据时，同样也会成功。</p>
+<h2 id="批量操作">批量操作</h2>
+<h3 id="批量插入">批量插入</h3>
+<p>使用循环来批量插入数据：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> transaction = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>, <span class="hljs-string">&#x27;readwrite&#x27;</span>);<br><span class="hljs-keyword">var</span> objectStore = transaction.<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> dataSet = [<br>    &#123;<br>        <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;IndexedDB 中文教程（1）简介&#x27;</span>,<br>        <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://www.hozen.site/archives/6/&#x27;</span>,<br>        <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;clientScript&#x27;</span>,<br>    &#125;, &#123;<br>        <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;IndexedDB 中文教程（2）基本用法&#x27;</span>,<br>        <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://www.hozen.site/archives/7/&#x27;</span>,<br>        <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;clientScript&#x27;</span>,<br>    &#125;, &#123;<br>  <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;《和解》—— React 差异化算法&#x27;</span>,<br>        <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://www.hozen.site/archives/1/&#x27;</span>,<br>        <span class="hljs-attr">catefory</span>: <span class="hljs-string">&#x27;React&#x27;</span>,<br>    &#125;, &#123;<br>        <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;[译]严格判定JavaScript对象是否为数组&#x27;</span>,<br>        <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://www.hozen.site/archives/2/&#x27;</span>,<br>        <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;ECMAScript&#x27;</span>,<br>    &#125;, &#123;<br>        <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;JavaScript设计模式(1)——单例模式&#x27;</span>,<br>        <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://www.hozen.site/archives/17/&#x27;</span>,<br>        <span class="hljs-attr">category</span>: <span class="hljs-string">&#x27;ECMAScript&#x27;</span>,<br>    &#125;];<br>    <br>transaction.<span class="hljs-property">oncomplete</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;所有数据插入成功&#x27;</span>); <br>&#125;;<br><br>transaction.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;插入数据失败：&#x27;</span>, event);<br>&#125;<br><br>dataSet.<span class="hljs-title function_">forEach</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) &#123;<br>    objectStore.<span class="hljs-title function_">put</span>(data);<br>&#125;);<br></code></pre></td></tr></table></figure>
+<p>上例中使用了事务的 <code>oncomplete</code>
+事件，当事务完成时会触发该事件。</p>
+<h3 id="查询所有数据">查询所有数据</h3>
+<p>使用 <code>getAll()</code> 可以进行查询对象仓库所有数据：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> objectStore = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>).<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> getAllReq = objectStore.<span class="hljs-title function_">getAll</span>();<br>getAllReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;所有数据&#x27;</span>, <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>);<br>&#125;;<br>getAllReq.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">evnt</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;获取数据失败&#x27;</span>, event);<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>该方法有两个可选参数，第一个参数指定查询范围 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/IDBKeyRange">IDBKeyRange</a>，第二个参数限制返回数据的数量。</p>
+<p>相应的 <code>getAllKeys()</code> 可以获取所有数据的键。</p>
+<h3 id="清空对象仓库">清空对象仓库</h3>
+<p>在删除数据小节里已经提到，传入一个 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/IDBKeyRange">IDBKeyRange</a>
+对象参数给 <code>delete()</code>
+方法可以实现范围删除。如果需要清空对象仓库，有一个更简单的方法：<code>clear()</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> objectStore = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>, <span class="hljs-string">&#x27;readwrite&#x27;</span>).<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> clearReq = objectStore.<span class="hljs-title function_">clear</span>();<br>clearReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;清空成功&#x27;</span>);<br>&#125;<br>clearReq.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;清空失败&#x27;</span>, event);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="使用游标">使用游标</h2>
+<p>使用游标可以对对象仓库中的数据进行遍历：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> objectStore = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>).<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br>cursorReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">var</span> cursor = <span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>;<br>    <span class="hljs-keyword">if</span> (cursor) &#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(cursor.<span class="hljs-property">value</span>.<span class="hljs-property">title</span>);<br>        cursor.<span class="hljs-title function_">continue</span>();<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;遍历结束&#x27;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>openCursor()</code> 方法有两个可选参数，第一个仍然是一个
+IDBKeyRange
+对象来指定遍历范围，第二个参数用来指定遍历方向。当查询成功时，<code>cursorReq</code>
+的 <code>result</code> 属性指向一个游标对象，该对象的 <code>key</code>
+和 <code>value</code> 分别保存了查询数据的键值。调用 <code>cursor</code>
+的 <code>continue()</code> 方法使遍历继续吗，当遍历结束时
+<code>result</code> 得到 <code>null</code>。</p>
+<p>使用 <code>getAll()</code> 获取所有所有数据，然后对结果进行遍历获取
+<code>title</code> 属性，也可以达到上例的目的。但如果我们只想获取
+<code>key</code> 的值时，使用游标要比使用 <code>getAll()</code>
+高效得多。</p>
+<p>相应的 <code>openKeyCursor</code> 可以用来获取数据的键。</p>
+<h2 id="使用索引">使用索引</h2>
+<p>本文中的例子使用了 <code>url</code>
+作为对象仓库的内键以保证不会重复，但不会重复的键大多不易记忆和查询。IndexedDB
+提供了索引机制。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> objectStore = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>).<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br><span class="hljs-keyword">var</span> index = objectStore.<span class="hljs-title function_">index</span>(<span class="hljs-string">&#x27;category&#x27;</span>);<br><span class="hljs-keyword">var</span> indexReq = index.<span class="hljs-title function_">getAll</span>();<br>indexReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">result</span>);<br>&#125;<br>indexReq.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(event);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="可能存在的疑问">可能存在的疑问</h2>
+<p>以上是一些基本的 IndexedDB 的
+API，尽量避免了一些可能稍微复杂的概念和原理，但如果想解决实践过程中遇到的一些问题，这些原理必须要掌握。</p>
+<p>比如，新学者在使用 IndexedDB 的过程中可能会遇到以下问题：</p>
+<ul>
+<li>事务终止，无法调用</li>
+<li>请求一直处于 <code>pending</code> 状态，无法进行数据的版本升级</li>
+<li>启用不必要的事务，浪费性能</li>
+<li>事务跨作用域失败</li>
+<li>选择不合适的对象仓库类型</li>
+</ul>
+<p>这些问题的排查和解决需要对 IndexedDB
+的请求机制，事务生命周期等内容有全面的了解。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/16/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Nginx 配置前端 HTML5 History 路由</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/1/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      IndexedDB 中文教程（1）介绍
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
+  
+    <a href="/tags/indexedDB/" class="post-tag">#indexedDB</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/14/" title="为DOM2级事件函数传参——bind的应用" rel="bookmark">为DOM2级事件函数传参——bind的应用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/15/" title="requestAnimationFrame——HTML5动画利器" rel="bookmark">requestAnimationFrame——HTML5动画利器</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

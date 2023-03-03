@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        数据结构基础（2）算法及算法分析 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">数据结构基础（2）算法及算法分析</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
+  
+    <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" class="post-tag">#时间复杂度</a>
+  
+
+
+          <span class="post-date">2021-03-08</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>本文主要讲述了算法的基本概念和算法的分析方法，主要包括算法的时间复杂度分析.</p>
+<span id="more"></span>
+<p><strong><em>目录（更新中）</em></strong></p>
+<ul>
+<li><p>第一章绪论</p>
+<p><a href="https://www.hozen.site/archives/36/">(1)
+数据结构的基本概念</a></p>
+<p><strong>(2) 算法及算法分析</strong></p></li>
+<li><p>第二章 线性表</p>
+<p><a href="https://www.hozen.site/archives/38/">(3)
+线性表的逻辑结构</a></p>
+<p><a href="https://www.hozen.site/archives/39/">(4)
+线性表的顺序存储结构——顺序表</a></p></li>
+</ul>
+<p><em>参考资料</em></p>
+<p>[1] 王红梅编著. 数据结构（C++版本）（第2版）.
+北京：清华大学出版社，2011.</p>
+<p>[2] 张铭. <a
+target="_blank" rel="noopener" href="https://www.coursera.org/learn/shuju-jiegou-suanfa">coursera-数据结构基础</a>.
+coursera.</p>
+<hr />
+<h3 id="算法algorithm">算法（Algorithm）</h3>
+<h4 id="概述">概述</h4>
+<p>算法被公认为是计算机科学的基石.</p>
+<p>通俗地讲，算法是解决问题的方法.
+现实生活中算法的实例不胜枚举，如一道菜谱、一个安装转移的操作指南等.</p>
+<p>严格地说，算法是对特定问题求解步骤的一种描述，是指令的有限序列.</p>
+<p>通常一个问题可以有多种算法，一个算法可以解决某个特定的问题.</p>
+<p>算法必须满足以下 5 个重要特性：</p>
+<ol type="1">
+<li><p><strong>输入</strong>：一个算法有零个或多个输入，这些输入通常取自于某个特定的对象集合.</p></li>
+<li><p><strong>输出</strong>：一个有一个或多个输出，通常输出与输入之间有着某种特定的关系.</p></li>
+<li><p><strong>有穷性</strong>：一个算法必须总是（对任何合法的输入）在执行有穷步之后结束，且每一步都在有穷时间内完成.</p></li>
+<li><p><strong>确定性</strong>：算法中每一条指令必须有确切的含义，不存在二义性。并且，在任何条件下，对于相同的输入只能得到相同的输出.</p></li>
+<li><p><strong>可行性</strong>：算法描述的操作过程可以通过已经实现的基本操作执行有限次来实现.</p></li>
+</ol>
+<p>算法和程序不同. 原则上，算法可以用任何一种程序设计语言实现.</p>
+<p>算法的有穷性意味着并不是所有的计算机程序都是算法，例如操作系统是一个在无限循环中执行的程序而不是一个算法.
+然而我们可以把操作系统的各个任务看成是一个单独的问题，每一个问题由操作系统中的一个子程序通过特定的算法来实现，得到输出结果后便终止.</p>
+<h4 id="优良性">优良性</h4>
+<p>一个“好"算法首先要满足算法的五大特性，此外还要具备下列特性.</p>
+<ol type="1">
+<li><p><strong>正确性</strong>：对于任何合法的输入，算法都会得出正确的结果.</p></li>
+<li><p><strong>鲁棒性</strong>：也称健壮性，算法对非法输入的抵抗能力，即对于错误的输入，算法应能是被并做处理，而不是产生错误动作或陷入瘫痪.</p></li>
+<li><p><strong>简单性</strong>：算法容易理解和实现.</p></li>
+<li><p><strong>抽象分级</strong>：为了时算法便于阅读、理解、使用和修改，应使用抽象分级来组织算法表达的思想.
+换言之，算法中的每一条逻辑步骤可以是一条简单的指令，也可以是一个模块，通过模块调用完成相应功能.
+每个模块表示一种抽象，模块的内部描述了怎样实现抽象，而模块的名称描述了模块的功能.</p></li>
+<li><p><strong>高效性</strong>：算法的效率包括时间效率和空间效率.</p></li>
+</ol>
+<h4 id="描述方法">描述方法</h4>
+<p>常用的描述算法的方法有：</p>
+<ul>
+<li><p>自然语言：容易理解；但准确性不佳，容易出现二义性.</p></li>
+<li><p>流程图：直观易懂；但严密性和灵活性欠佳，在描述复杂算法时极不方便.</p></li>
+<li><p>程序设计语言：能直接由计算机执行；但抽象性差，往往拘泥于描述算法的具体细节，容易失去算法的整体观，还要求算法设计者熟练掌握程序设计语言及其编程技巧.</p></li>
+<li><p><strong>伪代码</strong>：表达能力上类似于编程语言，同时极小化了描述算法所不必要的技术细节，比较适合描述算法，被称为“<strong>算法语言</strong>”或“<strong>第一语言</strong>”.</p></li>
+</ul>
+<p>伪代码（pseudo-code）是介于自然语言和程序设计语言之间的方法，它采用某一程序设计语言的基本语法，操作指令可以结合自然语言来设计.
+至于算法中自然语言的成分有多少，取决于算法的抽象级别：往往抽象级别越高自然语言使用得越多.</p>
+<h3 id="算法分析">算法分析</h3>
+<h4 id="时间复杂度">时间复杂度</h4>
+<p>显然，事后统计的方法可以准确的计算一个算法的效率.
+但该方法至少有以下缺点：</p>
+<ol type="1">
+<li><p>编写程序实现算法将花费较多时间和精力，若事后统计发现算法效率并不理想，则编写程序的成分白白浪费.</p></li>
+<li><p>所的实验结果依赖于计算机的软硬件等客观环境，有时容易掩盖算法本身的优劣.</p></li>
+</ol>
+<p>因此，我们通常采用事前分析估算的方法——<strong>渐进复杂度</strong>（<strong>symptotic
+complexity</strong>）.</p>
+<h3 id="算法的时间复杂度">算法的时间复杂度</h3>
+<p>撇开与计算机软硬件有关的因素，影响算法时间代价的最主要因素是问题规模.
+问题规模（problem
+scope）是指输入量的多少，一般来说，它可以从问题描述中得到.</p>
+<p>显然，算法运行的时间 <span class="math inline">\(T\)</span>
+是问题规模 <span class="math inline">\(n\)</span> 的函数，记作 T(n).</p>
+<p>要精确表示算法的运行时间函数是很困难的，且即使能够给出往往也是个相当复杂的函数，这与我们摒弃“事后统计”的方法，希望通过“估算”来节约成本的原则违背.
+在准确度与效率之间，“渐进时间复杂度”取得了一个良好的平衡.</p>
+<p>渐进时间复杂度通过衡量算法中<strong>基本语句</strong>（basic
+statement）执行的次数，并且只关心其中随着问题规模增大对时间成本贡献最大的部分.
+类似于高数中对于一个由多项式给出的无穷大，很多情况下，我们只需关注其中最高阶无穷大项即可.</p>
+<p><em>高数中，对于极限 <span
+class="math inline">\(\lim\limits_{x\to+\infty}(x^4 + 100 x^3 +
+1)\)</span>，我们知道随着 <span class="math inline">\(x\)</span>
+的增大，第二项 <span class="math inline">\(100x^3\)</span>
+对于整个多项式增大的贡献逐渐小于 <span
+class="math inline">\(x^4\)</span>，直至可以忽略.</em></p>
+<p>由以上讨论，我们给出渐近时间复杂度分析的常用方法：</p>
+<ol type="1">
+<li><p><strong>大 <span class="math inline">\(O\)</span>
+表示法</strong>：若存在常数 <span class="math inline">\(c,N &gt;
+0\)</span>，对于任意 <span class="math inline">\(n\geqslant N\)</span>
+时，都有 <span class="math inline">\(T(n)\leqslant c\times
+f(n)\)</span>，则称 <span
+class="math inline">\(T(n)=O(f(n))\)</span>，或称 <span
+class="math inline">\(T(n)\)</span> 在 <span
+class="math inline">\(O(f(n))\)</span> 中.</p></li>
+<li><p><strong>大 <span class="math inline">\(\Omega\)</span>
+表示法</strong>：若存在常数 <span class="math inline">\(c,N &gt;
+0\)</span>，对于任意 <span class="math inline">\(n\geqslant N\)</span>
+时，都有 <span class="math inline">\(T(n)\geqslant c\times
+f(n)\)</span>，则称 <span
+class="math inline">\(T(n)=\Omega(f(n))\)</span>，或称 <span
+class="math inline">\(T(n)\)</span> 在 <span
+class="math inline">\(\Omega(f(n))\)</span> 中.</p></li>
+<li><p><strong>大 <span class="math inline">\(\Theta\)</span>
+表示法</strong>：若 <span class="math inline">\(T(n)\)</span> 既在 <span
+class="math inline">\(O(f(n))\)</span> 中，又在 <span
+class="math inline">\(\Omega(n)\)</span> 中，则称 <span
+class="math inline">\(T(n)\)</span> 在 <span
+class="math inline">\(\Theta(n)\)</span> 中. 更具体地，若存在常数 <span
+class="math inline">\(c_1, c_2, N &gt;0\)</span>，对于任意 <span
+class="math inline">\(n\geqslant N\)</span> 时，都有 <span
+class="math inline">\(c_1f(n) \leqslant T(n) \leqslant
+c_2f(n)\)</span>，则称 <span
+class="math inline">\(T(n)=\Theta(f(n))\)</span>，或称 <span
+class="math inline">\(T(n)\)</span> 在 <span
+class="math inline">\(\Theta(f(n))\)</span> 中.</p></li>
+</ol>
+<p>不难理解：</p>
+<ul>
+<li>大 <span class="math inline">\(O\)</span>
+表示法给出算法时间复杂度的渐近上限，大 <span
+class="math inline">\(\Omega\)</span> 表示法给出渐近下限.</li>
+<li>大 <span class="math inline">\(O\)</span> 和大 <span
+class="math inline">\(\Omega\)</span> 表示法往往是不唯一的.
+为了尽可能精确，往往选择上（下）限中最“紧”的那个.</li>
+<li>当 <span class="math inline">\(T(n) = O(f(n)) =
+\Omega(f(n))\)</span> 时，有 <span
+class="math inline">\(T(n)=\Theta(f(n))\)</span>.</li>
+</ul>
+<p>其中大 <span class="math inline">\(O\)</span>
+表示法最为常用，且往往选择最“紧”的那个上限，即选择所有上限中最小的.</p>
+<p>对于大 <span class="math inline">\(O\)</span>
+表示法，容易得到如下规则：</p>
+<ol type="1">
+<li><p><strong>加法规则</strong> <span
+class="math display">\[T_1(n)+T_2(n) = O\left(\max\{T_1(n),
+T_2(n)\}\right) \]</span></p></li>
+<li><p><strong>乘法规则</strong> <span
+class="math display">\[T_1(n)\cdot T_2(n) = O\left(T_1(n)\cdot
+T_2(n)\right) \]</span></p></li>
+</ol>
+<h4 id="最好最坏和平均情况">最好、最坏和平均情况</h4>
+<p>对于某些算法，即使问题规模相同，如果输入数据不同，其时间开销也不同.</p>
+<p>例如，在一维整型数组 <span class="math inline">\(A[n]\)</span>
+中顺序查找与给定值 <span class="math inline">\(k\)</span>
+相等的元素：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @param int[] 待查数组</span><br><span class="hljs-comment"> * @param int 数组长度</span><br><span class="hljs-comment"> * @returns 元素 k 的下标，返回 n 时表示查找失败</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">Find</span><span class="hljs-params">(<span class="hljs-type">int</span> A[], <span class="hljs-type">int</span> n)</span> </span>&#123;<br>  <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++)<br>    <span class="hljs-keyword">if</span> (A[i] == k) <span class="hljs-keyword">break</span>;<br>  <span class="hljs-keyword">return</span> i;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>对于输入的数组 <span
+class="math inline">\(A[]\)</span>，如果第一个元素恰好等于 <span
+class="math inline">\(k\)</span>，算法只需要比较一次，这是<strong>最好的情况</strong>；如果直到最后一个元素才等于
+<span class="math inline">\(k\)</span>，则算法需要比较 <span
+class="math inline">\(n\)</span> 次，这是<strong>最坏情况</strong>.</p>
+<p>显然直接使用<strong>最好情况</strong>来估计算法性能是不合理的，因为它发生的概率往往是很小的，得到的结果将过于乐观了；当然<strong>最坏情况</strong>发生的概率往往也很小，但估计最坏情况下的算法性能是有意义的，即据此来保证某些系统的可靠性.</p>
+<p>算法往往是对不同数据进行多此执行的，因此考虑<strong>平均情况</strong>是有必要的.
+从概率统计的角度来讲，我们需要知道输入数据的分布情况，以此估计算法性能的“均值”.</p>
+<p>比如，上例中，当我们知道 <span class="math inline">\(k\)</span>
+极大概率出现在第一个元素位置时，使用<strong>最好情况</strong>估算性能是合理的.
+当我们对数据的分布一无所知时，采用“等同无知”原则，认为各数据元素是等概率分布的，则上例中平均要比较
+<span class="math inline">\(\frac n2\)</span> 个元素.</p>
+<h4 id="空间复杂度space-complexity">空间复杂度（space complexity）</h4>
+<p>算法的空间复杂度是指在算法的执行过程中，需要的辅助空间数量，即除算法本身和输入输出数据所占据的空间外，算法临时开辟的存储空间，通常记作：</p>
+<p><span class="math display">\[ S(n) = O(f(n)) \]</span></p>
+<p>其中，<span class="math inline">\(n\)</span>
+为问题规模，分析方法与算法的时间复杂度类似.</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/38/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>数据结构基础（3）线性表的逻辑结构</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/36/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      数据结构基础（1）数据结构的基本概念
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
+  
+    <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" class="post-tag">#时间复杂度</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/36/" title="数据结构基础（1）数据结构的基本概念" rel="bookmark">数据结构基础（1）数据结构的基本概念</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/38/" title="数据结构基础（3）线性表的逻辑结构" rel="bookmark">数据结构基础（3）线性表的逻辑结构</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/39/" title="数据结构基础（4）线性表的顺序存储结构——顺序表" rel="bookmark">数据结构基础（4）线性表的顺序存储结构——顺序表</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

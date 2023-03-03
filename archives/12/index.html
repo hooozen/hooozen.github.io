@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        排序算法（二）——交换排序（冒泡排序+快速排序） | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">排序算法（二）——交换排序（冒泡排序+快速排序）</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/Algorithm/" class="post-tag">#Algorithm</a>
+  
+    <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="post-tag">#排序算法</a>
+  
+    <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" class="post-tag">#冒泡排序</a>
+  
+    <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" class="post-tag">#快速排序</a>
+  
+
+
+          <span class="post-date">2018-04-04</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="冒泡排序">冒泡排序</h2>
+<h3 id="算法分析">算法分析</h3>
+<p>冒泡排序可能是排序算法中最简单最好理解的算法了。 <span id="more"></span></p>
+<p>以正序排序为例，该算法从序列头部开始，每次将当前元素与下一个元素进行比较，若下一个元素小于该元素，则交换位置。依次递增迭代指针，直至序列尾部。这“一趟”操作过后，序列中最大的值就冒到了序列尾部。</p>
+<p>以下列序列为例：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs txt">50 13 55 97 27 38 49 65<br></code></pre></td></tr></table></figure>
+<p>从下标为 0 的元素 <code>50</code> 开始，与 <code>13</code>
+进行比较，<code>13 &lt; 50 == true</code>，则交换位置。序列变为：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs txt">13 50 55 97 27 38 49 65<br></code></pre></td></tr></table></figure>
+<p>下标加 1，继续上述操作：<code>55 &lt; 13 ==
+false</code>，则不执行交换操作。下标加
+1，重复上述操作，直至序列尾部，则完成“一趟”冒泡。序列变为：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs txt">13 50 55 27 38 49 65 97<br></code></pre></td></tr></table></figure>
+<p>继续从头进行冒泡操作，每次都将剩余元素中最大的元素冒泡到尾部。直至一趟下来未发生位置交换，则说明序列已有序。</p>
+<h3 id="代码示例">代码示例</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">const</span> <span class="hljs-title function_">bubbleSort</span> = array =&gt; &#123;<br>    <span class="hljs-comment">// 使用 exchange 记录发生交换的位置</span><br>    <span class="hljs-keyword">let</span> exchange = array.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;<br><br>    <span class="hljs-comment">// 若上一趟未发生交换，则说明序列已有序，算法结束</span><br>    <span class="hljs-keyword">while</span> (exchange !== <span class="hljs-number">0</span>) &#123;<br>        <span class="hljs-comment">// 暂存上次交换位置，交换位置之后的序列已经有序，则跳过比较。</span><br>        <span class="hljs-keyword">let</span> end = exchange;<br>        exchange = <span class="hljs-number">0</span>;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>; j &lt; end; j++) &#123;<br>            <span class="hljs-keyword">if</span> (array[j] &gt; array[j + <span class="hljs-number">1</span>]) &#123;<br>                [array[j], array[j + <span class="hljs-number">1</span>]] = [array[j + <span class="hljs-number">1</span>], array[j]];  <span class="hljs-comment">// 交换位置</span><br>                exchange = j; <span class="hljs-comment">// 记录交换位置</span><br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上述代码对冒泡算法的基本算法进行了一些优化。使用一个变量记录上一趟冒泡的最后交换位置，该位置之后的元素未发生交换，即说明该位置之后的序列已经有序。则在此趟冒泡中不需要对后面有序的子序列进行操作了。当上一躺未发生交换时，则说明序列已经有序，结束循环。</p>
+<h2 id="快速排序">快速排序</h2>
+<h3 id="算法分析-1">算法分析</h3>
+<p>快速排序（快排）着眼于解决冒泡排序位置交换次数太多的问题。希望通过一次进行长距离的交换从而减少交换次数。</p>
+<p>快排又称为分区交换排序，其基本思想是：首先选一个轴值（pivot，即比较的基准值），每次都将序列划分为两部分，左侧记录的关键码均小于基准值，右侧记录的关键码均大于基准值。然后对左右两部分分别重复上述划分操作，直至序列整体有序。</p>
+<p>显然快排是一个递归的过程。</p>
+<h3 id="一次划分算法">一次划分算法</h3>
+<p>由于快排是一个递归过程，我们先分析对序列进行一次划分的一种算法思路。</p>
+<p>该示例算法，选取序列第一个元素为基准值。从序列两侧交替与该基准值比较，进行相应的位置移动。直至所有的值都移动到了合适的位置（小于基准值的移动到基准值左侧，反之右侧）。</p>
+<p>以下面序列为例，具体解释一下算法过程。</p>
+<p><strong>23</strong> 13 49 6 31 19 28</p>
+<p>首先选取第一个元素 <code>23</code>
+作为基准值。先从右侧进行比较，令右侧指针为 <code>j = 6</code>，<code>28
+&gt; 23 == true</code>
+且该值处于基准值右侧，则无序移动。<code>j--</code>，继续比较下一个值。<code>19
+&gt; 23 ==
+false</code>，则将该值与基准值交换，使得该值位于基准值的左侧，且同时保证了基准值的右侧都是大于基准值的元素。此时，序列变为：</p>
+<p>19 13 49 6 31 <strong>23</strong> 28</p>
+<p>基准值被移动到右侧，进行进行左侧元素的比较。令左侧指针为 <code>i =
+0</code>，<code>19 &lt; 23 ==
+true</code>，且位于基准值左侧，无需操作。<code>i++</code>，<code>13 &lt;
+23 == true</code>，无需操作。继续比较下一个值，<code>49 &lt; 23 ==
+false</code>，则将 <code>49</code>
+与基准值交换，使得该值位于基准值的右侧，且保证了基准值左侧都是小于基准值的元素。此实，序列变为：</p>
+<p>19 13 <strong>23</strong> 6 31 49 28</p>
+<p>交替进行右侧扫描，上次 <code>j = 5</code>，则对 <code>j = 4</code>
+的元素进行比较，<code>31 &gt; 23 ==
+true</code>，无需操作。<code>j--</code>，<code>6 &gt; 23 ==
+false</code>，则交换位置，序列变为：</p>
+<p>19 13 6 <strong>23</strong> 31 49 28</p>
+<p>此时，基准值左侧的值均小于基准值，右侧的值均大于基准值，完成一次划分。</p>
+<h4 id="一次划分示例代码">一次划分示例代码</h4>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">partition</span> = (<span class="hljs-params">arr, first, end</span>) =&gt; &#123;<br>    <span class="hljs-keyword">let</span> i = first<br>    <span class="hljs-keyword">let</span> j = end<br>    <span class="hljs-keyword">while</span> (i &lt; j) &#123;<br>        <span class="hljs-keyword">while</span> (i &lt; j &amp;&amp; arr[i] &lt;= arr[j]) j--<br>        <span class="hljs-keyword">if</span> (i &lt; j) &#123;<br>            [arr[i], arr[j]] = [arr[j], arr[i]]<br>            i++<br>        &#125;<br>        <span class="hljs-keyword">while</span> (i &lt; j &amp;&amp; arr[i] &lt;= arr[j]) i++<br>        <span class="hljs-keyword">if</span> (i &lt; j) &#123;<br>            [arr[i], arr[j]] = [arr[j], arr[i]]<br>            j--<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> i;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>该示例代码，左右依次与基准值进行比较并交换位置，以保证每次交换后都能使得操作过的值处于合适的位置。同时当左右指针指向同一个值时，说明循环结束。</p>
+<h3 id="快速排序算法">快速排序算法</h3>
+<p>快排算法是一个递归的过程。首先将序列进行一次划分，然后分别对左右子序列进行递归的划分。直到子序列被划分为最小的长度，则所有的子序列都有序，则整个序列有序。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">quickSort</span> = (<span class="hljs-params">arr, first, end</span>) =&gt; &#123;<br>    first = first === <span class="hljs-literal">undefined</span> ? <span class="hljs-number">0</span> : first<br>    end = end === <span class="hljs-literal">undefined</span> ? arr.<span class="hljs-property">length</span> - <span class="hljs-number">1</span> : end<br><br>    <span class="hljs-keyword">if</span> (first &lt; end) &#123;<br>        <span class="hljs-keyword">let</span> pivot = <span class="hljs-title function_">partition</span>(arr, first, end)<br>        <span class="hljs-title function_">quickSort</span>(arr, first, pivot - <span class="hljs-number">1</span>)<br>        <span class="hljs-title function_">quickSort</span>(arr, pivot + <span class="hljs-number">1</span>, end)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>冒泡排序的时间复杂度为 O(n)，是稳定的排序方法。</p>
+<p>快速排序的时间复杂度为 O(nlog2n)，是不稳定的排序方法。</p>
+<p>正如其名，快排是迄今为止所有内排序算法中最好的一种，尤其适用于待排序记录个数很大且原始记录随机排列的情况。快排算法得到广泛应用，如
+UNIX 系统的库函数中的 <code>qsort</code> 函数。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/13/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>我与明二</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/11/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      排序算法（一）——插入排序（直接插入+希尔排序）
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/Algorithm/" class="post-tag">#Algorithm</a>
+  
+    <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="post-tag">#排序算法</a>
+  
+    <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" class="post-tag">#冒泡排序</a>
+  
+    <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" class="post-tag">#快速排序</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/46/" title="刷题笔记(1)：力扣-50.Pow(x,n): 快速幂算法" rel="bookmark">刷题笔记(1)：力扣-50.Pow(x,n): 快速幂算法</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/47/" title="刷题笔记(2)：力扣-67.二进制求和" rel="bookmark">刷题笔记(2)：力扣-67.二进制求和</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

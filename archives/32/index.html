@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        编写一个自动推送 Git Page 的 nodejs 脚本 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">编写一个自动推送 Git Page 的 nodejs 脚本</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/Git/" class="post-tag">#Git</a>
+  
+    <a href="/tags/Node-js/" class="post-tag">#Node.js</a>
+  
+    <a href="/tags/Github-page/" class="post-tag">#Github page</a>
+  
+
+
+          <span class="post-date">2020-02-03</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h3 id="背景">背景</h3>
+<p>写了一个简单的个人主页，由于使用了一些 CSS3
+的属性，考虑到浏览器兼容性问题，就使用了 webpack 的一些 loader
+给这些属性加前缀。所以简单的静态单页面用了 webpack，又因为这个页面要放在
+Github Pages 上，每次打包后还得手动切换分支推送到 Github
+上，干脆趁这个机会写一个自动推送的脚本。 <span id="more"></span></p>
+<p><strong>该脚本主要参考了 <a
+target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-deployer-git">hexo-deployer-git</a></strong>，可以查看该项目获取功能更完善的源码。</p>
+<h3 id="预备知识">预备知识</h3>
+<p>脚本比较简单，主要使用 NodeJs child_process 的 spawn
+方法调用子进程执行 git 语句。如果你对 NodeJs
+不熟悉可能需要了解以下内容才能完全弄懂脚本中的每一行代码：（如果你只是想大致了解一下代码原理，可不必查看以下知识，本文将做简单的解释）</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://nodejs.cn/api/child_process.html">child_process</a>,
+<a
+target="_blank" rel="noopener" href="http://nodejs.cn/api/child_process.html#child_process_child_process_spawn_command_args_options">child_process.spawn</a></li>
+<li><a target="_blank" rel="noopener" href="http://nodejs.cn/api/stream.html">stream</a>, <a
+target="_blank" rel="noopener" href="http://nodejs.cn/api/process.html#process_process_stdout">process.stdout</a>,
+<a
+target="_blank" rel="noopener" href="http://nodejs.cn/api/process.html#process_process_stderr">process.stderr</a></li>
+<li><a target="_blank" rel="noopener" href="http://nodejs.cn/api/fs.html">fs</a></li>
+</ul>
+<h2 id="spawn">spawn</h2>
+<h3 id="用法">用法</h3>
+<p>NodeJs 的 child_process 模块提供了 <code>spawn</code>
+方法，该方法将调用子进程，并执行传入的命令行及参数。该脚本主要利用该方法执行需要的
+git 命令。下面是一个简单的 spawn 使用示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;child_process&#x27;</span>);<br><span class="hljs-keyword">const</span> ls = <span class="hljs-title function_">spawn</span>(<span class="hljs-string">&#x27;ls&#x27;</span>, [<span class="hljs-string">&#x27;-lh&#x27;</span>, <span class="hljs-string">&#x27;/usr&#x27;</span>]);<br><br>ls.<span class="hljs-property">stdout</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`stdout: <span class="hljs-subst">$&#123;data&#125;</span>`</span>);<br>&#125;);<br><br>ls.<span class="hljs-property">stderr</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;data&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">`stderr: <span class="hljs-subst">$&#123;data&#125;</span>`</span>);<br>&#125;);<br><br>ls.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;close&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">code</span>) =&gt;</span> &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`子进程退出，使用退出码 <span class="hljs-subst">$&#123;code&#125;</span>`</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+<p>实例中向 <code>spawn</code> 传入了 <code>ls</code> 命令，以及
+<code>-lh</code>、<code>/usr</code>
+参数，并通过事件监听回调处理命令执行的结果。<code>spawn</code>
+方法返回一个 <code>ChildProcess</code>实例，其中 <code>stdout</code> 和
+<code>stderr</code>
+是命令执行后的输出流和错误流。我们监听这两个流的事件来打印命令执行后的结果或错误信息。同时监听实例的
+<code>close</code> 事件，打印命令执行后的退出码。退出码为 0
+时代表命令正常执行完毕，非 0 时代表发生了异常。（如 debug
+需要具体代码含义,可查看<a
+target="_blank" rel="noopener" href="http://nodejs.cn/api/process.html#process_exit_codes">退出码</a>）。</p>
+<h3 id="封装-spawn">封装 spawn</h3>
+<p>如上所述，spawn 通过回调来处理响应，我们希望使用更方便易读的 Promise
+来简单封装一下
+spawn。(对于简单的代码来说，这一步不是必要的，但我还是参照 hexo
+的做法封装了 spawn。)</p>
+<p><code>spawn.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-meta">&#x27;use strict&#x27;</span><br><br><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;child_process&#x27;</span>)<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">promiseSpawn</span>(<span class="hljs-params">command, args, options</span>) &#123;<br>  <span class="hljs-keyword">if</span> (!command) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;command is reuqired&#x27;</span>);<br><br>  <span class="hljs-keyword">if</span> (!options &amp;&amp; args &amp;&amp; !<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(args)) &#123;<br>    options = args;<br>    args = [];<br>  &#125;<br><br>  <span class="hljs-comment">// note-1 以上是对参数的容错处理</span><br><br>  args = args || [];<br>  options = options || &#123;&#125;;<br><br>  <span class="hljs-comment">// note-2 接下来将其封装成一个 Promise 对象</span><br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> task = <span class="hljs-title function_">spawn</span>(command, args, options);<br>    <span class="hljs-keyword">const</span> encoding = options.<span class="hljs-title function_">hasOwnProperty</span>(<span class="hljs-string">&#x27;encoding&#x27;</span>) ? options.<span class="hljs-property">encoding</span> : <span class="hljs-string">&#x27;utf8&#x27;</span>;<br><br>    <span class="hljs-comment">/*-- note-3 start --*/</span><br>    <span class="hljs-keyword">if</span> (task.<span class="hljs-property">stdout</span>) &#123;<br>      task.<span class="hljs-property">stdout</span>.<span class="hljs-title function_">pipe</span>(process.<span class="hljs-property">stdout</span>);<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (task.<span class="hljs-property">stderr</span>) &#123;<br>      task.<span class="hljs-property">stderr</span>.<span class="hljs-title function_">pipe</span>(process.<span class="hljs-property">stdout</span>)<br>    &#125;<br>    <span class="hljs-comment">/* </span><br><span class="hljs-comment">     这里调用子进程输出流(stdout/stderr)的 pipe 方法，</span><br><span class="hljs-comment">     将其输入到当前进程的输出流，这样就能在调用该脚本的</span><br><span class="hljs-comment">     进程中看到子进程中执行的命令的输入了</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">     如果你希望子进程的命令静默执行，这些代码同样不是必要的</span><br><span class="hljs-comment">     或者可以传入一个参数来决定是否在主进程中展示这些信息</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-comment">/*-- note-3 end --*/</span><br><br>    <span class="hljs-comment">// note-4 监听命令结束事件，根据 code 来决定是否 resolve</span><br>    task.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;close&#x27;</span>, <span class="hljs-function"><span class="hljs-params">code</span> =&gt;</span> &#123;<br>      <span class="hljs-keyword">if</span> (code) &#123;<br>        <span class="hljs-keyword">const</span> e = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;command execute failed&#x27;</span>);<br>        e.<span class="hljs-property">code</span> = code;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(e);<br>      &#125;<br><br>      <span class="hljs-title function_">resolve</span>();<br>    &#125;);<br><br><br>    <span class="hljs-comment">// note-5 命令执行错误时 reject</span><br>    task.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, reject)<br><br>    <span class="hljs-comment">// note-6 处理 `exit` 事件</span><br>    <span class="hljs-keyword">if</span> (!task.<span class="hljs-property">stderr</span> &amp;&amp; !task.<span class="hljs-property">stdout</span>) &#123;<br>      task.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;exit&#x27;</span>, <span class="hljs-function"><span class="hljs-params">code</span> =&gt;</span> &#123;<br>        <span class="hljs-keyword">if</span> (code) &#123;<br>          <span class="hljs-keyword">const</span> e = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Spawn failed&#x27;</span>);<br>          e.<span class="hljs-property">code</span> = code;<br>          <br>          <span class="hljs-keyword">return</span> <span class="hljs-title function_">reject</span>(e);<br>        &#125;<br>      &#125;);<br>    &#125;<br>  &#125;);<br>&#125;<br><br><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = promiseSpawn;<br><br></code></pre></td></tr></table></figure>
+<p>ChildProcess 的
+<code>close</code>、<code>error</code>、<code>exit</code>
+事件的触发是有区别的，并且也不是简单的包含关系，所以代码中对其分别进行了处理，具体可查看<a
+target="_blank" rel="noopener" href="http://nodejs.cn/api/child_process.html#child_process_event_close">官方文档</a>。</p>
+<h2 id="执行-git-命令">执行 git 命令</h2>
+<p>利用上面封装的 <code>spawn</code> 方法，可以很方便的执行 git
+的语句。</p>
+<p><code>deployer.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-meta">&#x27;use strict&#x27;</span><br><br><span class="hljs-keyword">const</span> spawn = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./lib/spawn&#x27;</span>);  <span class="hljs-comment">// note-1 导入封装好的 spawn</span><br><span class="hljs-keyword">const</span> pathFn = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;path&#x27;</span>);<br><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;fs&#x27;</span>);<br><br><span class="hljs-comment">// note-2 设置好执行 git 命令时需要用到的参数，也可以单独分离出配置文件</span><br><span class="hljs-keyword">const</span> args = &#123;<br>  <span class="hljs-attr">user</span>: &#123;<br>    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;name&#x27;</span>,<br>    <span class="hljs-attr">email</span>: <span class="hljs-string">&#x27;name@email.com&#x27;</span>,<br>  &#125;,<br>  <span class="hljs-comment">// 需要 push 的目录，此处推送的是 webpack 默认的打包路径</span><br>  <span class="hljs-attr">baseDir</span>: pathFn.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;./&#x27;</span>, <span class="hljs-string">&#x27;dist&#x27;</span>),<br>  <span class="hljs-attr">repo</span>: &#123;<br>    <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;git@github.com:username/username.github.io.git&#x27;</span>,<br>    <span class="hljs-attr">branch</span>: <span class="hljs-string">&#x27;master&#x27;</span>,<br>  &#125;,<br>&#125;;<br><br><span class="hljs-title function_">deployToGit</span>(args); <span class="hljs-comment">// 执行推送函数</span><br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">deployToGit</span>(<span class="hljs-params">args</span>) &#123;<br>  <span class="hljs-keyword">const</span> message = args.<span class="hljs-property">message</span> || <span class="hljs-string">`Site updated: <span class="hljs-subst">$&#123;(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()).toDateString()&#125;</span>`</span><br>  <span class="hljs-keyword">const</span> baseDir = args.<span class="hljs-property">baseDir</span>;<br>  <span class="hljs-keyword">const</span> gitDir = pathFn.<span class="hljs-title function_">join</span>(baseDir, <span class="hljs-string">&#x27;.git&#x27;</span>);<br><br>  <span class="hljs-keyword">if</span> (!args.<span class="hljs-property">repo</span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Please check configs of repository!&#x27;</span>)<br>  &#125;<br><br>  <span class="hljs-comment">// 检查要推送的目录是否存在</span><br>  <span class="hljs-keyword">if</span> (!fs.<span class="hljs-title function_">existsSync</span>(baseDir)) &#123;<br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Please build before deploy&#x27;</span>)<br>  &#125;<br>  <span class="hljs-comment">// 检查该目录下是否已经存在 git 仓库</span><br>  <span class="hljs-keyword">if</span> (!fs.<span class="hljs-title function_">existsSync</span>(gitDir)) &#123;<br>    <span class="hljs-title function_">setup</span>()<br>      .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">push</span>(args.<span class="hljs-property">repo</span>));<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-title function_">push</span>(args.<span class="hljs-property">repo</span>);<br>  &#125;<br><br>  <span class="hljs-keyword">function</span> <span class="hljs-title function_">git</span>(<span class="hljs-params">...args</span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">spawn</span>(<span class="hljs-string">&#x27;git&#x27;</span>, args, &#123;<br>      <span class="hljs-attr">cwd</span>: baseDir,<br>      <span class="hljs-attr">stdio</span>: <span class="hljs-string">&#x27;inherit&#x27;</span><br>    &#125;);<br>  &#125;<br><br>  <span class="hljs-comment">// 初始化 git 仓库</span><br>  <span class="hljs-keyword">function</span> <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">const</span> userName = args.<span class="hljs-property">user</span> &amp;&amp; args.<span class="hljs-property">user</span>.<span class="hljs-property">name</span> || <span class="hljs-string">&#x27;&#x27;</span>;<br>    <span class="hljs-keyword">const</span> userEmail = args.<span class="hljs-property">user</span> &amp;&amp; args.<span class="hljs-property">user</span>.<span class="hljs-property">emial</span> || <span class="hljs-string">&#x27;&#x27;</span>;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">git</span>(<span class="hljs-string">&#x27;init&#x27;</span>).<br>      <span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">git</span>(<span class="hljs-string">&#x27;config&#x27;</span>, <span class="hljs-string">&#x27;user.name&#x27;</span>, userName)).<br>      <span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">git</span>(<span class="hljs-string">&#x27;config&#x27;</span>, <span class="hljs-string">&#x27;user.email&#x27;</span>, userEmail)).<br>      <span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">git</span>(<span class="hljs-string">&#x27;add&#x27;</span>, <span class="hljs-string">&#x27;-A&#x27;</span>)).<br>      <span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">git</span>(<span class="hljs-string">&#x27;commit&#x27;</span>, <span class="hljs-string">&#x27;-m&#x27;</span>, message));<br>  &#125;<br><br>  <span class="hljs-comment">// 提交并推送指定目录</span><br>  <span class="hljs-keyword">function</span> <span class="hljs-title function_">push</span>(<span class="hljs-params">repo</span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title function_">git</span>(<span class="hljs-string">&#x27;add&#x27;</span>, <span class="hljs-string">&#x27;-A&#x27;</span>).<br>      <span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">git</span>(<span class="hljs-string">&#x27;commit&#x27;</span>, <span class="hljs-string">&#x27;-m&#x27;</span>, message).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;&#x27;</span>)).<br>      <span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">git</span>(<span class="hljs-string">&#x27;push&#x27;</span>, <span class="hljs-string">&#x27;-u&#x27;</span>, repo.<span class="hljs-property">url</span>, <span class="hljs-string">&#x27;HEAD:&#x27;</span> + repo.<span class="hljs-property">branch</span>, <span class="hljs-string">&#x27;--force&#x27;</span>));<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>执行 git
+命令的代码相对来说就比较简单了，但是要关注一些错误情况的检查，可能需要多
+debug 几遍才能确保命令的执行达到预期的效果。</p>
+<h2 id="执行脚本">执行脚本</h2>
+<p>以上 <code>spawn.js</code> 和 <code>deployer.js</code>
+就是推送脚本的全部内容，最后把这些脚本胶乳 <code>package.json</code>
+中的 <code>script</code> 中，就能在打包后，一键推送部署到 github pages
+上了。</p>
+<p>package.json</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  ...<br>  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    ...<br>    <span class="hljs-attr">&quot;deploy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;node ./script/deploy&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  ...<br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>在 shell 中执行 <code>npm run deploy</code>
+即可执行脚本一键部署，下面是我执行的示，(显然我在这次部署前没有进行任何修改)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell">Hozen@HOZEN MINGW64 /c/Workspace/localstatic/lei (dev)<br><span class="hljs-meta prompt_">$ </span><span class="language-bash">npm run deploy</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">&gt; </span><span class="language-bash">lei@1.0.0 deploy C:\Workspace\localstatic\lei</span><br><span class="hljs-meta prompt_">&gt; </span><span class="language-bash">node ./script/deploy</span><br><br>On branch master<br>nothing to commit, working tree clean<br>Everything up-to-date<br>Branch &#x27;master&#x27; set up to track remote branch &#x27;master&#x27; from &#x27;git@github.com:****/****.github.io.git&#x27;.<br></code></pre></td></tr></table></figure>
+<h2 id="注意">注意</h2>
+<p>由于不同操作系统和不同 shell
+客户端中的命令行和格式可能会有不同，导致同一套代码可能不能在不同环境中执行，要解决这个问题可以使用
+<a target="_blank" rel="noopener" href="https://github.com/moxystudio/node-cross-spawn">cross-spawn</a>
+工具替代 NodeJs 中的 spawn。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/33/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>机器学习基础-“逻辑”回归(logistic regression)的数学原理</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/31/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      经济学的旁听生-张晓风
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/Git/" class="post-tag">#Git</a>
+  
+    <a href="/tags/Node-js/" class="post-tag">#Node.js</a>
+  
+    <a href="/tags/Github-page/" class="post-tag">#Github page</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/23/" title="Git 子模块 submodule 的使用" rel="bookmark">Git 子模块 submodule 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/43/" title="多 Git 仓库的 SSH-key 配置" rel="bookmark">多 Git 仓库的 SSH-key 配置</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/24/" title="webpack4 打包“块”的分离" rel="bookmark">webpack4 打包“块”的分离</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

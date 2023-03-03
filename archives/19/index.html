@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        我们为什么构建React | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">我们为什么构建React</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="post-tag">#转载</a>
+  
+    <a href="/tags/React/" class="post-tag">#React</a>
+  
+
+
+          <span class="post-date">2018-06-07</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>现在已经存在很多 JavaScript MVC 框架了，为什么我们还要创建 React
+并且你为什么会去用它？ <span id="more"></span></p>
+<h2 id="react-并不是一个-mvc-框架">React 并不是一个 MVC 框架</h2>
+<p>React 是一个构建合成式用户界面的库。它鼓励创建可重用的 UI
+组件，这些组件能跟随数据变化进行展示。</p>
+<h2 id="react-不使用模板">React 不使用模板</h2>
+<p>通常，Web 应用使用模板或 HTML
+指令来构建用户界面。这些模板主导了所用你可以用来构建用户界面的抽象集合。</p>
+<p>React
+允许通过把用户界面拆分成<strong>组件</strong>来进行构建。这意味着 React
+使用了真正的、全功能的编程语言来渲染视图，这样一来相对模板语言具有一定优势，原因如下：</p>
+<ul>
+<li><p><strong>JavaScript
+是一个灵活的，强大的具有抽象能力的编程语言</strong>。这在大型应用中非常重要。</p></li>
+<li><p>通过统一你的标记和它所对应的视图逻辑，React
+实际上可以使视图<strong>更容易扩展和维护</strong>。</p></li>
+<li><p>通过将标记和内容解释成
+JavaScript，这里就<strong>没有手动的字符串插入</strong>，因此降低了 XSS
+漏洞的暴露面积。</p></li>
+</ul>
+<p>我们同样提供了 JSX，一个可选的语法扩展，如果你喜欢使用 HTML
+的易读性来书写原生 JavaScript。</p>
+<h2 id="即时更新非常简单">即时更新非常简单</h2>
+<p>当数据随着时间更新时，React 会跟随着变化。</p>
+<p>在一个传统的 JavaScript
+应用中，你需要去监控什么数据发生了改变，然后立刻操作 DOM
+节点来确保视图和数据保持一致。即使
+AngularJS，也需要通过指令和数据绑定提供一个声明式的接口<a
+target="_blank" rel="noopener" href="https://code.angularjs.org/1.0.8/docs/guide/directive#reasonsbehindthecompilelinkseparation">需要绑定一个函数来手动更新
+DOM 节点</a>。</p>
+<p>React 采用不用的方法</p>
+<p>当你的组件第一次初始化，<code>render</code>
+方法被调用，生成轻量级表现形式的视图。通过这个表现形式，标签字符串被生成，然后插入到文档中。当数据发生变化时，<code>render</code>
+方法再次被调用。为了确保更新的高效性，我们将上次和本次
+<code>render</code> 方法的返回值进行比较，然后生成最小的变化来应用到 DOM
+结构中。</p>
+<blockquote>
+<p><code>render</code> 方法的返回值既不是字符串也不是 DOM 节点 ——
+它是一种对 DOM 结构轻量级的表述方法。</p>
+</blockquote>
+<p>我们把这个过程叫做<strong>和解</strong>。通过<a
+target="_blank" rel="noopener" href="http://jsfiddle.net/2h6th4ju/">这个
+jsFiddle</a>可以查看一个关于<strong>和解</strong>如何进行的实例。</p>
+<p>因为重新渲染是如此的快速（大概 1
+毫秒），开发者无需去明确的声明数据绑定。我们已经证实该方法使得构建 APP
+变得简单。</p>
+<h2 id="html-仅仅只是开始">HTML 仅仅只是开始</h2>
+<p>因为 React
+拥有对文档独有的轻量级表述方式，我可以利用它做一些非常酷的事情：</p>
+<ul>
+<li>Facebook 有许多渲染在 <code>&lt;canvas&gt;</code> 而不是 HTML
+上的动态图表。</li>
+<li>Instagram 是一个完全由 React 和 <code>Backbone.Router</code>
+构建的“单页” web 应用。设计者定期使用 JSX 语法贡献 React 代码。</li>
+<li>我们已经有了一个内部项目原型，该项目使用 Objective-C 作为桥接，使得
+React 应用可以运行在一个 web 工作环境中，并使用 React 去驱动<strong>原生
+IOS 视图</strong>。</li>
+<li>你可以<a
+target="_blank" rel="noopener" href="https://github.com/petehunt/react-server-rendering-example">在服务端</a>运行
+React 来做 SEO、性能优化、代码分享等很多灵活性的内容。</li>
+<li>在所有浏览器中（包括 IE
+8）具有统一的、标准的、兼容的行为表现，并且自动使用了<a
+target="_blank" rel="noopener" href="http://davidwalsh.name/event-delegate">事件委托</a>。</li>
+</ul>
+<p>请浏览<a
+target="_blank" rel="noopener" href="https://reactjs.org">https://reactjs.org</a>来了解我们构建了哪些东西。我们的文档是面向如何使用框架一步步构建应用的，但如果你对其中的实现原理感兴趣，请<a
+target="_blank" rel="noopener" href="https://reactjs.org/community/support.html">联系</a>我们！</p>
+<p>感谢阅读!</p>
+<h3 id="译者按">译者按</h3>
+<p>该文翻译自 <a target="_blank" rel="noopener" href="https://reactjs.org/blog/all.html">React
+官方博客</a>中的<a
+target="_blank" rel="noopener" href="https://reactjs.org/blog/2013/06/05/why-react.html">Why did we
+build React?</a>，发布于 2013 年 6 月 5 日，作者为<a
+target="_blank" rel="noopener" href="https://twitter.com/floydophone">Pete Hunt</a>。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/22/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>别君去兮何时还</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/18/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      捕梦 - 尼尔·盖曼
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="post-tag">#转载</a>
+  
+    <a href="/tags/React/" class="post-tag">#React</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

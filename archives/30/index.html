@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        在 Windows 上真机调试 iPhone(iOS) Safari Web 页面 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">在 Windows 上真机调试 iPhone(iOS) Safari Web 页面</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/Tools/" class="post-tag">#Tools</a>
+  
+
+
+          <span class="post-date">2019-03-18</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>在移动端页面开发中，需要处理 Android 和 iOS 的兼容性问题。在 Chrome
+DevTools
+中选择手机模式，可以一定程度上模拟移动端的页面，但更多的只是方便进行页面布局的调试和兼容。一些移动端的特性与表现，在真机和模拟情况下还是有存在很大差别的（比如软键盘的弹出等），尤其是
+iOS 出于某些“考虑”表现出不符合标准的 BUG，在 Windows Chrome
+中更是难以定位。</p>
+<p>本文介绍如何在 Windows 系统中连接 iPhone Web 页面进行真机调试。
+<span id="more"></span></p>
+<h2 id="工具资料">工具资料</h2>
+<ul>
+<li>iPhone + 数据线</li>
+<li>iTunes</li>
+<li>Node.js 环境</li>
+<li>remotedebug-ios-webkit-adapter</li>
+<li>Chrome 浏览器（勿使用过低版本 Chrome）</li>
+<li>梯子（可能需要）</li>
+</ul>
+<h2 id="环境准备">环境准备</h2>
+<p>实现真机调试主要是使用了 remotedebug-ios-webkit-adapter
+这一工具，使用方法在其 <a
+target="_blank" rel="noopener" href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter">gitHub
+主页</a> 上有介绍，可以直接按照其官方说明安装使用。本文对其 Windows
+下的安装使用进行了一些细节的补充和说明。</p>
+<h3 id="安装-scoope">安装 scoope</h3>
+<p><a target="_blank" rel="noopener" href="https://scoop.sh/">scoope</a> 是一个 Windows
+命令行安装工具，类似 linux 下的 yum 或
+apt-get。remotedebug-ios-webkit-adapter 的安装将使用该工具。</p>
+<p>使用 <a
+target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/powershell/">powershell</a>（powershell
+是 Windows 预装的 Shell 工具）依次执行一下命令，安装 scoope：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powdershell">Set-ExecutionPolicy RemoteSigned -scope CurrentUser<br>iex (new-object net.webclient).downloadstring(&#x27;https://get.scoop.sh&#x27;)<br></code></pre></td></tr></table></figure>
+<p>稍等片刻就安装成功了。如果安装失败，请尝试使用管理员权限执行。</p>
+<h3 id="安装-remotedebug-ios-webkit-adapter">安装
+remotedebug-ios-webkit-adapter</h3>
+<p>使用 cmd、powershell 或 git bash 依次执行以下命令，安装依赖环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">scoop bucket add extras<br>scoop install ios-webkit-debug-proxy<br>npm install -g vs-libimobile<br></code></pre></td></tr></table></figure>
+<p>（这里默认你的电脑已经安装了 <a target="_blank" rel="noopener" href="https://nodejs.org">Node.js</a>
+环境，否则 <code>npm</code> 命令将执行失败）</p>
+<p>安装 remotedebug-ios-webkit-adapter：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install remotedebug-ios-webkit-adapter -g<br></code></pre></td></tr></table></figure>
+<p>安装成功后，你将能在命令行中使用
+<code>remotedebug_ios_webkit_adapter</code> 命令</p>
+<h3 id="安装-itunes">安装 iTunes</h3>
+<p><a target="_blank" rel="noopener" href="https://www.apple.com/itunes/download/">访问官网</a>，下载
+iTunes。这里注意 iTunes for Windows 提供两个版本，一个是从 Windows Store
+下载，另一个是安装包。选择后者下载安装。</p>
+<h2 id="连接调试">连接调试</h2>
+<ol type="1">
+<li><p>进入 iPhonse 中的 <em>设置 &gt; Safari 浏览器 &gt; 高级 &gt; Web
+检查器</em>，开启该选项。</p></li>
+<li><p>打开 iTunes 并连接 iPhone，在 iPhone
+弹框中选择信任该电脑。</p></li>
+<li><p>打开命令行，执行以下命令，启动适配器：</p>
+<p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">remotedebug_ios_webkit_adapter --port=9000<br></code></pre></td></tr></table></figure></p></li>
+<li><p>在 iPhone 中打开 Safari 浏览器，打开待调试页面。</p></li>
+<li><p>打开 Chrome 浏览器，进入 <a
+href="chrome://inspect/#devices">chrome://inspect/#devices</a> 页面，在
+Discover network targets 选项添加 localhost:9000
+配置。刷新页面，这时页面中会出现 'Remote Target' 列表，该列表展示了
+iPhone 中打开的页面，点击 inspect，即可进行调试。</p></li>
+</ol>
+<p><strong>注意</strong>：如果第 5 步中未出现待调试页面，请重启
+remotedebug_ios_webkit_adapter 工具，然后刷新或重启浏览器重试。</p>
+<h2 id="说明">说明</h2>
+<p>在首次点击 inspect 打开真机调试工具时可能需要科学上网，否则可能出现
+404 错误。</p>
+<p>命令行执行失败时，请尝试使用管理员权限，或查看其官网说明。</p>
+<p>请勿使用较低版本的 Chrome 浏览器</p>
+<p>该例中使用了 Windows 10、Chrome 73.0.3683.75、iOS 12.1.4。</p>
+<p>其他系统下的安装和使用请查看 <a
+target="_blank" rel="noopener" href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter">remotedebug-ios-webkit-adapter
+gitHub 主页</a>。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/31/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>经济学的旁听生-张晓风</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/29/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      日记-下雨天
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/Tools/" class="post-tag">#Tools</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/23/" title="Git 子模块 submodule 的使用" rel="bookmark">Git 子模块 submodule 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/43/" title="多 Git 仓库的 SSH-key 配置" rel="bookmark">多 Git 仓库的 SSH-key 配置</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        为DOM2级事件函数传参——bind的应用 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">为DOM2级事件函数传参——bind的应用</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
+  
+    <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" class="post-tag">#DOM事件</a>
+  
+
+
+          <span class="post-date">2018-04-07</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>在复杂的 web 开发中，我们应采用 DOM 2 级事件来绑定和移除函数。即使用
+<code>addEventListener</code> 和 <code>removeEventListener</code> 方法为
+DOM 节点绑定和解绑函数。因为 DOM 1
+级事件不支持多个函数的绑定。这意味着，当你使用 DOM 1 级为 DOM
+绑定新函数时，旧的函数会被取代。这在很多情况下是不被希望看到的。
+<span id="more"></span></p>
+<p>例如，我们经常会在 <code>document</code> 对象上绑定多个鼠标事件，使用
+DOM 2
+级事件既不会取消之前的函数，也不用担心对项目组其他成员编写的事件绑定造成影响。</p>
+<h2 id="一个问题">一个问题</h2>
+<p>一个常见的 DOM 2 级事件绑定和解绑如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">fn</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;in function&#x27;</span>);<br>&#125;<br><br><span class="hljs-comment">// 绑定</span><br>element.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;cilck&#x27;</span>, fn);<br><br><span class="hljs-comment">// 解绑</span><br>element.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, fn);<br></code></pre></td></tr></table></figure>
+<p>如上，由于一个 DOM 2
+级事件可以被绑定多个函数，所以当我们解绑函数时，需指明要解绑的函数名。这意味着，如果在
+DOM 2
+级事件上绑定了一个匿名函数，那么是难以解绑改函数的。所以应尽量避免绑定匿名函数。</p>
+<p>但通常，绑定的函数并不是完全孤立的，我们需要传入一些参数。新手常会犯的一个错误就是企图通过以下语句传参：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">element.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-title function_">fn</span>(params));<br></code></pre></td></tr></table></figure>
+<p>然而，上面的写法会直接执行 <code>fn</code>
+函数，而不是等待点击事件的触发时才执行。给 <code>click</code> 绑定的也是
+<code>fn(params)</code> 的返回值，而非 <code>fn</code> 函数。</p>
+<h2 id="实例">实例</h2>
+<p>下面是一个例子。该实例实现点击小球时可以拖拽小球，当松开鼠标时停止拖拽。考虑到要在
+<code>document</code> 上绑定事件，我们使用 DOM 2 级事件。
+<iframe height='265' scrolling='no' title='bind' src='//codepen.io/Hozen/embed/yKRxRO/?height=265&theme-id=0&default-tab=result&embed-version=2' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'>See
+the Pen <a target="_blank" rel="noopener" href='https://codepen.io/Hozen/pen/yKRxRO/'>bind</a> by Hozen
+(<a target="_blank" rel="noopener" href='https://codepen.io/Hozen'><span class="citation"
+data-cites="Hozen">@Hozen</span></a>) on
+<a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>. </iframe></p>
+<p>通常，实现拖拽效果时，大体思路是：</p>
+<ul>
+<li><p>点击目标对象时，为 <code>document</code> 绑定
+<code>mousemove</code>
+事件，当鼠标移动时，根据鼠标位置设置目标对象的位置。</p></li>
+<li><p>当鼠标弹起时，解绑 <code>document</code> 的
+<code>mousemove</code> 事件。</p>
+<p>这样需要监听目标对象的 <code>mousedown</code> 事件，
+<code>document</code> 的 <code>mousemove</code> 和 <code>mouseup</code>
+事件。</p>
+<p>当鼠标在目标对象上按下时，我们需要计算出此时目标对象的位置，然后将位置信息作为参数，传入
+<code>mousemove</code> 事件函数中。这就涉及了 DOM 2
+级事件的传参问题。</p>
+<p>该例中的实现代码如下：</p></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 主函数</span><br><span class="hljs-keyword">const</span> <span class="hljs-title function_">main</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>  <span class="hljs-keyword">const</span> ball = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;ball&#x27;</span>);<br>  <br>  <span class="hljs-keyword">let</span> isDraging = <span class="hljs-literal">false</span>; <span class="hljs-comment">// 记录是否在拖动中</span><br>  <br>  <span class="hljs-keyword">let</span> dragWithParams; <span class="hljs-comment">// 绑定参数的拖动方法</span><br>  <br>  <span class="hljs-keyword">const</span> <span class="hljs-title function_">drag</span> = (<span class="hljs-params">params, e</span>) =&gt; &#123;<br>    <span class="hljs-keyword">let</span> x = e.<span class="hljs-property">clientX</span> - params.<span class="hljs-property">offsetLeft</span>;<br>    <span class="hljs-keyword">let</span> y = e.<span class="hljs-property">clientY</span> - params.<span class="hljs-property">offsetTop</span>;<br>    <br>    <span class="hljs-comment">// 避免小球移出视口</span><br>    <span class="hljs-keyword">if</span> (x &lt; <span class="hljs-number">0</span>) &#123;<br>      x = <span class="hljs-number">0</span>;<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (x &gt; <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">clientWidth</span> - ball.<span class="hljs-property">offsetWidth</span>) &#123;<br>      x = <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">clientWidth</span> - ball.<span class="hljs-property">offsetWidth</span><br>    &#125;<br>    <span class="hljs-keyword">if</span> (y &lt; <span class="hljs-number">0</span>) &#123;<br>      y = <span class="hljs-number">0</span>;<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (y &gt; <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">clientHeight</span> - ball.<span class="hljs-property">offsetHeight</span>) &#123;<br>      y = <span class="hljs-variable language_">document</span>.<span class="hljs-property">documentElement</span>.<span class="hljs-property">clientHeight</span> - ball.<span class="hljs-property">offsetHeight</span>;<br>    &#125;<br>    <br>    ball.<span class="hljs-property">style</span>.<span class="hljs-property">left</span> = x + <span class="hljs-string">&#x27;px&#x27;</span>;<br>    ball.<span class="hljs-property">style</span>.<span class="hljs-property">top</span> = y + <span class="hljs-string">&#x27;px&#x27;</span>;<br>  &#125;<br>  <br>  <span class="hljs-comment">// 当鼠标弹起时判断是否移除 mousemove 事件</span><br>  <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mouseup&#x27;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (isDraging) &#123;<br>      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;up&#x27;</span>);<br>      <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, dragWithParams);<br>      isDraging = <span class="hljs-literal">false</span>;<br>    &#125;<br>  &#125;)<br>  <br>  <span class="hljs-comment">// 点击球时为 document 绑定 mousemove 事件</span><br>  ball.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mousedown&#x27;</span>, <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> offsetLeft = e.<span class="hljs-property">clientX</span> - ball.<span class="hljs-property">offsetLeft</span>;<br>    <span class="hljs-keyword">const</span> offsetTop = e.<span class="hljs-property">clientY</span> - ball.<span class="hljs-property">offsetTop</span>;<br>    <br>    isDraging = <span class="hljs-literal">true</span>;<br>    <br>    <span class="hljs-comment">// 绑定参数</span><br>    dragWithParams = drag.<span class="hljs-title function_">bind</span>(<span class="hljs-literal">null</span>, &#123;<br>      offsetLeft,<br>      offsetTop,<br>    &#125;)<br>    <br>    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, dragWithParams);<br>   &#125;);<br>  <br>&#125;<br><br><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;DOMContentLoaded&#x27;</span>, main);<br></code></pre></td></tr></table></figure>
+<h3 id="代码分析">代码分析</h3>
+<p>上例中利用了 <code>bind</code>
+方法可以绑定参数的特点来为事件函数绑定参数。<a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">点击查看
+<code>bind</code> 详情</a>。</p>
+<p>同样需要注意的是，代码中为绑定参数后的 <code>drag</code>
+函数赋予了新的引用 <code>dragWithParams</code>。这是因为
+<code>bind</code>
+方法返回的是原函数的拷贝而非原函数。所以，如果我们不赋予它引用名，该函数就变成了匿名函数，我们依然无法解绑。例如，下面的例子中，是无法解绑的。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">fn</span> = (<span class="hljs-params">params</span>) =&gt; &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(params);<br>&#125;<br><br><span class="hljs-keyword">const</span> params = <span class="hljs-string">&#x27;some params&#x27;</span>;<br><br><span class="hljs-comment">// 此处相当于绑定了一个匿名函数</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, fn.<span class="hljs-title function_">bind</span>(<span class="hljs-literal">null</span>, params));<br><br><span class="hljs-comment">// 无法解绑事件，因为该事件绑定的不是 fn 函数，而是它的一个拷贝。</span><br><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">remvoeEventListener</span>(<span class="hljs-string">&#x27;mousemove&#x27;</span>, fn);<br><br></code></pre></td></tr></table></figure>
+<p><code>bind</code> 方法第一个参数指定函数中 <code>this</code>
+的指向，其余的参数会被作为绑定的参数传入新的函数，并且会出现在传入参数的前面位置。所以在示例代码
+<code>drag</code> 函数中，将 event 对象参数放在了 <code>params</code>
+后面接收。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/15/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>requestAnimationFrame——HTML5动画利器</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/13/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      我与明二
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
+  
+    <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" class="post-tag">#DOM事件</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/15/" title="requestAnimationFrame——HTML5动画利器" rel="bookmark">requestAnimationFrame——HTML5动画利器</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/2/" title="IndexedDB 中文教程（2）基本使用" rel="bookmark">IndexedDB 中文教程（2）基本使用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

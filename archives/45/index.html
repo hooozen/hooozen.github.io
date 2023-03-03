@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        一致最小方差无偏估计 UMVUE 的求法归纳 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">一致最小方差无偏估计 UMVUE 的求法归纳</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/" class="post-tag">#数理统计</a>
+  
+    <a href="/tags/UMVUE/" class="post-tag">#UMVUE</a>
+  
+
+
+          <span class="post-date">2021-12-04</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>一致最小方差无偏估计估计 UMVUE
+是参数估计中的重难点内容，也是很多高校考研专业课喜欢考察的问题.
+但在很多教材中的介绍并不全面，主要问题在于本科生教材浅尝辄止，研究生教材有些晦涩，所以我归纳整理了求解
+UMVUE 的背景知识和常用解法，供大家参阅批评. <span id="more"></span></p>
+<p><strong>转载注明出处！</strong></p>
+<h2 id="一致最小方差无偏估计umvue">1 一致最小方差无偏估计（UMVUE）</h2>
+<h3 id="均方误差">1.1 均方误差</h3>
+<p>在参数的点估计中，需要对各个估计量的好坏进行评价. <strong>均方误差
+(Mean Squared Error)</strong>
+是在小样本量下对点估计进行评价的常用标准，定义为 <span
+class="math inline">\(\text{MSE}(\hat\theta) = E(\hat\theta -
+\theta)^2\)</span>，其中 <span class="math inline">\(\hat\theta\)</span>
+代表对参数真值 <span class="math inline">\(\theta\)</span> 的点估计量.
+显然，估计的 MSE 越小越好.</p>
+<p>对于无偏估计量 <span
+class="math inline">\(E(\hat\theta)=\theta\)</span>，有</p>
+<p><span class="math display">\[\begin{aligned}
+\text{MSE}(\hat\theta) &amp; = E[(\hat\theta -
+E\hat\theta)+(E\hat\theta-\theta)]^2 \\
+           &amp; = E(\hat\theta-E\hat\theta)^2 + E(E\hat\theta-\theta)^2
++ 2E[(\hat\theta-E\hat\theta)(E\hat\theta-\theta)] \\
+           &amp; = \text{Var}(\hat\theta)
+\end{aligned}\]</span></p>
+<p>即，无偏估计的均方误差即为其方差.</p>
+<h3 id="一致最小均方误差估计">1.2 一致最小均方误差估计</h3>
+<p><strong>定义1</strong> 设有样本 <span
+class="math inline">\(X_1,X_2,\cdots,X_n\)</span>，对待估参数 <span
+class="math inline">\(\theta\)</span>，有一个估计类，称 <span
+class="math inline">\(\hat\theta(X_1,X_2,\cdots,X_n)\)</span>
+是该估计类中 <span class="math inline">\(\theta\)</span>
+的<strong>一致最小均方误差估计</strong>，如果对该估计类中另外任意一个
+<span class="math inline">\(\theta\)</span> 的估计 <span
+class="math inline">\(\widetilde\theta\)</span>，在参数空间 <span
+class="math inline">\(\Theta\)</span> 上都有<span
+class="math inline">\(\text{MSE}_\theta(\hat\theta)\leqslant\text{MSE}_\theta(\widetilde\theta)\)</span></p>
+<p>一致最小均方误差估计通常在一个确定的估计类中考虑，若不加限制，一致最小均方误差估计通常是不存在的（[1]287）.</p>
+<h3 id="一致最小方差无偏估计">1.3 一致最小方差无偏估计</h3>
+<p>当在参数 <span class="math inline">\(\theta\)</span>
+的无偏估计类中考虑一致最小均方误差估计时，由（1）式知，一致最小均方误差估计变为一致最小方差无偏估计.</p>
+<p><strong>定义2</strong> 对参数估计问题，设 <span
+class="math inline">\(\hat\theta\)</span> 是 <span
+class="math inline">\(\theta\)</span> 的一个无偏估计，如果对另外任意一个
+<span class="math inline">\(\theta\)</span> 的无偏估计 <span
+class="math inline">\(\widetilde\theta\)</span>，在参数空间 <span
+class="math inline">\(\Theta\)</span> 上都有 <span
+class="math inline">\(\text{Var}_\theta(\hat\theta)\leqslant\text{Var}(\widetilde\theta)\)</span>，则称
+<span class="math inline">\(\hat\theta\)</span> 是 <span
+class="math inline">\(\theta\)</span> 的<strong>一致最小方差无偏估计
+(Uniform Minimum-Variance Unbiased Estimator)</strong>，记为
+<strong>UMVUE</strong>.</p>
+<p><strong>定理1</strong> 设 <span
+class="math inline">\(X=(x_1,x_2,\cdots,x_n)\)</span>
+是来自总体样本的一个样本，<span
+class="math inline">\(\hat\theta=\hat\theta(\mathbf X)\)</span> 是 <span
+class="math inline">\(\theta\)</span> 的一个无偏估计，<span
+class="math inline">\(\text{Var}(\hat\theta) &lt; \infty\)</span>. 则
+<span class="math inline">\(\hat\theta\)</span> 是 <span
+class="math inline">\(\theta\)</span> 的 UMVUE
+的充要条件是，对任意一个满足 <span
+class="math inline">\(E(\varphi(\mathbf X))=0\)</span> 和 <span
+class="math inline">\(\text{Var}(\varphi(\mathbf X))&lt;\infty\)</span>
+的 <span class="math inline">\(\varphi(\mathbf X)\)</span>，都有 <span
+class="math inline">\(\text{Cov}_\theta(\hat\theta,\varphi)=0, \forall
+\theta \in \Theta.\)</span></p>
+<p><strong>证明</strong> 充分性：对于 <span
+class="math inline">\(\theta\)</span> 的任意一个无偏估计 <span
+class="math inline">\(\widetilde\theta\)</span>，令 <span
+class="math inline">\(\varphi = \widetilde\theta -
+\hat\theta\)</span>，则 <span
+class="math inline">\(E(\varphi)=0\)</span>. 于是</p>
+<p><span class="math display">\[\begin{aligned}
+\text{Var}(\widetilde \theta) &amp;= E(\widetilde\theta - \theta)^2 \\
+         &amp;= E[(\widetilde\theta - \hat\theta) + (\hat\theta -
+\theta)]^2 \\
+         &amp;= E(\varphi^2) +
+\text{Var}(\hat\theta)+2\text{Cov}(\varphi, \hat\theta) \\
+         &amp;\geqslant \text{Var}(\hat\theta)
+\end{aligned}\]</span></p>
+<p>得证 <span class="math inline">\(\hat\theta\)</span> 为 <span
+class="math inline">\(\theta\)</span> 的 UMVUE.
+必要性证明见参考文献[1]第288页.</p>
+<h2 id="充分完备统计量">2 充分完备统计量</h2>
+<h3 id="充分统计量">2.1 充分统计量</h3>
+<p><strong>定义3</strong> 设样本 <span
+class="math inline">\(\mathbf{X}\)</span> 的分布族为 <span
+class="math inline">\(\{f(\boldsymbol\theta,x), \boldsymbol\theta \in
+\Theta\}\)</span>，<span class="math inline">\(\Theta\)</span>
+是参数空间. 对于统计量 <span class="math inline">\(\boldsymbol
+T(\boldsymbol X)\)</span> ，若在已知 <span
+class="math inline">\(\boldsymbol T\)</span> 的条件下，样本 <span
+class="math inline">\(\mathbf X\)</span> 的条件分布与参数 <span
+class="math inline">\(\boldsymbol\theta\)</span> 无关，则称 <span
+class="math inline">\(\boldsymbol T\)</span> 为 <span
+class="math inline">\(\boldsymbol\theta\)</span> 的<strong>充分统计量
+(Sufficient Statistic)</strong>.</p>
+<p><strong>定理2 (因子分解定理)</strong> 设 <span
+class="math inline">\(\boldsymbol{X} = (X_1,X_2,\cdots,X_n)\)</span>
+是随机向量，<span class="math inline">\(\boldsymbol T(\boldsymbol
+x)\)</span> 是已知函数. 则 <span class="math inline">\(T = T(\boldsymbol
+X)\)</span> 为充分统计量的充分必要条件是：存在两个函数 <span
+class="math inline">\(g\left(\boldsymbol T(\boldsymbol{\boldsymbol
+x}),\boldsymbol \theta \right)\)</span> 和 <span
+class="math inline">\(h(\boldsymbol{x})\)</span> 使得对任意的 <span
+class="math inline">\(\boldsymbol\theta\)</span> 和任一组观测值 <span
+class="math inline">\(\boldsymbol{x}\)</span>，有联合概率函数
+(简便起见，将连续变量的概率密度函数和离散变量的概率分布列统称为概率函数，下同)
+<span class="math display">\[
+f(\boldsymbol{x},\boldsymbol\theta) = g\big(\boldsymbol
+T(\boldsymbol{x}),\boldsymbol\theta\big)h(\boldsymbol{x})
+\]</span> 其中 <span class="math inline">\(g(\boldsymbol
+t,\boldsymbol\theta)\)</span> 是 <span class="math inline">\(\boldsymbol
+t,\boldsymbol \theta\)</span> 的函数，<span
+class="math inline">\(\boldsymbol T(\boldsymbol x)=(T_1(\boldsymbol x),
+T_2(\boldsymbol x),\cdots,T_m(\boldsymbol x))\)</span> 和 <span
+class="math inline">\(h(\boldsymbol x)\)</span> 是 <span
+class="math inline">\(\boldsymbol x = (x_1,x_2,\cdots,x_n)\)</span>
+的函数.</p>
+<p><strong>例1</strong> 设 <span
+class="math inline">\(X_1,\cdots,X_n\)</span> 为来自正态总体 <span
+class="math inline">\(N(\mu,\sigma^2)\)</span> 的 i.i.d 样本，求 <span
+class="math inline">\(\mu, \sigma^2\)</span> 的充分统计量.</p>
+<p><strong>解</strong> 样本的联合概率函数为 <span
+class="math inline">\(f(\boldsymbol{x},\mu,\sigma^2) =
+(\sqrt{2\pi}\sigma)^{-n}\mathrm{exp}\left[-\frac{\sum\limits_{i=1}^n(x_i
+- \mu)^2}{2\sigma^2}\right]\)</span>，整理可得 <span
+class="math display">\[
+f(\boldsymbol{x},\mu,\sigma^2)=(\sqrt{2\pi}\sigma)^{-n}\mathrm{exp}\left[-\frac{\sum\limits_{i=1}^nx_i^2-2\mu\sum\limits_{i=1}^nx_i
++ n\mu^2}{2\sigma^2}\right]
+\]</span> 由因子分解定理 <span class="math inline">\(\boldsymbol T =
+(\sum\limits_{i=1}^n X_i, \sum\limits_{i=1}^n X_i^2)\)</span> 是参数
+<span class="math inline">\((\mu, \sigma^2)\)</span> 的充分统计量.
+进一步整理得 <span class="math display">\[
+f(\boldsymbol{x},\mu,\sigma^2)=(\sqrt{2\pi}\sigma)^{-n}\mathrm{exp}\left[\frac{n(\bar
+x - \mu)^2 + (n-1)s^2}{2\sigma^2}\right]
+\]</span> 说明 <span class="math inline">\((\bar X,S^2)\)</span>
+也是参数 <span class="math inline">\((\mu, \sigma^2)\)</span>
+得充分统计量. 事实上 <span class="math inline">\((\sum\limits_{i=1}^n
+X_i, \sum\limits_{i=1}^n X_i^2)\)</span> 与 <span
+class="math inline">\((\bar X,S^2)\)</span> 是一一对应的.</p>
+<p><strong>定理2 Rao–Blackwell 定理</strong>：假设 <span
+class="math inline">\(g(\boldsymbol X)\)</span> 是 <span
+class="math inline">\(\theta\)</span> 的一个任意估计，<span
+class="math inline">\(T(\boldsymbol{X})\)</span> 是一个充分统计量；那么
+<span class="math inline">\(g(\boldsymbol{X})\)</span> 相对于给定 <span
+class="math inline">\(T(\boldsymbol X)\)</span> 的条件期望 <span
+class="math inline">\(\widetilde{g}=E\big(g(\boldsymbol{X})|T\big)\)</span>
+是一个比 <span class="math inline">\(g(\boldsymbol X)\)</span>
+更好的估计量（至少不差于），即 <span
+class="math inline">\(\mathrm{Var}(\widetilde{g})\leqslant\mathrm{Var}(g)\)</span>.</p>
+<p><strong>证明</strong> 由定义3知 <span
+class="math inline">\(\widetilde{g}=E\big(g(\boldsymbol{X})|T\big)\)</span>
+与参数 <span class="math inline">\(\theta\)</span> 无关，故 <span
+class="math inline">\(\widetilde{g}\)</span> 可作为 <span
+class="math inline">\(\theta\)</span> 的估计量，并可表示为充分统计量
+<span class="math inline">\(T\)</span> 的函数，记为 <span
+class="math inline">\(\widetilde{g} = \widetilde{g}(T)\)</span>.
+由重期望公式得 <span class="math inline">\(E(\widetilde{g})
+=E(g)\)</span>，不妨记为 <span class="math inline">\(\theta_0\)</span>.
+<span class="math inline">\(\mathrm{Var}(g) = E\left[(g-\widetilde
+g)+(\widetilde{g}-\theta_0)\right]^2=E(g-\widetilde{g})^2+E(\widetilde{g}-\theta_0)^2+2E\left[(g-\widetilde{g})(\widetilde{g}-\theta_0)\right]\)</span>，其中</p>
+<p><span class="math display">\[\begin{aligned}
+E\left[(g-\tilde g)(\tilde g - \theta_0)\right]
+&amp;= E\left\{E\left[(g-\tilde g)(\tilde g - \theta_0)|T\right]\right\}
+\\
+&amp;= E\left\{(\tilde g-\theta_0)E\left[(g-\tilde g)|T\right]\right\}
+\\
+&amp; = E\left\{(\tilde g-\theta_0)
+\left[E(g|T)-E(\tilde g|T)\right]
+\right\} \\
+&amp; = E\left[(\tilde g-\theta_0)
+(\tilde g-\tilde g)
+\right] \\
+&amp;=0
+\end{aligned}\]</span></p>
+<p>故 <span class="math inline">\(\mathrm{Var}(g) = E(g-\widetilde{g})^2
++ \mathrm{Var}(\widetilde{g})\)</span>, 则 <span
+class="math inline">\(\mathrm{Var}(\widetilde{g}) \leqslant
+\mathrm{Var}(g)\)</span>.</p>
+<p>由 Rao–Blackwell 定理可知，若参数得 UMVUE
+存在，则一定是充分统计量或充分统计量的函数.</p>
+<h3 id="完备统计量">2.2 完备统计量</h3>
+<p><strong>定义4</strong> 设总体 <span class="math inline">\(X\)</span>
+的分布函数是 <span class="math inline">\(F(x;\theta)\)</span>，<span
+class="math inline">\(\Theta\)</span> 是参数空间，<span
+class="math inline">\(\mathbf T=\mathbf T(\mathbf X)\)</span> 是基于
+<span class="math inline">\(X\)</span> 的样本 <span
+class="math inline">\(X_1, X_2, \cdots, X_n\)</span> 的统计量.
+如果对于任何函数 <span class="math inline">\(g(\mathbf t)\)</span>，条件
+<span class="math display">\[
+E_\theta g(\boldsymbol T) = 0,\forall \boldsymbol\theta \in \Theta
+\]</span> 蕴涵 <span class="math inline">\(P_\theta(g(\mathbf T))=0) =
+1(\forall \boldsymbol\theta \in \Theta)\)</span>，则称 <span
+class="math inline">\(\mathbf T(\mathbf X)\)</span>
+是<strong>完全统计量</strong>或<strong>完备统计量 (Complete
+Statistic)</strong>.</p>
+<p>既是充分的又是完备的统计量称为<strong>充分完备统计量</strong>.</p>
+<h2 id="指数型分布族">3 指数型分布族</h2>
+<h3 id="指数分布族">3.1 指数分布族</h3>
+<p><strong>定义5</strong> 设 <span class="math inline">\(\boldsymbol X =
+(X_1, X_2, \cdots, X_n)\)</span> 是随机向量，<span
+class="math inline">\(h(\boldsymbol x), T_i(\boldsymbol x)\)</span> 是
+<span class="math inline">\(\boldsymbol x = (x_1, x_2, \cdots,
+x_n)\)</span> 的实值函数，<span class="math inline">\(C(\boldsymbol
+\theta), Q_i(\boldsymbol \theta)\)</span> 是 <span
+class="math inline">\(\boldsymbol \theta\)</span> 的函数. 如果 <span
+class="math inline">\(\boldsymbol X\)</span> 有联合概率函数 <span
+class="math display">\[
+f(x,\boldsymbol\theta) =
+C(\boldsymbol\theta)\mathrm{exp}\left[\sum\limits_{i=1}^mQ_i(\boldsymbol\theta)T_i(\boldsymbol
+x)\right]h(\boldsymbol x),\boldsymbol\theta\in\Theta
+\]</span> 则称 <span class="math inline">\(\boldsymbol X\)</span>
+服从<strong>指数族分布</strong>，其分布族称为<strong>指数型分布族</strong>.</p>
+<h3 id="自然形式">3.2 自然形式</h3>
+<p><strong>定义6</strong> 对于上述指数型分布族，引入新参数 <span
+class="math display">\[
+\eta_i = Q_i(\boldsymbol\theta), i = 1,2,\cdots,m.
+\]</span> 如果能从 <span class="math inline">\((18)\)</span> 中解出唯一
+<span class="math inline">\(\theta_i = h_i(\boldsymbol\eta)(1\leqslant i
+\leqslant m)\)</span>，其中 <span class="math inline">\(\boldsymbol \eta
+= (\eta_1, \eta_2,\cdots,\eta_m)\)</span>，则有 <span
+class="math inline">\(C(\boldsymbol \theta) = \widetilde C(\boldsymbol
+\eta)\)</span>，这就得到指数族分布的自然形式 <span
+class="math display">\[
+\tilde
+C(\boldsymbol\eta)\mathrm{exp}\left[\sum_{i=1}^m\eta_iT_i(\boldsymbol
+x)\right]h(\boldsymbol x)
+\]</span> 则称 <span class="math inline">\((19)\)</span>
+为<strong>自然指数族</strong>或<strong>标准指数族</strong>，称 <span
+class="math display">\[
+\widetilde{\Theta} = \{\boldsymbol{\eta}|\boldsymbol{\eta} =
+\big(Q_1(\boldsymbol\theta),Q_2(\boldsymbol{\theta}),\cdots,Q_m(\boldsymbol{\theta})\big),
+\boldsymbol{\theta}\in\Theta\}
+\]</span>
+为<strong>自然参数空间</strong>或<strong>标准参数空间</strong>.</p>
+<p><strong>例2</strong> 证明 <span
+class="math inline">\(\mathrm{Ga}(\alpha, \lambda)\)</span>
+的样本分布服从指数型分布，并写出其自然形式.</p>
+<p><strong>解</strong> 记 <span class="math inline">\(\boldsymbol\Theta
+= (\theta_1, \theta_2) = (\alpha, \lambda)\)</span>，则样本随机变量
+<span class="math inline">\(X=(X_1,X_2,\cdots, X_n)\)</span>
+的联合密度为</p>
+<p><span class="math display">\[\begin{aligned}
+f(\boldsymbol x,\boldsymbol{\Theta}) &amp;=
+\frac{\lambda^{n\alpha}}{\Gamma^n(\alpha)}\mathrm{exp}\left[(\alpha-1)\sum_{i=1}^n\ln
+x_i-\lambda\sum_{i=1}^nx_i\right] \\
+&amp; =
+C(\boldsymbol\Theta)\mathrm{exp}\left[Q_1(\boldsymbol\theta)T_1(\boldsymbol{x})
++ Q_2(\boldsymbol{\theta})T_2(\boldsymbol{x})\right]h(\boldsymbol{x})
+\end{aligned}\]</span></p>
+<p>其中 <span class="math inline">\(C(\Theta) =
+\frac{\theta_2^{n\theta_1}}{\Gamma^n(\theta_1)},
+Q_1(\boldsymbol{\theta}) = \theta_1 - 1, Q_2(\boldsymbol{\theta}) =
+-\theta_2, h(\boldsymbol{x}) = 1.\)</span> <span
+class="math inline">\((\theta_1, \theta_2)\)</span>的参数空间是 <span
+class="math display">\[
+\Theta =
+\left\{\boldsymbol{\theta}=(\theta_1,\theta_2)|\theta_1&gt;0,\theta_2&gt;0
+\right\}.
+\]</span> 所以 <span class="math inline">\(\boldsymbol{X}\)</span>
+服从指数分布. 下面取 <span class="math inline">\(\eta_1 =
+Q_1(\boldsymbol{\theta}) = \theta_1 - 1, \eta_2 =
+Q_2(\boldsymbol{\theta}) = -\theta_2\)</span>，则唯一解出 <span
+class="math display">\[
+\theta_1 = \eta_1 + 1, \theta_2 = -\eta_2,
+\widetilde{C}(\boldsymbol{\eta}) = \frac{(-\eta_2)^{n(\eta_1 +
+1)}}{\Gamma^n(\eta_1 + 1)}
+\]</span> 所以 <span class="math inline">\(X\)</span> 分布的自然形式为
+<span class="math display">\[
+\tilde
+C(\boldsymbol\eta)\mathrm{exp}\left[\eta_1T_1(\boldsymbol{x})+\eta_2T_2(\boldsymbol{x})\right]h(\boldsymbol
+x)
+\]</span> 且自然参数空间为 <span class="math display">\[
+\widetilde{\Theta} = \left\{\boldsymbol{\eta}=(\eta_1,\eta_2) |
+\eta_1&gt;-1, \eta_2&lt;0\right\},
+\]</span> <strong>定理3</strong> 如果 <span
+class="math inline">\(\boldsymbol X\)</span>
+的概率分布族能写成指数分布的自然形式 <span
+class="math inline">\((19)\)</span>，且自然参数空间 <span
+class="math inline">\(\widetilde\Theta\)</span> 有内点，则 <span
+class="math display">\[
+\boldsymbol T(\boldsymbol{X}) =
+\big(T_1(\boldsymbol{X}),T_2(\boldsymbol{X}),\cdots,
+T_m(\boldsymbol{X})\big)
+\]</span> 是 <span class="math inline">\(\boldsymbol\theta\)</span> 和
+<span class="math inline">\(\boldsymbol\eta\)</span> 充分完备统计量.</p>
+<p><strong>证明</strong> 由因子分解定理易证 <span
+class="math inline">\(T(\boldsymbol{X})\)</span>
+为充分统计量，完全性的证明参见参考资料[2]第 80 页.</p>
+<p><strong>例3</strong> 对于正态分布 <span
+class="math inline">\(\{N(0,\sigma^2):\sigma\in \mathbb R^+
+\}\)</span>，证明统计量 <span class="math inline">\(X_1\)</span>
+不是完备统计量，而 <span class="math inline">\(T=\sum\limits_{i=1}^n
+X_i^2\)</span> 是完备统计量.</p>
+<p><strong>解</strong> <span class="math inline">\(E_\sigma(X_1) =
+0\)</span> 而 <span class="math inline">\(P_\sigma(X_1 = 0) =
+0\not=1(\forall \sigma\in\mathbb R^+)\)</span>，故 <span
+class="math inline">\(X_1\)</span> 不是完备统计量.</p>
+<p><span class="math inline">\(X_i / \sigma \sim N(0,1)\)</span>，故
+<span class="math inline">\(T/\sigma^2 \sim Ga(\frac n 2,\frac 1
+2)\)</span>，因此 <span class="math inline">\(T \sim Ga(\frac n2, \frac
+1{2\sigma^2})\)</span>，由例1知，<span class="math inline">\(\boldsymbol
+X\)</span> 服从指数型分布族，且其自然参数空间有内点，故由定理3，<span
+class="math inline">\(T\)</span> 为充分完备统计量，证必.</p>
+<h2 id="lehmannscheffé-定理">4 Lehmann–Scheffé 定理</h2>
+<p><strong>定理4 Lehmann–Scheffé 定理</strong> 设 <span
+class="math inline">\(\boldsymbol T = \boldsymbol
+T(\boldsymbol{X})\)</span> 是充分完备统计量，若 <span
+class="math inline">\(\hat g(\boldsymbol X)\)</span> 是 <span
+class="math inline">\(h(\boldsymbol\theta)\)</span>
+的方差有限的无偏估计，即 <span class="math display">\[
+E_\theta\hat g(\boldsymbol{X}) = h(\boldsymbol{\theta}),
+\mathrm{Var}_\theta(\hat g(\boldsymbol{X}))&lt;\infty, \forall
+\boldsymbol{\theta} \in \Theta,
+\]</span> 则条件数学期望 <span class="math display">\[
+\eta(\boldsymbol{T}) = E\left[\hat g(\boldsymbol{X})|T\right]
+\]</span> 是 <span class="math inline">\(h(\boldsymbol{\theta})\)</span>
+的唯一的 UMVUE. 证明见参考文献[3]103页</p>
+<h2 id="cramer-rao-不等式">5 Cramer-Rao 不等式</h2>
+<p><strong>定理5 Cramer-Rao 不等式</strong> 设总体分布 <span
+class="math inline">\(f(x,\theta)\)</span>，<span
+class="math inline">\(X_1,\cdots,X_n\)</span>
+是来自该总体的简单样本，<span
+class="math inline">\(T=T(X_1,\cdots,X_n)\)</span> 是 <span
+class="math inline">\(g(\theta)\)</span> 的任一个无偏估计，<span
+class="math inline">\(g&#39;(\theta) = \frac{\partial
+g(\theta)}{\partial\theta}\)</span> 存在，且对 <span
+class="math inline">\(\Theta\)</span> 中一切 <span
+class="math inline">\(\theta\)</span>，对 <span class="math display">\[
+g&#39;(\theta) = \int_{-\infty}^\infty\cdots\int_{-\infty}^\infty
+T(x_1,\cdots,x_n)\prod_{i=1}^np(x_i,\theta)\mathrm dx_1\cdots\mathrm
+dx_n,
+\]</span> 的微商可在积分号下进行，即 <span class="math display">\[
+g&#39;(\theta) =  \int_{-\infty}^\infty\cdots\int_{-\infty}^\infty
+T(x_1,\cdots,x_n)\frac\partial{\partial\theta}\left(\prod_{i=1}^np(x_i,\theta)\right)\mathrm
+dx_1\cdots\mathrm dx_n.
+\]</span> 则有 <span class="math display">\[
+\mathrm{Var}(T) \geqslant \frac{[g&#39;(\theta)]^2}{nI(\theta)}
+\]</span> 其中 <span class="math inline">\(I(\theta) =
+E\left[\frac\partial{\partial\theta}\ln f(x,\theta)\right]^2\)</span>
+为费希尔信息量，<span
+class="math inline">\(\frac{[g&#39;(\theta)]^2}{nI(\theta)}\)</span>
+称为参数估计的 C-R 下限. 证明详见参考文献[1]291页.</p>
+<p><span class="math inline">\((31)\)</span> 式中若等号成立则称 <span
+class="math inline">\(T\)</span> 是 <span
+class="math inline">\(g(\theta)\)</span> 的有效估计，有效估计一定是
+UMVUE.</p>
+<h2 id="umvue-的求法">6 UMVUE 的求法</h2>
+<p>根据 Rao–Blackwell 定理 ，UMVUE 若存在一定是基于充分统计量的估计.
+故寻找 UMVUE
+可以利用因子分解定理寻找充分统计量，然后对充分统计量进行无偏修正，得到可能的
+UMUVE，最后可以利用 UMVUE 的充要条件 (定理1)、Lehmann–Scheffé
+定理、Cramer-Rao 不等式等方法说明其方差一致最小.</p>
+<p>下面通过例题说明求 UMVUE 的具体思路.</p>
+<p><strong>例4</strong> 设 <span
+class="math inline">\(X_1,\cdots,X_n\)</span> 为来自正态总体 <span
+class="math inline">\(N(\mu,\sigma^2)\)</span> 的 i.i.d 样本，求 <span
+class="math inline">\(\mu, \sigma^2\)</span> 的 UMVUE.</p>
+<p><strong>解法1</strong> 由例1知，<span class="math inline">\((\bar X,
+S^2)\)</span> 是 <span class="math inline">\((\mu, \sigma^2)\)</span>
+的充分统计量. <span class="math inline">\(E(\bar X) = \mu,
+E(S^2)=\sigma^2\)</span> 均为无偏估计，且为充分统计量的函数. 令 <span
+class="math inline">\(E(\varphi(\boldsymbol{X})) = 0\)</span>，即</p>
+<p><span
+class="math display">\[\int_{-\infty}^\infty\cdots\int_{-\infty}^\infty\varphi(x_1,\cdots,x_n)\frac1{(2\pi\sigma^2)^{n/2}}\mathrm{exp}\{-\frac1{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\}\mathrm{d}x_1\cdots\mathrm{d}x_n
+= 0\]</span></p>
+<p>两边对 <span class="math inline">\(\mu\)</span> 求导，得</p>
+<p><span class="math display">\[\begin{aligned}
+\int_{-\infty}^\infty\cdots\int_{-\infty}^\infty\varphi(x_1,\cdots,x_n)\sum_{i=1}^n(x_i-\mu)\mathrm{exp}\{-\frac1{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\}\mathrm{d}x_1\cdots\mathrm{d}x_n
+&amp;= 0 \\
+\int_{-\infty}^\infty\cdots\int_{-\infty}^\infty\varphi(x_1,\cdots,x_n)\bar
+xf(\boldsymbol{x},\theta,\sigma^2)\mathrm{d}x_1\cdots\mathrm{d}x_n
+&amp;= 0 \\
+\mathrm{Cov}(\varphi, \bar X) &amp;= 0
+\end{aligned}\]</span></p>
+<p>由定理1知，<span class="math inline">\(\bar X\)</span> 是 <span
+class="math inline">\(\mu\)</span> 的 UMVUE.</p>
+<p>同理，式 <span class="math inline">\((32)\)</span> 俩边对 <span
+class="math inline">\(\sigma^2\)</span> 求导，得到 <span
+class="math inline">\(\mathrm{Cov}(\varphi, S^2) = 0\)</span>，证得
+<span class="math inline">\(S^2\)</span> 是 <span
+class="math inline">\(\sigma^2\)</span> 的UMVUE.</p>
+<p><strong>解法2</strong> 记 <span class="math inline">\(\boldsymbol{T}
+=(T_1(\boldsymbol{X}), T_2(\boldsymbol{X})) = (\sum\limits_{i=1}^nX_i,
+\sum_{i=1}^n X_i^2)\)</span> 样本的联合密度函数为</p>
+<p><span class="math display">\[\begin{aligned}
+f(\boldsymbol{x},\theta,\sigma^2) &amp;=
+\frac1{(2\pi\sigma^2)^{n/2}}\mathrm{exp}\left[-\frac1{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right]
+\\
+&amp; =
+\frac1{(2\pi\sigma^2)^{n/2}}\mathrm{exp}\left(-\frac{n\mu^2}{2\sigma^2}\right)\mathrm{exp}\left[\frac{\mu
+T_1(\boldsymbol{x})}{\sigma^2}-\frac{T_2(\boldsymbol{x})}{2\sigma^2}\right]
+\\
+&amp; =
+C(\boldsymbol{\Theta})\mathrm{exp}\left[Q_1(\boldsymbol{\theta})T_1(\boldsymbol{x})
++ Q_2(\boldsymbol{\theta})T_2(\boldsymbol{x})\right]h(\boldsymbol{x})
+\end{aligned}\]</span></p>
+<p>其中，<span class="math inline">\(\boldsymbol{\theta} = (\theta_1,
+\theta_2) = (\mu,\sigma^2), h(\boldsymbol{x})=1\)</span>.</p>
+<p>取 <span class="math inline">\(\eta_1 = Q_1(\boldsymbol{\theta}) =
+\frac{\theta_1}{\theta_2}, \eta_2 = Q_2(\boldsymbol{\theta}) =
+\frac{-1}{2\theta_2}\)</span>，唯一解出 <span
+class="math inline">\(\theta_1=\frac{-\eta_1}{2\eta_2},
+\theta_2=\frac{-1}{2\eta_2}\)</span>，带入 <span
+class="math inline">\(C(\boldsymbol{\theta})\)</span> 得到 <span
+class="math inline">\(\widetilde{C}(\boldsymbol{\eta})\)</span>. 所以
+<span class="math inline">\(\boldsymbol{X}\)</span>
+的分布族为指数型分布族且有自然形式，自然参数空间为 <span
+class="math display">\[
+\widetilde{\Theta} =
+\left\{\boldsymbol{\eta}=(\eta_1,\eta_2)|\eta_1\in(-\infty,\infty),\eta_2&lt;0\right\}
+\]</span></p>
+<p>由定理3知，<span class="math inline">\(\boldsymbol{T} =
+(\sum\limits_{i=1}^nX_i, \sum_{i=1}^n X_i^2)\)</span> 是 <span
+class="math inline">\(\boldsymbol{\Theta}=(\mu, \sigma^2)\)</span>
+的充分完备统计量，基于该统计量构造 <span class="math inline">\(\mu,
+\sigma^2\)</span> 的无偏估计 <span class="math inline">\(\bar X,
+S^2\)</span>. 显然 <span class="math inline">\(\bar X, S^2\)</span>
+都可以表示为 <span class="math inline">\(\boldsymbol{T}\)</span>
+的函数，故由Lehmann–Scheffé 定理 <span class="math inline">\(\bar X =
+E(\bar X|\boldsymbol{T})\)</span> 和 <span
+class="math inline">\(S^2=E(S^2|\boldsymbol{T})\)</span> 分别为 <span
+class="math inline">\(\mu\)</span> 和 <span
+class="math inline">\(\sigma^2\)</span> 的 UMVUE.</p>
+<p>上例中，分布族为指数型分布族，使用定理3确定充分完备统计量是方便的，然后使用
+Lehmann–Scheffé 定理说明 UMVUE.
+对于非指数族分布，可以尝试使用因子分解定理和定义4说明充分性和完备性.</p>
+<p><strong>例5</strong> 设 <span
+class="math inline">\(X_1,\cdots,X_n\)</span> 为来自均匀样本分布 <span
+class="math inline">\(U(0, \theta), \theta&gt;0\)</span> 的 i.i.d
+样本，求 <span class="math inline">\(\theta\)</span> 的UMVUE.</p>
+<p><strong>解</strong> 样本的联合概率分布为 <span
+class="math inline">\(f(\boldsymbol{x},\theta)=\frac1{\theta^n}I_{\{0&lt;x_{(n)}&lt;\theta\}}\)</span>，其中
+<span class="math inline">\(X_{(n)}=\max\{\boldsymbol{X}\}\)</span>
+为次序统计量. 根据因子分解定理，<span
+class="math inline">\(T=X_{(n)}\)</span> 为充分统计量. <span
+class="math inline">\(T\)</span> 的概率密度函数为 <span
+class="math inline">\(f(t,\theta)=n\frac{t^{n-1}}{\theta^n}
+I_{\{0&lt;x_{(n)}&lt;\theta\}}\)</span>. 则 <span
+class="math inline">\(E(T) = \frac{n}{n+1}\theta\)</span>，可得 <span
+class="math inline">\(\frac{n+1}nT\)</span> 为 <span
+class="math inline">\(\theta\)</span> 的无偏估计，记为 <span
+class="math inline">\(\hat\theta(T)\)</span>. 设 <span
+class="math inline">\(E(g(T)) = 0\)</span>，即</p>
+<p><span class="math display">\[\begin{aligned}
+\int_0^\theta g(T)n\frac{t^{n-1}}{\theta^n}\mathrm{d}t &amp;= 0 \\
+\int_0^\theta g(T)t^{n-1}\mathrm{d}t &amp;= 0 \\
+\end{aligned}\]</span></p>
+<p>两边对 <span class="math inline">\(\theta\)</span> 求导，得 <span
+class="math inline">\(g(\theta) = 0\)</span>，由定义4知 <span
+class="math inline">\(T\)</span> 为完备统计量. <span
+class="math inline">\(\hat\theta(T) = E(\hat\theta(T)|T)\)</span>, 由
+Lehmann–Scheffé 定理，<span class="math inline">\(\hat\theta =
+\frac{n+1}nX_{(n)}\)</span> 为 <span
+class="math inline">\(\theta\)</span> 的 UMVUE.</p>
+<p>相对于以上解法，估计的 C-R
+下限的计算是简单而直接的，所以对于某估计我们可以先验证它的方差是否达到
+C-R 下限，一旦达到 C-R 下限则立即说明该估计为 UMVUE.</p>
+<p><strong>例6</strong> 设总体为指数分布 <span
+class="math inline">\(Exp(1/\theta)\)</span>，求参数 <span
+class="math inline">\(\theta\)</span> UMVUE.</p>
+<p><strong>解</strong> 先计算费希尔信息量 <span
+class="math inline">\(I(\theta) =
+E\left[\frac\partial{\partial\theta}\ln f(x,\theta)\right]^2 =
+\frac1{\theta^2}\)</span>，则 <span
+class="math inline">\(\theta\)</span> 的 C-R 下限为 <span
+class="math inline">\(\frac{1}{nI(\theta)} = \frac{\theta^2}n\)</span>.
+对于 <span class="math inline">\(\theta\)</span> 的无偏估计量 <span
+class="math inline">\(\bar X = \frac1n\sum\limits_{i=1}^n
+X_i\)</span>，其方差为 <span class="math inline">\(\mathrm{Var}(\bar X)
+= \frac{\theta^2}n\)</span> 达到 C-R 下限，故为有效估计，则为 UMVUE.</p>
+<p>通过以上例题，总结 UMVUE 的求法思路.</p>
+<ol type="1">
+<li><p>首先应明确，并不是所有的参数都有 UMVUE.</p></li>
+<li><p>根据 Rao–Blackwell 定理，若 UMVUE
+存在则一定是基于充分统计量的，故应先寻找参数的充分统计量.</p></li>
+<li><p>确定待证明的统计量，一般基于充分统计量构造，然后进行无偏修正.</p></li>
+<li><p>证明选择的统计量为 UMVE. 具体地，</p>
+<ol type="1">
+<li>首先考虑 C-R
+下限，因为该方法计算相对简单，一旦估计的方差达到下限，则立即说明其为
+UMVUE. 但应注意方差达到 C-R 下限是 UMVUE 的充分不必要条件.</li>
+<li>由于指数族分布的优良性质，整理联合概率函数，证明其为指数族分布且有自然形式，并写出自然参数空间，使用定理3说明
+UMVUE.</li>
+<li>若分布族不是指数族分布，则考虑使用完备统计量的定义说明完备性(例5)，然后利用
+Lehmann–Scheffé 定理说明 UMVUE.</li>
+<li>使用 UMVUE 的充分必要条件 (定理1)，对 <span
+class="math inline">\(E(\varphi) = 0\)</span> 两边求导，整理得到 <span
+class="math inline">\(\mathrm{Cov}(\varphi, T) = 0\)</span> 来证明.</li>
+<li>对于某些特殊的情况可以使用定义法直接说明其方差一致最小，但一般比较困难.</li>
+<li>若以上方法均无法证明，则考虑更换估计量，或者估计的 UMVUE
+不存在.</li>
+</ol></li>
+</ol>
+<h2 id="参考文献">参考文献</h2>
+<p>[1] 茆诗松, 程依明, 濮晓龙. 概率论与数理统计教程. 3版. 北京:
+高等教育出版社, 2019.</p>
+<p>[2] 陈希孺. 数理统计引论. 北京：科学出版社, 1981.</p>
+<p>[3] 韦来生, 数理统计. 北京: 科学出版社, 2015.</p>
+<p>[4] 周伟萍, 关于一直最小方差无偏估计的教学思考, 高师理科学刊,
+2013,33(06)</p>
+<p>[5] Charles Elkan, Rao-Blackwell Theorem: Intuition, Lemmas and Start
+of Proof</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/46/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>刷题笔记(1)：力扣-50.Pow(x,n): 快速幂算法</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/44/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      使用 Web 前端技术开发一个 Wallpaper Engine 壁纸
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/" class="post-tag">#数理统计</a>
+  
+    <a href="/tags/UMVUE/" class="post-tag">#UMVUE</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/33/" title="机器学习基础-“逻辑”回归(logistic regression)的数学原理" rel="bookmark">机器学习基础-“逻辑”回归(logistic regression)的数学原理</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/34/" title="机器学习基础-BP(Error Back Propagation)算法的数学原理" rel="bookmark">机器学习基础-BP(Error Back Propagation)算法的数学原理</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

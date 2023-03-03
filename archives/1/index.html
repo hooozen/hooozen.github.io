@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        IndexedDB 中文教程（1）介绍 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">IndexedDB 中文教程（1）介绍</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
+  
+    <a href="/tags/indexedDB/" class="post-tag">#indexedDB</a>
+  
+
+
+          <span class="post-date">2018-11-10</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p><a href="https://www.hozen.site/archives/1/">IndexedDB
+中文教程（1）介绍</a></p>
+<p><a href="https://www.hozen.site/archives/2/">IndexedDB
+中文教程（2）基本使用</a></p>
+<p>教程持续更新中…… <span id="more"></span></p>
+<p>**参考*</p>
+<p>[1] <em><a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">《IndexedDB》</a>
+- <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API"
+class="uri">https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API</a></em></p>
+<hr />
+<h2 id="概述">概述</h2>
+<p>IndexedDB 是一种 web 浏览器中持久存储数据的方法，是一种“<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Object_database">NoSQL</a>”数据库。IndexedDB
+提供了高性能的接口，适用于大量数据的本地读写和持久存储，对于开发可离线
+Web 应用意义非凡。</p>
+<p>Web 本地存储有很多方法可选，早期可选的方法可能只有 cookie。但 cookie
+的初衷并非单纯用来做本地存储的，而是用来记录一些用户身份信息，便于网站标识访问者身份。因此
+cookie 的可用大小有限，并且会被 HTTP
+请求携带，造成了不必要的网络性能开销，尤其是在较差的网络环境中，这些开销将导致极差的体验。</p>
+<p>在新的 HTML 标准中提供了 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Storage_API">Web
+Storage API</a>，包括 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/sessionStorage">sessionStorage</a>
+和 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage">localStorage</a>
+两种机制。新的 API 配合 Ajax 在很多场景中完全可以替代
+cookie，并且存储容量限制大大提高。两个接口不同的生命周期机制也提供了一定的方便。</p>
+<p>虽然不同于 cookie 的字符串存储的方式，Web Storage API
+提供了键值对的存储方式。但对于复杂数据来说，依然只能通过格式化后的字符串去存储数据，这就决定了
+Web Storage API 在进行复杂数据的修改和查询时很不方便。更关键的是，Web
+Storage API 是同步接口，会同步阻断浏览器 JavaScript
+进程。当数据量比较大，或操作比较复杂时，这两个缺陷将会带来致命的性能问题。</p>
+<p>随着移动互联网发展和技术进步，用户和开发者对 Web
+应用的期望越来越高，Web
+应用需要承担越来越多的任务。体现在可离线应用和数据持久化方面，对于本地化数据存储的要求也越来越高。浏览器本地数据库被设计和实现出来，关系型数据库
+<a target="_blank" rel="noopener" href="https://www.w3.org/TR/webdatabase/">WebSql</a>
+出现了，大量的数据存储和对 SQL
+语句的支持，大大提高了浏览器本地数据存储能力。</p>
+<p>2010 年 W3C 组织废弃了 WebSql，key-value 数据库 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API">IndexedDB</a>
+成为其替代品。</p>
+<h2 id="例子">例子</h2>
+<p>为了方便介绍和观察 IndexedDB 的结构和特点，我们先创建一个 IndexedDB
+的简单实例。</p>
+<p>复制以下代码到 Chrome 中并执行。该代码将创建一个 IndexedDB
+数据库，并建立一个
+<code>ObjectStore</code>（对象仓库），同时存储了一条数据到数据库中。</p>
+<p><em>可以不必在意代码的实现细节，后续会详细介绍。</em></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs js">(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">window</span>.<span class="hljs-property">indexedDB</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;浏览器不支持 indexedDB&#x27;</span>);<br>    <span class="hljs-keyword">return</span>;<br>  &#125;<br><br>  <span class="hljs-keyword">var</span> delReq = <span class="hljs-variable language_">window</span>.<span class="hljs-property">indexedDB</span>.<span class="hljs-title function_">deleteDatabase</span>(<span class="hljs-string">&#x27;hozen.site&#x27;</span>);<br>  delReq.<span class="hljs-property">onsuccess</span> = initDB;<br><br>  <span class="hljs-keyword">function</span> <span class="hljs-title function_">initDB</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">var</span> openReq = <span class="hljs-variable language_">window</span>.<span class="hljs-property">indexedDB</span>.<span class="hljs-title function_">open</span>(<span class="hljs-string">&#x27;hozen.site&#x27;</span>);<br>    openReq.<span class="hljs-property">onupgradeneeded</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>      openReq.<span class="hljs-property">result</span>.<span class="hljs-title function_">createObjectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br>    &#125;<br>    openReq.<span class="hljs-property">onsuccess</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>      <span class="hljs-keyword">var</span> db = openReq.<span class="hljs-property">result</span>;<br>      <span class="hljs-keyword">var</span> store = db.<span class="hljs-title function_">transaction</span>(<span class="hljs-string">&#x27;blog&#x27;</span>, <span class="hljs-string">&#x27;readwrite&#x27;</span>).<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;blog&#x27;</span>);<br>      store.<span class="hljs-title function_">add</span>(&#123;<br>        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;indexDB&#x27;</span>,<br>        <span class="hljs-attr">author</span>: <span class="hljs-string">&#x27;hozen&#x27;</span>,<br>      &#125;, <span class="hljs-number">1</span>);<br>    &#125;<br>    openReq.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) &#123;<br>      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;打开数据库失败&#x27;</span>, e);<br>    &#125;<br>  &#125;<br>&#125;)();<br></code></pre></td></tr></table></figure>
+<p>代码执行成功后，打开 Chrome 的开发者工具，在 Application 面板中找到
+IndexedDB 选项，打开就能查看一个最简单的 IndexedDB 的样例了。</p>
+<p>有了这个例子，我们可以分析一些 IndexedDB 的显著特点。</p>
+<h2 id="特性">特性</h2>
+<h3 id="面向对象数据库">面向对象数据库</h3>
+<p>IndexedDB 是不需要 SQL 语句来操控的，是面向对象数据库。</p>
+<p>从例子中可以看出，IndexedDB
+数据库并不具备类似关系数据库的表结构和固定的字段。在同一个源下，可以存在多个不同名的数据库，每个数据库下包含若干个对象仓库（Object
+Store），对象仓库是 Key-Value 结构的。你可以将数据（甚至是 JavaScript
+对象）存储到对象仓库中，需要时通过键或索引快速的读出数据。</p>
+<p>这种面向对象的设计，允许直接对 JavaScript
+对象进行存取，使得数据库的灵活性大大提高，读取存储数据的格式转化成本也大大下降。也规避了关系型数据库中需求变更时，需要对表结构进行修改甚至重新设计的风险。</p>
+<h3 id="key-value-数据库">key-value 数据库</h3>
+<p>与传统的关系型数据库不同，IndexedDB 是 kye-value 数据库。value
+可以是非常复杂的对象，key
+可以是对象自身的属性。可以对对象的某个属性创建索引来实现快速查询和列举排序。并且，key
+的数据类型几乎没有限制，甚至可以是二进制对象。</p>
+<h3 id="事务模式数据库">事务模式数据库</h3>
+<p>对于 IndexedDB
+数据的操作都必须在一个<strong>事务</strong>中完成，因此 IndexedDB
+<strong>基本</strong>（对于持久性，IndexedDB 在实现中是有一个默认的 BUG
+的，参见）保证了原子性、一致性、隔离性和持久性，减少了数据混乱的机会。</p>
+<h3 id="异步">异步</h3>
+<p>IndexedDB API 基本上是异步的。当对 IndexedDB
+数据库进行读写等操作时，会向数据库发送一个操作请求，当操作完成时数据库会通过事件通知我们。这类似
+Ajax
+请求，这样的好处在于程序不会阻塞在数据库操作过程，对于大量复杂数据的操作，这一点是很重要的。</p>
+<p>IndexedDB 标准中提供了同步接口，但这些同步接口只能用于 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API">Web
+Workers</a>。</p>
+<h3 id="同源策略">同源策略</h3>
+<p>IndexedDB
+同样遵循同源策略，即对于不同的应用层协议、域名、端口产生不同的“源”。在不同的“源”之间，数据是不会相互干扰和作用的，在同一个“源”内所有的数据库都有唯一的名称。</p>
+<p>容易理解，同源策略是为了数据安全考虑。</p>
+<h2 id="局限性">局限性</h2>
+<p>IndexedDB
+是有一些局限性的，下面的内容只是指导性的，一些特性和原因后面的教程中会进行解释。</p>
+<p>!<strong>以下情况不适合使用IndexedDB</strong></p>
+<ul>
+<li>全球多种语言混合存储。国际化支持不好。需要自己处理。</li>
+<li>和服务器端数据库同步。你得自己写同步代码。</li>
+<li>全文搜索。IndexedDB 接口没有类似 SQL 语句中 LIKE 的功能。</li>
+</ul>
+<p>!<strong>注意，在以下情况下，数据库可能被清除:</strong></p>
+<ul>
+<li>用户请求清除数据。</li>
+<li>浏览器处于隐私模式。最后退出浏览器的时候，数据会被清除。</li>
+<li>硬盘等存储设备的容量到限。</li>
+<li>数据损坏。</li>
+<li>进行与特性不兼容的操作。</li>
+</ul>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/2/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>IndexedDB 中文教程（2）基本使用</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/26/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      秋天的味道
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
+  
+    <a href="/tags/indexedDB/" class="post-tag">#indexedDB</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/2/" title="IndexedDB 中文教程（2）基本使用" rel="bookmark">IndexedDB 中文教程（2）基本使用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/14/" title="为DOM2级事件函数传参——bind的应用" rel="bookmark">为DOM2级事件函数传参——bind的应用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/15/" title="requestAnimationFrame——HTML5动画利器" rel="bookmark">requestAnimationFrame——HTML5动画利器</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

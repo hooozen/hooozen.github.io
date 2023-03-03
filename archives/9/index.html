@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        为 CentOS 添加回收站功能 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">为 CentOS 添加回收站功能</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/Server/" class="post-tag">#Server</a>
+  
+    <a href="/tags/CentOS/" class="post-tag">#CentOS</a>
+  
+    <a href="/tags/bash/" class="post-tag">#bash</a>
+  
+
+
+          <span class="post-date">2018-03-20</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>在 centos 中删除文件时会使用 <code>rm -rf</code>
+命令，然而该命令往往造成不可挽回的后果，比如手抖删错目录然后过段时间再想恢复几乎时不可能的。在很多桌面发行版本中已经有了回收站功能，在服务器端的
+centos 中这个功能更为重要。</p>
+<span id="more"></span>
+<p>接下来就是一个经典的添加“回收站功能”的教程。</p>
+<h2 id="编写-shell-脚本">编写 Shell 脚本</h2>
+<p>教程原理即是使用 <code>bash</code> 脚本中 <code>alias</code> 命令重写
+<code>rm</code> 命令，将其修改为移动到指定回收站目录。</p>
+<p>脚本内容如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><span class="hljs-built_in">mkdir</span> -p ~/.trash<br><span class="hljs-built_in">alias</span> <span class="hljs-built_in">rm</span>=trash<br><span class="hljs-built_in">alias</span> r=trash<br><span class="hljs-built_in">alias</span> rl=<span class="hljs-string">&#x27;ls ~/.trash&#x27;</span><br><span class="hljs-built_in">alias</span> ur=undelfile<br><span class="hljs-function"><span class="hljs-title">undelfile</span></span>() &#123;<br>   <span class="hljs-built_in">mv</span> -i ~/.trash/<span class="hljs-variable">$@</span> ./<br>&#125;<br><span class="hljs-function"><span class="hljs-title">trash</span></span>() &#123;<br>    <span class="hljs-built_in">mv</span> <span class="hljs-variable">$@</span> ~/.trash/<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>脚本很简单，即使没有任何 <code>bash</code>
+编程基础也看得出大概意思。</p>
+<p>首先在用户根目录下新建隐藏目录 <code>.trash</code>
+作为回收站目录。然后重写 <code>rm</code> 命令。其中 <code>$@</code>
+为获取输入的所有参数。所以重写命令后不需要使用 <code>-r</code>
+参数，因为 <code>mv</code> 命令没有该参数。</p>
+<h2 id="应用脚本">应用脚本</h2>
+<p>将上面的脚本追加到 <code>/etc/profile</code> 尾部，使用 <code>source
+/etc/profile</code>
+应用改变，则所有的用户都会应用改变（第一次切换用户时记得 <code>source
+/etc/profile</code>）。如果想仅对某用户添加回收站功能，则修改用户目录下的
+<code>.bashrc</code> 文件，追加上面的脚本，然后 <code>source
+~/.bashrc</code> 即可。</p>
+<h2 id="进阶版回收站">进阶版回收站</h2>
+<p>下面的回收站会根据删除时间分类并自动清理回收站。转载至<a
+target="_blank" rel="noopener" href="https://www.linuxidc.com/Linux/2016-01/127765.htm">《CentOS实现回收站机制》</a>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br>month=`<span class="hljs-built_in">date</span> <span class="hljs-string">&quot;+%m&quot;</span>`    <span class="hljs-comment">#获取当前月份</span><br>day=`<span class="hljs-built_in">date</span> <span class="hljs-string">&quot;+%d&quot;</span>`    <span class="hljs-comment">#获取当前日期　</span><br><br>last_day=`<span class="hljs-built_in">date</span> -d <span class="hljs-string">&quot;-1 day&quot;</span> <span class="hljs-string">&quot;+%d&quot;</span>`    <span class="hljs-comment">#获取前天月份</span><br>last_day_m=`<span class="hljs-built_in">date</span> -d <span class="hljs-string">&quot;-1 day&quot;</span> <span class="hljs-string">&quot;+%m&quot;</span>`    <span class="hljs-comment">#获取前天日期</span><br><br>del_day=`<span class="hljs-built_in">date</span> -d <span class="hljs-string">&quot;-5 day&quot;</span> <span class="hljs-string">&quot;+%d&quot;</span>`    <span class="hljs-comment">#获取五天前月份</span><br>del_day_m=`<span class="hljs-built_in">date</span> -d <span class="hljs-string">&quot;-5 day&quot;</span> <span class="hljs-string">&quot;+%m&quot;</span>`    <span class="hljs-comment">#获取五天前日期</span><br><br>Trash_dir=<span class="hljs-string">&quot;/tmp/del_bak&quot;</span>    <span class="hljs-comment">#回收站总目录</span><br>tmp_dir=<span class="hljs-string">&quot;/tmp/del_bak/tmp&quot;</span>    <span class="hljs-comment">#每天删除文件存放目录</span><br><br><span class="hljs-comment">#下面是创建相应目录，并赋予777权限15 </span><br><span class="hljs-keyword">if</span> [ ! -d <span class="hljs-variable">$Trash_dir</span> ]<br><span class="hljs-keyword">then</span><br>    /bin/mkdir -p <span class="hljs-variable">$Trash_dir</span><br>    /bin/chmod 777 <span class="hljs-variable">$Trash_dir</span><br><span class="hljs-keyword">fi</span><br><br><span class="hljs-keyword">if</span> [ ! -d <span class="hljs-variable">$tmp_dir</span> ]<br><span class="hljs-keyword">then</span><br>    /bin/mkdir -p <span class="hljs-variable">$tmp_dir</span><br>    /bin/chmod 777 <span class="hljs-variable">$tmp_dir</span><br><span class="hljs-keyword">fi</span><br><br><span class="hljs-keyword">if</span> [ ! -d /tmp/del_bak/<span class="hljs-variable">$month</span> ]<br><span class="hljs-keyword">then</span><br>    /bin/mkdir /tmp/del_bak/<span class="hljs-variable">$month</span><br>    /bin/chmod 777 /tmp/del_bak/<span class="hljs-variable">$month</span><br><span class="hljs-keyword">fi</span><br><br><span class="hljs-keyword">if</span> [ ! -d /tmp/del_bak/<span class="hljs-variable">$month</span>/<span class="hljs-variable">$day</span> ]<br><span class="hljs-keyword">then</span><br>    /bin/mkdir /tmp/del_bak/<span class="hljs-variable">$month</span>/<span class="hljs-variable">$day</span><br>    /bin/chmod 777 /tmp/del_bak/<span class="hljs-variable">$month</span>/<span class="hljs-variable">$day</span><br><span class="hljs-keyword">fi</span><br><br>Trash_file=`/bin/ls -A <span class="hljs-variable">$tmp_dir</span>`<br><br><span class="hljs-comment">#这是定时在每天凌晨将昨天删除的文件放到已月份和日期分类的目录下</span><br><span class="hljs-comment">#保证/tmp/del_bak/tmp目录下只存放当天删除的文件</span><br><span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$Trash_file</span>&quot;</span> != <span class="hljs-string">&quot;&quot;</span> ]<br><span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">cd</span> <span class="hljs-variable">$tmp_dir</span><br>    <span class="hljs-keyword">if</span> [ ! -d /tmp/del_bak/<span class="hljs-variable">$last_day_m</span>/<span class="hljs-variable">$last_day</span>/ ]<br>    <span class="hljs-keyword">then</span><br>      /bin/mkdir -p /tmp/del_bak/<span class="hljs-variable">$last_day_m</span>/<span class="hljs-variable">$last_day</span>/<br>    <span class="hljs-keyword">fi</span><br>    /bin/mv <span class="hljs-variable">$tmp_dir</span>/* /tmp/del_bak/<span class="hljs-variable">$last_day_m</span>/<span class="hljs-variable">$last_day</span>/<br><span class="hljs-keyword">fi</span><br><br><span class="hljs-keyword">if</span> [ -d <span class="hljs-variable">$Trash_dir</span>/<span class="hljs-variable">$del_day_m</span>/<span class="hljs-variable">$del_day</span>/ ]    <span class="hljs-comment">#清理五天前删除的文件</span><br><span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">cd</span> <span class="hljs-variable">$Trash_dir</span>/<span class="hljs-variable">$del_day_m</span>/<span class="hljs-variable">$del_day</span>/ &amp;&amp; &#123;<br>        /bin/rm -rf <span class="hljs-variable">$Trash_dir</span>/<span class="hljs-variable">$del_day_m</span>/<span class="hljs-variable">$del_day</span>/<br>    &#125;<br><span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br>USER=`/usr/bin/whoami`    <span class="hljs-comment">#获取当前用户</span><br>TOOLS=<span class="hljs-string">&quot;/usr/local/tools&quot;</span>    <span class="hljs-comment">#存放Trash_mkdir.sh定时任务脚本的路径，可根据个人自行修改</span><br>HOME_DIR=`/bin/grep <span class="hljs-string">&quot;<span class="hljs-variable">$USER</span>&quot;</span> /etc/passwd|awk -F <span class="hljs-string">&quot;:&quot;</span> <span class="hljs-string">&#x27;&#123;print $6&#125;&#x27;</span>`    <span class="hljs-comment">#获取当前用户家目录</span><br>CONF=<span class="hljs-variable">$HOME_DIR</span><span class="hljs-string">&quot;/.bashrc&quot;</span>    <span class="hljs-comment">#拼接当前用户的配置文件路径</span><br>Trash=`/bin/grep <span class="hljs-string">&quot;del&quot;</span> <span class="hljs-variable">$CONF</span>`    <span class="hljs-comment">#判断是否已经配置了回收站机制</span><br><br><span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$Trash</span>&quot;</span> = <span class="hljs-string">&quot;&quot;</span> ]    <span class="hljs-comment">#添加回收站别名del</span><br><span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;alias del=&#x27;mv -t /tmp/del_bak/tmp/ --backup=t&#x27;&quot;</span> &gt;&gt;<span class="hljs-variable">$CONF</span><br><span class="hljs-keyword">fi</span><br><br><span class="hljs-keyword">if</span> [ ! -d <span class="hljs-variable">$TOOLS</span> ]<br><span class="hljs-keyword">then</span><br>    /bin/mkdir -p <span class="hljs-variable">$TOOLS</span><br><span class="hljs-keyword">fi</span><br><br>/bin/cp Trash_mkdir.sh <span class="hljs-variable">$TOOLS</span>    <span class="hljs-comment">#拷贝定时任务脚本到指定目录</span><br>/bin/chmod +x <span class="hljs-variable">$TOOLS</span>/Trash_mkdir.sh<br><br><span class="hljs-keyword">if</span> [ -z <span class="hljs-string">&quot;`grep &#x27;Trash_mkdir.sh&#x27; /var/spool/cron/root`&quot;</span> ]    <span class="hljs-comment">#判断定时任务crontab里是否已经加了回收站脚本</span><br><span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;10 0 * * * <span class="hljs-variable">$TOOLS</span>/Trash_mkdir.sh&quot;</span> &gt;&gt;/var/spool/cron/root<br><span class="hljs-keyword">fi</span><br><br>/bin/sh <span class="hljs-variable">$TOOLS</span>/Trash_mkdir.sh　<br></code></pre></td></tr></table></figure>
+<h3 id="部署说明">部署说明</h3>
+<ol type="1">
+<li><p>将两个脚本放在同一目录下</p></li>
+<li><p>使用需要启用回收站功能的用户去执行install_Trash.sh脚本即可一键安装</p></li>
+</ol>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/10/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/8/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      谨以此文祭奠我的前博客
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/Server/" class="post-tag">#Server</a>
+  
+    <a href="/tags/CentOS/" class="post-tag">#CentOS</a>
+  
+    <a href="/tags/bash/" class="post-tag">#bash</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/16/" title="Nginx 配置前端 HTML5 History 路由" rel="bookmark">Nginx 配置前端 HTML5 History 路由</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/8/" title="谨以此文祭奠我的前博客" rel="bookmark">谨以此文祭奠我的前博客</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

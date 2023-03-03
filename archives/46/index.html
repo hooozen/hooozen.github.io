@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        刷题笔记(1)：力扣-50.Pow(x,n): 快速幂算法 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">刷题笔记(1)：力扣-50.Pow(x,n): 快速幂算法</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/Algorithm/" class="post-tag">#Algorithm</a>
+  
+    <a href="/tags/leetcode/" class="post-tag">#leetcode</a>
+  
+
+
+          <span class="post-date">2022-06-04</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>本题来自 leetcode 题库第 50 题：<a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/powx-n/">50.Pow(x,n)</a>，要求使用乘法实现乘幂计算，难度中等。本文介绍了官方给出的“快速幂”算法，并给出了其他方法和思考。
+<span id="more"></span></p>
+<h2 id="题目描述">题目描述</h2>
+<p>实现 <code>pow(x, n)</code> ，即计算 <span
+class="math inline">\(x\)</span> 的 <span
+class="math inline">\(n\)</span> 次幂函数（即，<span
+class="math inline">\(x^n\)</span> ）。</p>
+<ul>
+<li><p>示例 1：<br />
+输入：x = 2.00000, n = 10<br />
+输出：1024.00000</p></li>
+<li><p>示例 2：<br />
+输入：x = 2.10000, n = 3<br />
+输出：9.26100</p></li>
+<li><p>示例 3：<br />
+输入：x = 2.00000, n = -2<br />
+输出：0.25000<br />
+解释：2-2 = 1/22 = 1/4 = 0.25</p></li>
+<li><p>提示：<br />
+<span class="math inline">\(-100.0 &lt; x &lt; 100.0\)</span><br />
+<span class="math inline">\(-2^{31} \leqslant n \leqslant
+2^{31}-1\)</span><br />
+<span class="math inline">\(-10^4 \leqslant x^n \leqslant
+10^4\)</span></p></li>
+</ul>
+<p><em>这里题目中应明确 <span class="math inline">\(n\)</span>
+为整数</em></p>
+<h2 id="题解">题解</h2>
+<h3 id="解法1-暴力解法">解法1 暴力解法</h3>
+<p>根据乘幂的定义，将 <span class="math inline">\(n\)</span> 个 <span
+class="math inline">\(x\)</span> 相乘即可计算出结果。时间复杂度为 <span
+class="math inline">\(O(n)\)</span>，空间复杂度 <span
+class="math inline">\(O(1)\)</span>。 此法不赘述。</p>
+<h3 id="解法2-快速幂算法-递归">解法2 快速幂算法 + 递归</h3>
+<p>这里我们只考虑计算 <span class="math inline">\(n\geqslant0\)</span>
+时的情况，若 <span class="math inline">\(n&lt;0\)</span> 只需返回 <span
+class="math inline">\(1/x^{-n}\)</span>。</p>
+<p>考虑计算 <span class="math inline">\(x^n, n\geqslant0\)</span>。当
+<span class="math inline">\(n\)</span> 为偶数，有</p>
+<p><span class="math display">\[
+x^n = x^{\frac n2} \times x^{\frac n2}
+\]</span></p>
+<p><span class="math inline">\(n\)</span> 为奇数时，有</p>
+<p><span class="math display">\[
+x^n = x^{\lfloor n/2\rfloor}\times x^{\lfloor n/2\rfloor} \times x
+\]</span></p>
+<p>据此我们发现 <span class="math inline">\(x^n\)</span> 可以写作两个
+<span class="math inline">\(x^k\)</span> 相乘（根据情况可能额外多乘
+<span class="math inline">\(x\)</span>）。类似地，<span
+class="math inline">\(x^k\)</span> 也可以写作两个数相乘。整理如下：</p>
+<p><span class="math display">\[
+x^n =
+\begin{cases}
+1, &amp; n=0 \\
+x^k \times x^k, &amp; n&gt;0且为偶数 \\
+x^k \times x^k \times x, &amp;n&gt;0且为奇数
+\end{cases}
+\]</span></p>
+<p>其中，<span class="math inline">\(x^k=x^{\lfloor \frac
+n2\rfloor}\)</span>。此时我们便明确了递归算法的子问题以及返回条件。</p>
+<p>根据以上分析，写出递归函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">_pow</span>(<span class="hljs-params">x, n</span>) &#123;<br>  <span class="hljs-keyword">if</span> (n === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span><br>  <span class="hljs-keyword">const</span> xk = <span class="hljs-title function_">_pow</span>(x, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(n / <span class="hljs-number">2</span>))<br>  <span class="hljs-keyword">return</span> n % <span class="hljs-number">2</span> === <span class="hljs-number">0</span> ? xk * xk : xk * xk * x<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>然后对 <span class="math inline">\(n&lt;0\)</span>
+的情况稍作处理即可。最后提交的代码为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number</span>&#125; <span class="hljs-variable">x</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number</span>&#125; <span class="hljs-variable">n</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> &#123;<span class="hljs-type">number</span>&#125;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">var</span> myPow = <span class="hljs-keyword">function</span> (<span class="hljs-params">x, n</span>) &#123;<br>  <span class="hljs-keyword">function</span> <span class="hljs-title function_">_pow</span>(<span class="hljs-params">x, n</span>) &#123;<br>    <span class="hljs-keyword">if</span> (n === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span><br>    <span class="hljs-keyword">const</span> xk = <span class="hljs-title function_">_pow</span>(x, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(n / <span class="hljs-number">2</span>))<br>    <span class="hljs-keyword">return</span> n % <span class="hljs-number">2</span> === <span class="hljs-number">0</span> ? xk * xk : xk * xk * x<br>  &#125;<br>  <span class="hljs-keyword">return</span> n &lt; <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> / <span class="hljs-title function_">_pow</span>(x, -n) : <span class="hljs-title function_">_pow</span>(x, n)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>该算法的时间复杂度为 <span class="math inline">\(O(\log
+n)\)</span>，空间复杂度为 <span class="math inline">\(O(\log
+n)\)</span>。</p>
+<h3 id="解法3-快速幂算法-迭代">解法3 快速幂算法 + 迭代</h3>
+<p>一般而言，递归算法都可以通过改写成迭代算法来避免对栈的使用，从而降低空间复杂度。下面介绍快速幂算法的迭代版本。</p>
+<p>快速幂算法的降低时间复杂度的核心在于将 <span
+class="math inline">\(x^n\)</span> 逐步拆分为两个 <span
+class="math inline">\(x^k\)</span> 的乘积。由于递归是从 <span
+class="math inline">\(n\)</span>
+开始逐步分解，而迭代则与递归的方向相反。我们试着从递归算法中找到这些
+<span class="math inline">\(x^k\)</span> 的规律。</p>
+<p>对于 <span
+class="math inline">\(x^{77}\)</span>，由递归算法，可以发现
+<em>（这里注意到，这里分解的过程与二进制转化过程一致）</em>：</p>
+<p><span class="math display">\[
+\begin{aligned}
+x^{77} &amp;= x^{38} \times x^{38}  \times x\\
+x^{38} &amp;= x^{19} \times x^{19} \\
+x^{19} &amp;= x^{9} \times x^{9} \times x \\
+x^{9} &amp;= x^{4} \times x^4 \times x \\
+x^4 &amp;= x^2 \times x^2 \\
+x^2 &amp;= x \times x \\
+x &amp;= x
+\end{aligned}
+\]</span></p>
+<p>即</p>
+<p><span class="math display">\[
+x^{77} = ((((((x)^2)^2)^2 \times x)^2 \times x)^2)^2 \times x
+\]</span></p>
+<p>我们从右向左整理上式，得到</p>
+<p><span class="math display">\[
+\begin{aligned}
+x^{77} &amp;= x\times x^{2\times2} \times x^{2\times2\times2} \times
+x^{2\times2\times2\times2\times2\times2} \\
+&amp;= x^{2^0} \times x^{2^2} \times x^{2^3} \times x^{2^6} \\
+&amp;=x^{2^0 + 2^2+2^3+2^6}
+\end{aligned}
+\]</span></p>
+<p>得到</p>
+<p><span class="math display">\[
+77=2^0 + 2^2+2^3+2^6
+\]</span></p>
+<p>可以发现，上式即将 <span class="math inline">\(77\)</span>
+做二进制转换。</p>
+<p><span class="math display">\[
+77 = (1001101)_2
+\]</span></p>
+<p>通过上面的例子可以发现，求 <span class="math inline">\(x^n\)</span>
+可以转化为求下式：</p>
+<p><span class="math display">\[
+x^{n} = x^{k_0\times2^0+k_1\times 2^1\times\cdots+k_m\times 2^m}
+\]</span></p>
+<p>其中，<span class="math inline">\(k\in\{0,1\}\)</span>，序列 <span
+class="math inline">\(k_m\cdots k_1k_0\)</span> 即为 <span
+class="math inline">\(n\)</span> 的二进制表示。</p>
+<p>通过以上讨论可以发现，当需要计算 <span
+class="math inline">\(x^n\)</span> 时，先将 <span
+class="math inline">\(n\)</span> 转换为二进制。当 <span
+class="math inline">\(2^i\)</span> 数位上为 <span
+class="math inline">\(1\)</span> 时则乘以一个 <span
+class="math inline">\(x^{2^i}\)</span>。具体地，还以 <span
+class="math inline">\(x^{77}\)</span> 为例。</p>
+<p>首先将 <span class="math inline">\(77\)</span> 转为二进制 <span
+class="math inline">\(1001101\)</span>，则有</p>
+<p><span class="math display">\[
+x^{77} = x^{2^6} \times x^{2^3} \times x^{2^2} \times x
+\]</span></p>
+<p>具体的代码实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number</span>&#125; <span class="hljs-variable">x</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number</span>&#125; <span class="hljs-variable">n</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> &#123;<span class="hljs-type">number</span>&#125;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">var</span> myPow = <span class="hljs-keyword">function</span> (<span class="hljs-params">x, n</span>) &#123;<br>  <span class="hljs-keyword">function</span> <span class="hljs-title function_">_pow</span>(<span class="hljs-params">x, n</span>) &#123;<br>    <span class="hljs-keyword">let</span> base = x<br>    <span class="hljs-keyword">let</span> res = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">while</span> (n &gt; <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-keyword">if</span> (n % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) &#123;<br>        res *= base<br>      &#125;<br>      base *= base<br>      n = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(n / <span class="hljs-number">2</span>)<br>    &#125;<br>    <span class="hljs-keyword">return</span> res<br>  &#125;<br>  <span class="hljs-keyword">return</span> n &lt; <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> / <span class="hljs-title function_">_pow</span>(x, -n) : <span class="hljs-title function_">_pow</span>(x, n)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上面的代码中，在转化二进制的过程中同时进行计算。并且每次循环通过
+<code>n / 2</code>
+来只处理最后一位，此时要记录数位上的要乘的基（<code>base *=
+base</code>）。</p>
+<p>该算法时间复杂度为 <span class="math inline">\(O(\log
+n)\)</span>，空间复杂度为 <span
+class="math inline">\(O(1)\)</span>。</p>
+<h2 id="另解">另解</h2>
+<p>上面介绍的快速幂算法的递归和迭代版本非常巧妙的降低了事件复杂度，注意到其关键在于类似“二分”的处理方法。例如，迭代版本的算法中，考虑将
+<span class="math inline">\(n\)</span> 转化成二进制来分解 <span
+class="math inline">\(x^n\)</span>，那自然想到将 <span
+class="math inline">\(n\)</span> 转化成三进制可不可以呢？</p>
+<p>转化为三进制的思路与二进制类似，代码实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> myPow = <span class="hljs-keyword">function</span> (<span class="hljs-params">x, n</span>) &#123;<br>  <span class="hljs-keyword">function</span> <span class="hljs-title function_">_pow</span>(<span class="hljs-params">x, n</span>) &#123;<br>    <span class="hljs-keyword">let</span> base = x<br>    <span class="hljs-keyword">let</span> res = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">while</span> (n &gt; <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-keyword">const</span> remain =  n % <span class="hljs-number">3</span><br>      <span class="hljs-keyword">if</span> (remain === <span class="hljs-number">1</span>) &#123;<br>        res *= base<br>      &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (remain === <span class="hljs-number">2</span>) &#123;<br>        res *= base * base<br>      &#125;<br>      base *= base * base<br>      n = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(n / <span class="hljs-number">3</span>)<br>    &#125;<br>    <span class="hljs-keyword">return</span> res<br>  &#125;<br>  <span class="hljs-keyword">return</span> n &lt; <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> / <span class="hljs-title function_">_pow</span>(x, -n) : <span class="hljs-title function_">_pow</span>(x, n)<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>类似地，递归算法同样可以转化为“三分化”版本：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> myPow = <span class="hljs-keyword">function</span> (<span class="hljs-params">x, n</span>) &#123;<br>  <span class="hljs-keyword">function</span> <span class="hljs-title function_">_pow</span>(<span class="hljs-params">x, n</span>) &#123;<br>    <span class="hljs-keyword">if</span> (n === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span><br>    x_k = <span class="hljs-title function_">_pow</span>(x, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(n / <span class="hljs-number">3</span>))<br>    <span class="hljs-keyword">if</span> (n % <span class="hljs-number">3</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> x_k * x_k * x_k<br>    <span class="hljs-keyword">if</span> (n % <span class="hljs-number">3</span> === <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> x_k * x_k * x_k * x<br>    <span class="hljs-keyword">if</span> (n % <span class="hljs-number">3</span> === <span class="hljs-number">2</span>) <span class="hljs-keyword">return</span> x_k * x_k * x_k * x * x<br>  &#125;<br><br>  <span class="hljs-keyword">return</span> n &lt; <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> / <span class="hljs-title function_">_pow</span>(x, -n) : <span class="hljs-title function_">_pow</span>(x, n)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>以上修改后的两个算法的时间复杂度和空间复杂度不变。</p>
+<h2 id="总结与思考">总结与思考</h2>
+<p>这道题拿到手后只能想到暴力解法，“快速幂”的解法确实很巧妙，但对于我这种算法小白来说很难自己想出来。至于后面“三进制”的版本是在看官方快速幂迭代版本时想到的，其实理论上可以进行任意进制的转化，进制越高循环次数会越少，但循环中的
+<code>if</code> 语句会越多，所以“二进制”是个不差的选择。</p>
+<p>这道题给出了基于乘法的幂运算实现，那么计算机中的幂运算如何实现的呢？知乎上有一个问题：<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/20930598">计算机是怎样进行开方和幂运算的？</a>，回答中有提到与快速幂算法类似的算法，也有提到
+<span class="math inline">\(O(1)\)</span> 复杂度的算法。</p>
+<p>另外计算机加法与乘法的计算原理可参考：<a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/338814035">计算机中是如何实现加法乘法的？</a></p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/47/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>刷题笔记(2)：力扣-67.二进制求和</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/45/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      一致最小方差无偏估计 UMVUE 的求法归纳
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/Algorithm/" class="post-tag">#Algorithm</a>
+  
+    <a href="/tags/leetcode/" class="post-tag">#leetcode</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/47/" title="刷题笔记(2)：力扣-67.二进制求和" rel="bookmark">刷题笔记(2)：力扣-67.二进制求和</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/48/" title="刷题笔记(3)：力扣-338.比特位计数" rel="bookmark">刷题笔记(3)：力扣-338.比特位计数</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/49/" title="刷题笔记(4)：力扣-137.只出现一次的数字 II" rel="bookmark">刷题笔记(4)：力扣-137.只出现一次的数字 II</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

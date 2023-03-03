@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        机器学习基础-BP(Error Back Propagation)算法的数学原理 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">机器学习基础-BP(Error Back Propagation)算法的数学原理</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/ML/" class="post-tag">#ML</a>
+  
+
+
+          <span class="post-date">2020-02-11</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>本文就 <a target="_blank" rel="noopener" href="https://www.coursera.org/">coursera</a>
+上斯坦福大学吴恩达教授的<a
+target="_blank" rel="noopener" href="https://www.coursera.org/learn/machine-learning">《机器学习》</a>课程中的<a
+target="_blank" rel="noopener" href="https://baike.baidu.com/item/BP%E7%AE%97%E6%B3%95/1252294?fr=aladdin">误差反向传播算法</a>（<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Backpropagation">Error Back
+Propagation</a>）进行推导证明</p>
+<span id="more"></span>
+<h4 id="明确一些记法">明确一些记法</h4>
+<p>简单将神经网络的示意如下，有助于推导过程中理解，读者也可自己画出示意图:</p>
+<figure>
+<img src="/assets/images/34-1.svg" alt="net" />
+<figcaption aria-hidden="true">net</figcaption>
+</figure>
+<p>本文沿用公开课中的符号记法：</p>
+<ul>
+<li>用字母 <span class="math inline">\(z\)</span> 和 <span
+class="math inline">\(a\)</span>
+分别表示每个神经元上的输入和输出；其上标 <span
+class="math inline">\(^{(l)}\)</span> 表示该神经元所在的层数，<span
+class="math inline">\(L\)</span> 表示神经网络的总层数；其下标 <span
+class="math inline">\(_i\)</span> 表示该神经元在该层的标号，并用 <span
+class="math inline">\(S_l\)</span> 表示第 <span
+class="math inline">\(l\)</span> 层神经元的总个数。</li>
+<li>特别地，习惯用 <span class="math inline">\(_k\)</span>
+下标表示输出层的神经元标号，<span class="math inline">\(K\)</span>
+表示输出层神经元的总数，即 <span class="math inline">\(S_L =
+K\)</span></li>
+<li>用希腊字母 <span class="math inline">\(\boldsymbol\Theta\)</span>
+表示系数矩阵，它应该是一个三维矩阵。<span
+class="math inline">\(\boldsymbol\Theta^{(l)}\)</span> 表示第 <span
+class="math inline">\(l\)</span> 层的系数矩阵，它应该是一个 <span
+class="math inline">\(S^{l+1} \times (S^l + 1)\)</span> 矩阵。</li>
+<li>用 <span class="math inline">\(g(x)\)</span> 表示 <a
+target="_blank" rel="noopener" href="https://baike.baidu.com/item/S%E5%9E%8B%E5%87%BD%E6%95%B0/19178062?fr=aladdin">S
+型函数</a>（<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Sigmoid_function">Sigmoid
+function</a>）: <span class="math display">\[
+g(x) = \frac1{1+e^{-x}},\ x \in R \tag{1.1}
+\]</span></li>
+<li>且容易得： <span class="math display">\[
+g&#39;(x) = g(x)\left[1-g(x)\right] \tag{1.2}
+\]</span></li>
+<li><span class="math inline">\(\{\boldsymbol{x}^{(i)},
+y^{(i)}\}\)</span>
+表示训练样本，当有多个训练样本时，用上标进行标号。并字母 <span
+class="math inline">\(m\)</span> 表示训练样本的总数。</li>
+</ul>
+<p><strong>需要注意</strong>，除了输出层外，每一层都应加入一个偏置项:
+<span class="math display">\[
+a^{(l)}_0 = 1,\ \ l = 1,2,\cdots,L-1
+\]</span></p>
+<p>根据以上记法，有： <span class="math display">\[
+z^{(l)}_i = \sum\limits_{j=0}^{S_{l-1}}\Theta^{(l)}_{ij} a^{(l-1)}_j
+,\ \ i = 1,2,\cdots S_l \tag{1.3}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;a^{(l)}_0 = 1, \\
+&amp;a^{(l)}_i = g(z^{(l)}_i),\ \ i = 1,2,\cdots S_l
+\end{aligned}
+\tag{1.4}
+\]</span></p>
+<p>* 另外，文中一般使用粗体字母表示矩阵（或向量），如 <span
+class="math inline">\(\boldsymbol
+x\)</span>，表示输入特征向量；常规字母表示实数，如 <span
+class="math inline">\(x_1\)</span> 表示向量 <span
+class="math inline">\(\boldsymbol x\)</span>
+中的第一个元素，它是一个实数。（即使不关注这个区别，也应能从上下文区分出一个字母代表的是向量或实数）</p>
+<h4 id="目的">目的</h4>
+<blockquote>
+<p>我们已经走得太远，以至于忘记了为什么而出发
+——纪伯伦<a href="#note1"><span
+class="math inline">\(^{注1}\)</span></a></p>
+</blockquote>
+<p>我们要时刻记得我们想要得到什么，以至于当我们在进行复杂的推导过程中仍能清楚的知道每一步的意义，和接下来的方向。</p>
+<p>BP 算法是神经网络参数训练的重要算法，其关键在于得到代价函数 <span
+class="math inline">\(J(\boldsymbol\Theta)\)</span> 对于每一个参数 <span
+class="math inline">\(\Theta^{(l)}_{ij}\)</span>
+的偏导数，所以我们期望通过该算法，最终得到如下的内容： <span
+class="math display">\[\begin{aligned}
+\frac{\partial J}{\partial\Theta^{(1)}_{1\ 0}} &amp;= \cdots \\
+\frac{\partial J}{\partial\Theta^{(1)}_{1\ 2}} &amp;= \cdots \\
+&amp;\cdots \\
+\end{aligned}
+\tag{1.5}
+\]</span></p>
+<p>有了这些导数值我们就可以利用梯度下降或其他经典算法，很容易地（调用库）对代价函数
+<span class="math inline">\(J(\boldsymbol\Theta)\)</span>
+进行最小化，以训练出合适的参数。</p>
+<p>总而言之，我们的目的是得到一系列形如 <span
+class="math inline">\(1.5\)</span> 式的偏导。</p>
+<h4 id="代价函数">代价函数</h4>
+<p>如何选取合适的代价函数呢？当我们观察神经网络的最后一层时，可以把它看作输入为
+<span class="math inline">\(\boldsymbol a^{(L-1)}\)</span> 的 <span
+class="math inline">\(K\)</span> 分类问题。</p>
+<p>便得到了神经网络的代价函数:</p>
+<p><span class="math display">\[\begin{array}{r}
+J(\boldsymbol\Theta)
+=-\frac1m\sum\limits_{j=1}^m\sum\limits_{k=1}^K
+\left\{
+y^{(j)}_kln\left(h_\boldsymbol\Theta(\boldsymbol x^{(j)})\right)_k +
+\left(1-y^{(j)}_k\right)
+ln\left[1-\left(h_\boldsymbol \Theta(\boldsymbol
+x^{(j)})\right)_k\right]
+\right\}, \tag{3.1} \\
+y_k^{(j)} = \mathbf I_k(y^{(j)}) = \begin{cases}
+1, &amp; y^{(j)} = k \\
+0, &amp; y^{(j)} \not={k}
+\end{cases}
+\end{array}\]</span></p>
+<p>其中 <span class="math inline">\(h_\boldsymbol\Theta(\boldsymbol
+x)\)</span> 是一个 <span class="math inline">\(K\)</span> 维向量，<span
+class="math inline">\(\Big(h_\boldsymbol\Theta(\boldsymbol
+x)\Big)_k\)</span> 就是每个样本所对应的第 <span
+class="math inline">\(k\)</span> 个输出值，即对每个样本来说都有： <span
+class="math display">\[
+\Big(h_\boldsymbol\Theta(\boldsymbol x)\Big)_k = a^{(L)}_k \tag{3.2}
+\]</span></p>
+<p>* 代价函数在不同的算法中可能有细微差别，在<a
+target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/23613024?fr=aladdin">西瓜书</a>的BP算法一节中使用了均方误差作为代价函数，其值约等于上述代价函数，并且反向传播的推导过程基本一致。</p>
+<h4 id="最后一层参数的偏导">最后一层参数的偏导</h4>
+<p><strong>为简化记法，我们先在只有一个样本 <span
+class="math inline">\(\{\boldsymbol x, \boldsymbol y\}\)</span>
+的情况下推导。</strong></p>
+<p>由 <span class="math inline">\(3.1\)</span>、<span
+class="math inline">\(3.2\)</span> 式知，此时代价函数为： <span
+class="math display">\[
+J(\boldsymbol\Theta) =  
+-\sum\limits_{k=1}^K \left[
+y_klna^{(L)}_k +
+(1-y_k)ln\left(1-a^{(L)}_k\right)
+\right],\ y_k = \mathbf{I}_k(\boldsymbol{y}) \tag{4.1}
+\]</span></p>
+<p>由 <span class="math inline">\(1.3\)</span>、<span
+class="math inline">\(1.4\)</span> 式，及复合函数求导法则，可得代价函数
+<span class="math inline">\(J(\boldsymbol\Theta)\)</span> 对最后一层参数
+<span class="math inline">\(\boldsymbol\Theta^{(L-1)}\)</span>
+的偏导：</p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(L-1)}_{ij}} =
+\frac{\partial J}{\partial a_i^{(L)}} \cdot
+\frac{\mathrm{d}a^{(L)}_i}{\mathrm{d}z^{(L)}_i} \cdot
+\frac{\partial z^{(L)}_i}{\partial \boldsymbol{\Theta}^{(L-1)}_{ij}}
+\tag{4.2}
+\]</span></p>
+<p><span class="math display">\[
+\]</span></p>
+<p>分别计算上式中的 3 项：</p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial a_i^{(L)}} =
+-\Big(\frac{y_i}{a^{(L)}_i} + \frac{y_i-1}{1-a^{(L)}_i}\Big) \tag{4.3}
+\]</span></p>
+<p>由 <span class="math inline">\(1.4\)</span>、<span
+class="math inline">\(1.2\)</span> 式可得: <span class="math display">\[
+\frac{\mathrm{d}a^{(L)}_i}{\mathrm{d}z^{(L)}_i} =
+a^{(L)}_i\left(1-a^{(L)}_i\right) \tag{4.4}
+\]</span></p>
+<p>由 <span class="math inline">\(1.3\)</span> 式可得： <span
+class="math display">\[
+\frac{\partial z^{(L)}_i}{\partial \boldsymbol{\Theta}^{(L-1)}_{ij}}
+=a^{(L-1)}_j \tag{4.5}
+\]</span></p>
+<p>将上述三式带回 <span class="math inline">\(4.2\)</span>
+式，并化简，立即得： <span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(L-1)}_{ij}} =
+(a^{(L)}_i - y_i)a^{(L-1)}_j \tag{4.6}
+\]</span></p>
+<p>并且有, <span class="math display">\[
+\frac{\partial J}{\partial z^{(L)}_i} =
+\frac{\partial J}{\partial a_i^{(L)}} \cdot
+\frac{\mathrm{d}a^{(L)}_i}{\mathrm{d}z^{(L)}_i} =
+a^{(L)}_i - y_i
+\tag{4.7}
+\]</span></p>
+<p><strong>记</strong> <span class="math display">\[
+\delta^{(L)}_i = a^{(L)}_i - y_i
+\tag{4.8}
+\]</span></p>
+<p>称为第 <span class="math inline">\(L\)</span> 层（输出层）第 <span
+class="math inline">\(i\)</span> 个神经元的“误差项”。</p>
+<p><strong>至此，我们便得到代价函数对最后一层参数的偏导</strong>: <span
+class="math display">\[
+\frac{\partial J}{\partial\Theta^{(L-1)}_{ij}} =
+\delta^{(L)}_i a^{(L-1)}_j
+\tag{4.9}
+\]</span></p>
+<p>且有： <span class="math display">\[
+\frac{\partial J}{\partial z^{(L)}_i} = \delta^{(L)}_i
+\tag{4.10}
+\]</span></p>
+<h4 id="向前传播">向前传播</h4>
+<p>下面求代价函数 <span
+class="math inline">\(J(\boldsymbol\Theta)\)</span> 对第 <span
+class="math inline">\(L-2\)</span> 层参数 <span
+class="math inline">\(\boldsymbol\Theta^{(L-2)}\)</span> 的偏导：</p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(L-2)}_{ij}} \tag{5.1}
+\]</span></p>
+<p>由 <span class="math inline">\(1.3\)</span>、<span
+class="math inline">\(1.4\)</span> 式可得： <span
+class="math display">\[
+z^{(L)}_k = \sum\limits_{i=0}^{S_{L-1}}
+\boldsymbol \Theta^{(L-1)}_{ki} a^{(L-1)}_i \tag{5.2}
+\]</span></p>
+<p><span class="math display">\[
+a^{(L-1)}_i = g(z^{(L-1)}_i), \ i \not ={0} \tag{5.3}
+\]</span></p>
+<p><span class="math display">\[
+z^{(L-1)}_i = \sum\limits_{j=0}^{S_{L-2}}
+\boldsymbol \Theta^{(L-2)}_{ij} a^{(L-2)}_j \tag{5.4}
+\]</span></p>
+<p>因此由上述 3 式知对于任意一个 <span
+class="math inline">\(z^{(L)}_k\)</span> 都是 <span
+class="math inline">\(\Theta^{(L-2)}_{ij}\)</span> 的函数；而 <span
+class="math inline">\(J(\boldsymbol\Theta)\)</span> 又是每一个 <span
+class="math inline">\(z^{(L)}_k\)</span>
+的函数，所以有（画出神经网络图中相关的部分，结合图示更容易理解）：</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\partial J}{\partial\Theta^{(L-2)}_{ij}} &amp;=
+\sum\limits_{k=1}^{K}\frac{\partial J}{\partial z^{(L)}_k} \cdot
+\frac{\partial z^{(L)}_k}{\partial a^{(L-1)}_i} \cdot
+\frac{\mathrm{d}a^{(L-1)}_i}{\mathrm{d}z^{(L-1)}_i} \cdot
+\frac{\partial z^{(L-1)}_i}{\partial \boldsymbol \Theta^{(L-2)}_{ij}} \\
+&amp;= \frac{\partial J}{\partial z^{(L-1)}_i} \cdot
+\frac{\partial z^{(L-1)}_i}{\partial \boldsymbol \Theta^{(L-2)}_{ij}} \\
+\end{aligned}
+\tag{5.5}
+\]</span></p>
+<p>分别计算上式各导数项，得： <span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(L-2)}_{ij}} =
+\sum\limits_{k=1}^{K} \delta^{(L)}_k \cdot
+\Theta^{(L-1)}_{ki} \cdot
+g&#39;(z^{(L-1)}_i) \cdot
+a^{(L-2)}_j
+\tag{5.6}
+\]</span></p>
+<p><strong>记</strong> <span class="math display">\[
+\delta^{(L-1)}_i =
+\sum\limits_{k=1}^K \delta^{(L)}_k \cdot
+\Theta^{(L-1)}_{ki} \cdot
+g&#39;(z^{(L-1)}_i)
+\tag{5.7}
+\]</span> 表示第 <span class="math inline">\(L-1\)</span> 层第 <span
+class="math inline">\(i\)</span> 个神经元的“误差项”</p>
+<p>则有：</p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(L-2)}_{ij}} =
+\delta^{(L-1)}_i a^{(L-2)}_j
+\tag{5.8}
+\]</span></p>
+<p>结合 <span class="math inline">\(5.5\)</span>、<span
+class="math inline">\(5.8\)</span>，同样有： <span
+class="math display">\[
+\frac{\partial J}{\partial z^{(L-1)}_i} =
+\delta^{(L-1)}_i
+\tag{5.9}
+\]</span></p>
+<h4 id="找出通式">找出通式</h4>
+<p>至此，我们求得了代价函数对 <span
+class="math inline">\(\boldsymbol\Theta^{(L)}\)</span> 和 <span
+class="math inline">\(\boldsymbol\Theta^{(L-1)}\)</span>
+的偏导，在继续对 <span class="math inline">\(\boldsymbol\Theta^{(L-2)},
+\cdots, \boldsymbol\Theta^{(1)}\)</span>
+求导前，先看看我们得到了哪些有趣的结果。</p>
+<p>我们对前面两步得到的结果稍作整理，得到： <span
+class="math display">\[
+\delta_k^{(L)} = a_k^{(L)} - y_k =
+\frac{\partial J}{\partial z^{(l)}_k}
+\tag{6.1}
+\]</span></p>
+<p><span class="math display">\[
+\delta^{(L-1)}_i =
+\sum\limits_{k=1}^K \delta^{(L)}_k \cdot
+\Theta^{(L-1)}_{ki} \cdot
+g&#39;(z^{(L-1)}_i) =
+\frac{\partial J}{\partial z^{(L-1)}_i}
+\tag{6.2}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(L-1)}_{ij}} =
+a^{(L-1)}_j\delta^{(L)}_i \tag{6.3}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(L-2)}_{ij}} =
+a^{(L-2)}_j \delta^{(L-1)}_i \tag{6.4}
+\]</span></p>
+<p>自然地，我们倾向于作出以下猜想：（如果你觉得这个猜想不够“自然”，可以继续求出<span
+class="math inline">\(\frac{\partial
+J}{\partial\Theta^{(L-3)}_{ij}}\)</span>，再将结果放在一起比较，会发现做出这个猜想非常合理和自然）</p>
+<p>假设一：<em>若记：</em> <span class="math display">\[
+\delta_k^{(L)} =
+a_k^{(L)} - y_k \tag{6.5}
+\]</span> <span class="math display">\[
+\delta^{(l)}_j =
+\sum\limits_{i=1}^{S_{l+1}} \delta^{(l+1)}_i \Theta^{(l)}_{ij}
+g&#39;(z^{(l)}_j)
+,\ \ l\not=K  \tag{6.6}
+\]</span></p>
+<p><em>则对任意 <span class="math inline">\(z^{(l)}_j\)</span> 和 <span
+class="math inline">\(\Theta^{(l)}_{ij}\)</span>，有:</em></p>
+<p><span class="math display">\[
+\text{(1).}\ \
+\frac{\partial J}{\partial z^{(l)}_j} =
+\delta^{(l)}_j,
+\tag{6.7}
+\]</span></p>
+<p><span class="math display">\[
+\text{(2).}\ \ \frac{\partial J}{\partial\Theta^{(l)}_{ij}} =
+a^{(l)}_j \delta^{(l+1)}_i. \tag{6.8}
+\]</span></p>
+<p>若该假设正确，我们便得到了反向逐层求解代价函数对参数的偏导的方法。</p>
+<p>接下来证明该假设是否正确。</p>
+<h4 id="归纳证明">归纳证明</h4>
+<p>显然，我们得到的 <span class="math inline">\(6.1-6.4\)</span>
+式已经证明了 <span class="math inline">\(l=K\)</span> 和 <span
+class="math inline">\(l=K-1\)</span> 时，<em>假设一</em>
+的正确性。采用数学归纳法，假设当 <span
+class="math inline">\(l=n&lt;L\)</span> 时上述 <em>假设一</em>
+仍成立，即有：</p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial z^{(n+1)}_i} = \delta^{(n+1)}_i \tag{7.1}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(n)}_{ij}} =
+a^{(n)}_j \delta^{(n+1)}_i \tag{7.2}
+\]</span></p>
+<p>时，考察 <span class="math inline">\(l=n-1\)</span>
+时假设的正确性。</p>
+<p>由 <span class="math inline">\(7.1\)</span>、<span
+class="math inline">\(7.2\)</span> 式，同 <span
+class="math inline">\(5.5\)</span> 式推导过程，有： <span
+class="math display">\[
+\begin{aligned}
+\frac{\partial J}{\partial\Theta^{(n-1)}_{ij}} &amp;=
+\sum\limits_{t=1}^{S_{n+1}}
+\frac{\partial J}{\partial z^{(n+1)}_t} \cdot
+\frac{\partial z^{(n+1)}_t}{\partial a^{(n)}_i} \cdot
+\frac{\mathrm{d}a_i^{(n)}}{\mathrm{d}z^{(n)}_i} \cdot
+\frac{\partial z^{(n)}_i}{\partial\Theta^{(n-1)}_{ij}} \\
+&amp;=
+\frac{\partial J}{\partial z^{(n)}_i} \cdot
+\frac{\partial z^{(n)}_i}{\partial\Theta^{(n-1)}_{ij}}
+\end{aligned}
+\tag{7.3}
+\]</span></p>
+<p>将 <span class="math inline">\(7.1\)</span>
+式带入上式，并对剩余项逐项求导，得： <span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(n-1)}_{ij}} =
+\sum\limits_{t=1}^{S_{n}}
+\delta^{(n+1)}_t\cdot
+\Theta^{(n)}_{ti} \cdot
+g&#39;(z^{(n)}_i)\cdot
+a^{(n-1)}_j \tag{7.4}
+\]</span></p>
+<p>结合 <span class="math inline">\(7.3\)</span>、<span
+class="math inline">\(7.4\)</span> 及 <span
+class="math inline">\(6.6\)</span> 式便有：</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\partial J}{\partial z^{(n)}_i} &amp;=
+\sum\limits_{t=1}^{S_{n}}
+\delta^{(n+1)}_t\cdot
+\Theta^{(n)}_{ti} \cdot
+g&#39;(z^{(n)}_i)\\
+&amp;=
+\delta^{(n)}_i
+\end{aligned}
+\tag{7.5}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial J}{\partial\Theta^{(n-1)}_{ij}} =
+a^{(n-1)}_j \delta^{(n)}_i
+\tag{7.6}
+\]</span></p>
+<p>所以 <em>假设一</em> 对 <span class="math inline">\(l=n-1\)</span>
+时也成立，由数学归纳法， <em>假设一</em> 成立得证！</p>
+<h4 id="矩阵表示法">矩阵表示法</h4>
+<p>以上 <em>假设一</em> 的内容就是 BP
+算法的核心内容，在更多情况下还可以使用矩阵来表示：</p>
+<p>若记： <span class="math display">\[
+\begin{aligned}
+&amp;\delta^{(L)}_k = a^{(L)}_k - y_k \\
+&amp;\boldsymbol\delta^{(l)} =
+\left(\boldsymbol\Theta^{(l)}\right)^T \times
+\boldsymbol\delta^{(l+1)} .*
+g&#39;(\boldsymbol z^{(l)}), \ \
+l \not=L
+\end{aligned}
+\tag{8.1}
+\]</span> （<span class="math inline">\(.*\)</span>
+表示对对应元素逐个执行乘法运算），则有： <span class="math display">\[
+\frac{\partial J(\boldsymbol\Theta)}{\partial\boldsymbol\Theta^{(l)}} =
+\boldsymbol\delta^{(l+1)} \times
+\left(\boldsymbol{a^{(l)}}\right)^T
+\tag{8.2}
+\]</span></p>
+<h4 id="多样本的情况">多样本的情况</h4>
+<p>在矩阵表示法的基础下，容易写出在 <span
+class="math inline">\(m\)</span> 个训练样本下 BP 算法的结论：</p>
+<p>根据多样本下的代价函数（<span class="math inline">\(3.1\)</span>
+式），以及<em>假设一</em>的结论 <span
+class="math inline">\(8.1\)</span>、<span
+class="math inline">\(8.2\)</span> 式，有： <span
+class="math display">\[
+\frac{\partial J(\boldsymbol\Theta)}{\partial\boldsymbol\Theta^{(l)}} =
+\frac1m \sum\limits_{i=1}^m
+\left[
+\boldsymbol\delta^{(l+1)} \times
+\left(\boldsymbol{a^{(l)}}\right)^T
+\right]_i
+\tag{8.3}
+\]</span></p>
+<h4 id="正则化">正则化</h4>
+<p>为了一定程度地防止过拟合的情况地发生，选取合适的 <span
+class="math inline">\(\lambda\)</span> 将正则项加入代价函数（<span
+class="math inline">\(3.1\)</span> 式），便得到：</p>
+<p><span class="math display">\[
+\begin{aligned}
+J(\boldsymbol\Theta) &amp;=
+-\frac1m\sum\limits_{j=1}^m\sum\limits_{k=1}^K
+\left\{
+y^{(j)}_kln\left(h_\boldsymbol\Theta(\boldsymbol x^{(j)})\right)_k +
+\left(1-y^{(j)}_k\right)ln\left[1-\left(h_\boldsymbol\Theta(\boldsymbol
+x^{(j)})\right)_k\right]
+\right\} \\
+&amp;+
+\frac\lambda{2m} \sum\limits_{l=1}^{L-1}\sum\limits_{i=1}^{S_{l+1}}
+\sum\limits_{j=1}^{S_l} \Big(\Theta^{(l)}_{ij}\Big)^2,\\
+&amp;h_\boldsymbol\Theta(\boldsymbol x) \in \mathbb R^K，
+\left(h_\boldsymbol\Theta(\boldsymbol x)\right)_i = i^{(th)}
+\text{output}
+\end{aligned}
+\tag{9.1}
+\]</span></p>
+<p>则： <span class="math display">\[
+\frac{\partial J(\boldsymbol\Theta)}{\partial\boldsymbol\Theta^{(l)}} =
+\frac1m \sum\limits_{i=1}^m
+\left[
+\boldsymbol\delta^{(l+1)} \times
+\left(\boldsymbol{a^{(l)}}\right)^T
+\right]_i +
+\frac\lambda m\boldsymbol\Theta^{(l)}
+\tag{9.2}
+\]</span></p>
+<h4 id="bp-算法的使用">*BP 算法的使用</h4>
+<p>至此，我们已经将 BP 算法的核心内容的数学原理推导并阐述完整了。</p>
+<p>用伪代码表示使用 BP 算法来求解偏导的大致过程如下（其中 <span
+class="math inline">\(\Delta^{(l)}_{ij}\)</span> 表示第 <span
+class="math inline">\(i\)</span> 个样本中的 <span
+class="math inline">\(\delta^{(L)}_j\)</span>，<span
+class="math inline">\(D^{(l)}_{ij}\)</span> 表示 <span
+class="math inline">\(\frac{\partial
+J}{\partial\Theta^{(l)}_{ij}}\)</span>）：</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\text{Set }\Delta^{(l)}_{ij} = 0 \text{ (for all l, i, j)} \\
+&amp;\text{For } i = 1  \text{ to } m \\
+&amp;\ \ \ \text{ Set } \boldsymbol a^{(1)} = \boldsymbol x^{(i)} \\
+&amp;\ \ \ \text{ Perform forward propagation to compute } \boldsymbol
+a^{(l)} \text{ for } l = 2,3,\cdots,L \\
+&amp;\ \ \ \text{ Using } y^{(i)} \text{, compute
+}\boldsymbol\delta^{(L)} =
+\boldsymbol a^{(L)} - \boldsymbol y^{(i)}_* \\
+&amp;\ \ \ \text{ compute } \boldsymbol\delta^{(L-1)},
+\boldsymbol\delta^{(L-2)},
+\cdots, \boldsymbol\delta^{(2)} \\
+&amp;\ \ \ \ \ \Delta^{(l)}_{ij} := \Delta^{(l)}_{ij} +
+a^{(l)}_j\delta^{(l+1)}_i\\
+&amp;D^{(l)}_{ij} := \frac1m\Delta^{(l)}_{ij}
++ \frac\lambda m\Theta^{(l)}_{ij} \text{ if } j\not=0 \\
+&amp;D^{(l)}_{ij} := \frac1m\Delta^{(l)}_{ij} \ \ \ \ \ \ \ \ \ \ \ \ \
+\ \ \
+\text{ if } j=0
+\end{aligned}
+\]</span></p>
+<p>需要注意的是，在实际使用中，上述过程很多步骤可以转换为矩阵运算以提升性能。</p>
+<hr />
+<p><a name="note1">[<em>注1</em>]</a>
+这句话网传出自黎巴嫩诗人纪伯伦，但我在网络上并未查到确切证据或出处，甚至浏览了网上传言出处得作品，并未得到印证。如果你知道这句话的出处，请指正！</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/35/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>冬天</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/33/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      机器学习基础-“逻辑”回归(logistic regression)的数学原理
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/ML/" class="post-tag">#ML</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/33/" title="机器学习基础-“逻辑”回归(logistic regression)的数学原理" rel="bookmark">机器学习基础-“逻辑”回归(logistic regression)的数学原理</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/42/" title="熵与信息量" rel="bookmark">熵与信息量</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/45/" title="一致最小方差无偏估计 UMVUE 的求法归纳" rel="bookmark">一致最小方差无偏估计 UMVUE 的求法归纳</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

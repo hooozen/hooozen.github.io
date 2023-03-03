@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        如何从零开发一款微信小程序 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">如何从零开发一款微信小程序</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" class="post-tag">#个人项目</a>
+  
+    <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" class="post-tag">#微信小程序</a>
+  
+    <a href="/tags/%E5%85%A8%E6%A0%88/" class="post-tag">#全栈</a>
+  
+
+
+          <span class="post-date">2022-09-02</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>最近开发了一款小程序，本文将介绍这款小程序在两周之内从立项到上线的全部流程，为个人开发者开发自己的第一款微信小程序简单指南。</p>
+<span id="more"></span>
+<h2 id="背景介绍">背景介绍</h2>
+<p>前两周在和朋友打完球后讨论篮球规则时，互相提问了一些裁判员的手势，发现挺有意思。于是想可以开发一款小程序来考验球迷对标准篮球裁判手势的识别能力，于是去FIBA官网找了裁判手册，开始了两周开发一款小程序的历程。</p>
+<p>现在小程序已经上线，故整理一下这两周来的流程和经验，供大家参考。小程序名为「篮球裁判手势挑战」，可以扫码体验。</p>
+<figure>
+<img src="/assets/images/54-1.jpg" alt="搜索「篮球裁判手势挑战」" />
+<figcaption aria-hidden="true">搜索「篮球裁判手势挑战」</figcaption>
+</figure>
+<h2 id="开发流程">开发流程</h2>
+<p>一款软件的研发和维护流程涉及需求分析、产品设计、原型设计、UI和交互设计、系统设计、客服端和服务端编码实现、软件测试、运行维护、宣传运营、数据分析等等一系列工作。但如果整个项目只有你自己一个人，其实很多工作是可以简化和提高效率的，或者说是没有必要花费精力去做的。例如需求分析到UI设计的步骤完全可以合并到一起，前后端开发的也没必要花时间去指定详细的接口设计文档，测试和研发也可以随时交叉进行。毕竟自己提的需求自己改，自己的BUG自己测。
+由于一个人开发自己的小程序，没有责任和压力，所以很容易放弃，这里分享一下自己的一个经验。那就是要跳出自己开发者的定位，而更应该把自己看作项目经理的角色。具体来讲，技术的细节（或产品的设计）要让步于项目整体的规划，不然容易纠结于不断的优化代码和设计而导致进度缓慢，最终放弃。时刻提醒自己，先把事做完，再把事做完美。</p>
+<h3 id="技能和工具">技能和工具</h3>
+<p>个人开发软件，需要具备一定的设计和编程能力，但最重要的是有耐心。
+我选择了原生小程序开发和微信云开发的组合，主要涉及的工具如下。</p>
+<ul>
+<li><p><strong><a
+target="_blank" rel="noopener" href="https://mp.weixin.qq.com/">微信小程序</a></strong>，官网申请注册微信小程序，按照流程来很快就能申请到。</p></li>
+<li><p><strong><a
+target="_blank" rel="noopener" href="https://pixso.cn/">Pixso</a></strong>，一款国产“设计协作工具”，可以实现原型和UI的设计，免费且上手容易。</p></li>
+<li><p><strong><a
+target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/">微信小程序开发文档</a></strong>，微信小程序的官方文档，整体来说写的不错，有编程基础的很容易上手。</p></li>
+<li><p><strong><a
+target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html">微信小程序开发者工具</a></strong>，微信公众号、小程序、小游戏的官方开发工具。</p></li>
+<li><p><strong><a
+target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html">云开发</a></strong>
+实现小程序服务端的开发。我使用了微信云开发，优点是和小程序的无缝衔接，缺点是<strong>收费太高</strong>！可选阿里云开发，免费。</p></li>
+<li><p><strong>PS</strong>，主要用来处理资源图片和设计渲染宣传图。</p></li>
+<li><p><strong>Git
+及远程仓库</strong>，（非必须）代码版本管理和备份。</p></li>
+</ul>
+<p>如果你是Vue选手，完全可以使用 <strong><a
+target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/">uni-app</a></strong>
+进行开发，并且可以完成一份代码多端编译（网页，微信小程序、安卓、iOS）。同时还有一个优势就是可以无缝搭配
+<strong><a
+target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/uniCloud/">uniCloud</a></strong>，使用<strong>免费</strong>的阿里云开发服务！但缺点是文档写得不如微信。</p>
+<h3 id="产品设计">产品设计</h3>
+<p>我既然想开发一款考验球迷对篮球裁判手势识别能力的小程序，那么最好的选择就是做成答题类的形式，这样既有趣味性也相对简单。于是在简单进行软件流程的设计后，我着手进行了UI设计。</p>
+<p>有些开发者可能觉得自己开发软件还进行 UI 设计是多此一举，随着现在 UI
+设计工具的学习门槛越来越低，专门进行 UI 设计至少有以下几个好处：</p>
+<ul>
+<li>在专门的工具上 UI 的修改成本是比开发时调试修改的成本要低，UI
+设计虽然增加了工作步骤，但实际上减少了工作量，提高了效率。</li>
+<li>UI
+设计过程中也是对产品功能流程设计的检验，一些不合理或不符合用户习惯的流程设计会被提前发现和修改。</li>
+<li>UI 设计可以保证用户界面的一致性，体现良好的页面审美。</li>
+<li>考虑到软件 UI
+全局的一致性，可能会对已设计好的页面进行调整，所以当提前设计好所有 UI
+时，开发过程中针对 UI 的修改将大大减少。</li>
+<li>后期出宣传图时，可以直接使用 UI 设计稿，更加灵活。</li>
+</ul>
+<p>由于答题类竞赛偏向游戏类软件，不可避免的有计时、动画、计分、奖励等设计，逻辑会比较复杂，很容易出BUG。所以最好的方式就是参考和模仿成熟的同类软件，这样的好处是可以快速设计出成熟的交互逻辑，并且清楚知道现有技术框架下哪些功能是可以实现的。</p>
+<figure>
+<img src="/assets/images/54-2.png" alt="UI设计稿" />
+<figcaption aria-hidden="true">UI设计稿</figcaption>
+</figure>
+<h3 id="编码实现">编码实现</h3>
+<p>UI
+图稿有了进行前端的编码实现就变得比较轻松了，这里没有什么好说的，有一些经验分享给小程序开发新手：</p>
+<ul>
+<li><p>多读<a
+target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/">官方文档</a>，刚开始只需要读一下前几章，导入演示项目，把小程序开发的逻辑搞清楚就可以了。</p></li>
+<li><p>需要哪部分功能就去单独读文档里的相关部分，微信小程序的文档写得算不错的了，一般都能找到解决方案。</p></li>
+<li><p>遇到问题的话，可以去<a
+target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/question">微信开放社区</a>搜索和提问，里面有很多经验丰富的老哥活跃。</p></li>
+<li><p>实在搞不懂的接口和功能，一般文档都附有演示项目，导入本地去调试。</p></li>
+</ul>
+<p>服务端的开发我使用了<a
+target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html">微信云开发</a>，非常方便，直接砸微信开发者工具中就可以调试和部署。和现在市面上很多
+serverless 服务一样，微信云开发支持 <code>node.js</code>（仅支持），使用
+NoSQL
+数据库，对于前端开发非常友好，几乎没有上手难度。并且文档写得也不错，可以参考文档直接上手。</p>
+<figure>
+<img src="/assets/images/54-3.png" alt="微信云开发控制台" />
+<figcaption aria-hidden="true">微信云开发控制台</figcaption>
+</figure>
+<p>除了小程序业务需求的开发，同时注意埋点和数据统计，这样有利于后期产品的优化和运营。例如我的答题小程序，由于一开始每道题的选项除了正确答案外其他选项都是随机的，那么可能会有些题很简单。于是我采集了每道题的各个选项出现的次数和错误次数，每天凌晨都会自动更新题目的选项（文档指南：<a
+target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/wxcloud/guide/functions/triggers.html">定时触发器</a>），让错误率高的选项有更高的可能性被选中。</p>
+<p>要注意，微信云服务首月提供了配额非常少的免费环境，有时候连开发测试都会超出额度。所以项目上线必须要增加额度，并且如果需要配置测试环境等多个环境，又是一笔开销。费用相较市面的平均水平比较高，如果你一开始就对腾讯云服务的价格不满意，建议直接使用
+<a target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/">uni-app</a> + <a
+target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/uniCloud/">uniCloud</a>
+的开发模式，避免后期迁移的成本。</p>
+<h3 id="测试和发布">测试和发布</h3>
+<p>对个人开发者来说，测试是一个容易忽视的关键流程，因为“你永远也不知道用户将如何使用你的软件”。如果你没接触过软件测试的话很容易漏掉测试场景。所以我建议开发完成后，务必进行系统的测试。测试前用脑图软件或流程图软件，写好测试用例，尽可能涵盖每一种情况。如果软件编码完成后没测出来任何
+Bug，不能说明代码写得好，只能说明测试做得差。</p>
+<p>一个人既编码又测试有优点也有缺点，要注意扬长避短。优点就是你清楚的知道每个场景的触发条件和边界情况，所以可以更好的梳理测试用例，不至于遗漏。同理，由于你知道代码的逻辑，所以容易想当然的忽略简单场景下的测试，而这就往往容易忽略Bug。所以提前梳理测试用例，不漏掉任何简单场景的做测试是必要的。</p>
+<p>微信小程序的版本管理分为体验版、审核版和正式版。测试要在体验版上进行，除了需要权限才能访问外，体验版和正式版对于用户来说没有什么区别。而审核版就是准备发布的体验版经过微信人工审核后通过的版本，审核通过的审核版就可以直接发布成为正式版了。</p>
+<p>发布前注意要想好小程序的名称，设计好
+logo，因为一旦发布再去修改就比较麻烦了。小程序所有的审核时间都是 1-7
+个工作日，我体验下来整个流程都很快，除了小程序名称开始申请的涉及他人商标被驳回外，其余的都在
+2
+天之内通过。因为小程序名称的审核是最严格的，所以要注意如果名称涉及商标，要准备好商标授权书，否则就尽量避免，以免耽误时间。</p>
+<h3 id="运营和维护">运营和维护</h3>
+<p>鼓励用户分享是一个提高小程序访问量的好方法，这就需要设置一些奖励机制，以及足够有吸引力的文案和图片。同样的可以借鉴其他小游戏的机制和设计，同时也可以根据后台数据来调整的文案和图片。线下宣传是前期积累第一批用户的有效办法，尤其对于有特定目标人群的软件，线下宣传做的好事半功倍。比如我已经制作好了宣传海报，准备往篮球场上贴，但由于发现云服务有点贵，小程序又没有任何盈利目的和规划，所以先暂时作罢。另外，微信官方提供有广告接入功能，可自行查阅。</p>
+<figure>
+<img src="/assets/images/54-4.jpg" alt="准备好的宣传海报" />
+<figcaption aria-hidden="true">准备好的宣传海报</figcaption>
+</figure>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/55/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>JS探幽——从数据类型到包装器对象</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/59/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      「篮球裁判手势挑战」小程序发布
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" class="post-tag">#个人项目</a>
+  
+    <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" class="post-tag">#微信小程序</a>
+  
+    <a href="/tags/%E5%85%A8%E6%A0%88/" class="post-tag">#全栈</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/44/" title="使用 Web 前端技术开发一个 Wallpaper Engine 壁纸" rel="bookmark">使用 Web 前端技术开发一个 Wallpaper Engine 壁纸</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

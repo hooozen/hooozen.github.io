@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        刷题笔记(4)：力扣-137.只出现一次的数字 II | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">刷题笔记(4)：力扣-137.只出现一次的数字 II</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/Algorithm/" class="post-tag">#Algorithm</a>
+  
+    <a href="/tags/leetcode/" class="post-tag">#leetcode</a>
+  
+
+
+          <span class="post-date">2022-06-13</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>本题来自 leetcode 题库第 137 题：<a
+target="_blank" rel="noopener" href="https://leetcode.cn/problems/single-number-ii/">137.只出现一次的数字
+II</a>。题目要求找到数组中只出现过一次的数字（其他数字恰好出现 3
+次），该题比较巧妙的解法涉及自动机、位运算和电路设计等知识，很有意思。难度中等。</p>
+<span id="more"></span>
+<h2 id="题目描述">题目描述</h2>
+<p>给你一个整数数组<code>nums</code>，除某个元素仅出现<strong>一次</strong>外，其余每个元素都恰出现<strong>三次</strong>。请你找出并返回那个只出现了一次的元素。</p>
+<ul>
+<li><p>示例 1：<br />
+输入：nums = [2,2,3,2]<br />
+输出：3</p></li>
+<li><p>示例 2：<br />
+输入：nums = [0,1,0,1,0,1,99]<br />
+输出：99</p></li>
+<li><p>提示：</p>
+<ul>
+<li><span class="math inline">\(1 \leqslant \text{nums.length} \leqslant
+3 \times 10^4\)</span><br />
+</li>
+<li><span class="math inline">\(-2^{31} \leqslant \text{nums[i]}
+\leqslant 2^{31} - 1\)</span><br />
+</li>
+<li><code>nums</code>
+中，除某个元素仅出现<strong>一次</strong>外，其余每个元素都恰出现<strong>三次</strong></li>
+</ul></li>
+</ul>
+<p>进阶：你的算法应该具有线性时间复杂度。
+你可以不使用额外空间来实现吗？</p>
+<h2 id="题解">题解</h2>
+<h3 id="解法1-哈希表">解法1 哈希表</h3>
+<p>这道题目最直接的思路就是使用哈希表统计每个元素出现的次数，统计完毕后遍历哈希表找到只出现一次的元素即可。代码实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number[]</span>&#125; <span class="hljs-variable">nums</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> &#123;<span class="hljs-type">number</span>&#125;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">var</span> singleNumber = <span class="hljs-keyword">function</span> (<span class="hljs-params">nums</span>) &#123;<br>  <span class="hljs-keyword">const</span> freq = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> num <span class="hljs-keyword">of</span> nums) &#123;<br>    count = freq.<span class="hljs-title function_">get</span>(num)<br>    <span class="hljs-keyword">if</span> (count) freq.<span class="hljs-title function_">set</span>(num, ++count)<br>    <span class="hljs-keyword">else</span> freq.<span class="hljs-title function_">set</span>(num, <span class="hljs-number">1</span>)<br>  &#125;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [k, v] <span class="hljs-keyword">of</span> freq) &#123;<br>    <span class="hljs-keyword">if</span> (v === <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> k<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>该方法时间复杂度为 <span
+class="math inline">\(O(n)\)</span>，空间复杂度为 <span
+class="math inline">\(O(n)\)</span>。我个人觉得是个不错的方法，简单高效，并且可以查找出现任意次数的所有元素。</p>
+<h3 id="解法2-依次确定每一个二进制位">解法2 依次确定每一个二进制位</h3>
+<p>该方法利用题目的特殊点——除目标元素出现一次外其余元素均恰好出现三次。若将数组内所有数字的每个数位都单独求和，由于只有一个数字出现一次，其余数字恰出现
+3 次。那么这些恰出现 3 次的数字每个数位的和都是 3
+的倍数，再加上我们要找的只出现一次的数字，那么每个数位上的和对 3
+取余，即为要寻找数字在该数位上的值。例如，有输入
+<code>[8,8,8,12]</code>，我们单独每个数位求和得到个位数上和为 <span
+class="math inline">\(8+8+8+2=26\)</span>，十位数上为 <span
+class="math inline">\(1\)</span>，对 <span
+class="math inline">\(26\)</span> 和 <span
+class="math inline">\(1\)</span> 分别对 <span
+class="math inline">\(3\)</span> 取余，得到 <span
+class="math inline">\(2\)</span> 和 <span
+class="math inline">\(1\)</span>，那么便有 <span
+class="math inline">\(12\)</span> 是我们要寻找的只出现一次的数字。</p>
+<p>这个思路非常巧妙，但处理起来有一些细节比较麻烦。比如确定数字有多少位，如何遍历每个数字的每一位。这些问题在二进制下使用位运算可以很好的解决。首先确定了数值范围为
+32
+位整型。将数组里每个数字的二进制位的各个数位求和。由于二进制每个数位只能是
+<code>1</code> 或 <code>0</code>，那么对 <code>3</code>
+取余后的值也只会是 <code>1</code> 或
+<code>0</code>。得到这些数字后，再按照他们所处的数位拼合成最后的结果就可以了。具体的代码实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number[]</span>&#125; <span class="hljs-variable">nums</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> &#123;<span class="hljs-type">number</span>&#125;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">var</span> singleNumber = <span class="hljs-keyword">function</span> (<span class="hljs-params">nums</span>) &#123;<br>  <span class="hljs-keyword">let</span> ans = <span class="hljs-number">0</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">32</span>; i++) &#123;<br>    <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> num <span class="hljs-keyword">of</span> nums) &#123;<br>      sum += ((num &gt;&gt; i) &amp; <span class="hljs-number">1</span>)<br>    &#125;<br>    ans |= ((sum % <span class="hljs-number">3</span>) &lt;&lt; i)<br>  &#125;<br>  <span class="hljs-keyword">return</span> ans<br>&#125;;<br></code></pre></td></tr></table></figure>
+<p>该算法的时间复杂度为 <span class="math inline">\(O(n\log
+C)\)</span>，本题中 <span class="math inline">\(\log C =
+32\)</span>，一般情况下可认为是 <span
+class="math inline">\(O(n)\)</span>。空间复杂度为 <span
+class="math inline">\(O(1)\)</span>。</p>
+<p>注意，代码里用到了很多二进制位运算的处理。例如 <code>(num &gt;&gt; i)
+&amp; 1</code> 便是求 <code>num</code> 二进制下第 <code>i</code>
+位上的数字。并且注意到第 <code>12</code> 行在求 <code>ans</code>
+时使用了 <code>|=</code> 运算符，在这里使用 <code>+=</code>
+也可以。但要注意，这两种运算是不同的，这里之所以能够互换是因为
+<code>|=</code> 后的数值 <code>((sum % 3) &lt;&lt; i)</code>
+最多只在某一位上有 <code>1</code>，其余位均为
+<code>0</code>。否则两者运算不可互换，例如 <code>11 | 10 == 11</code> 而
+<code>11 + 10 == 101</code>。</p>
+<h3 id="解法3-有限状态自动机">解法3 有限状态自动机</h3>
+<p>如果说解法 2 巧妙利用了算术知识，那么解法 3
+则在此基础上运用了编译原理中有关自动机的知识，进一步降低了算法复杂度。对于该解法，之前没有接触过相关知识的话我觉得短时间内不太可能自己想出来。</p>
+<p>对于解法 2 中计算每个数位的和时，我们考虑每一次叠加时数位和对 3
+取余的值，可能的结果只有 <span
+class="math inline">\(0,1,2\)</span>。由于二进制每个数位上只可能是 <span
+class="math inline">\(0\)</span> 或 <span
+class="math inline">\(1\)</span>。所以，若下一个加数为 <span
+class="math inline">\(0\)</span>，则取余的结果维持不变；若下一个加数为
+<span class="math inline">\(1\)</span> 则取余的结果会由 <span
+class="math inline">\(0\)</span> 变成 <span
+class="math inline">\(1\)</span>、<span class="math inline">\(1\)</span>
+变成 <span class="math inline">\(2\)</span>，或 <span
+class="math inline">\(2\)</span> 变成 <span
+class="math inline">\(0\)</span>，即发生状态的转移。为了引入位运算，我们使用两个二进制位来记录这个状态变化，则得到以下状态变化的规律：</p>
+<table>
+<thead>
+<tr class="header">
+<th>a</th>
+<th>b</th>
+<th>n</th>
+<th>-&gt;</th>
+<th>a</th>
+<th>b</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td></td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td></td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td></td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>其中 a 和 b 分别表示余数的第 2 位和第 1 位上的值， n
+表示加数。例如余数为 2 时，则 a=1，b=0。使用状态转移图表示更加直观：</p>
+<figure>
+<img src="/assets/images/49-1.svg" alt="图 1 状态转移图" />
+<figcaption aria-hidden="true">图 1 状态转移图</figcaption>
+</figure>
+<p>根据以上转移规律，我们可以根据当前的 a 和 b 以及当前的加数 n
+计算出下一个状态的 a 和 b（方便起见，记作 a'
+b'）。所有的转移规律都在上表中了。但如果我们能找到更简洁的规律就更好了。</p>
+<p>我们先求 b。首先我们发现当 a=1 时，b'=0 ；当 a=0 时，若 n=0 则
+b'=b，若 n=1 则 b'=~b。即</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> a == <span class="hljs-number">1</span>:<br>  b = <span class="hljs-number">0</span><br><span class="hljs-keyword">if</span> a == <span class="hljs-number">0</span>:<br>  <span class="hljs-keyword">if</span> n == <span class="hljs-number">0</span>:<br>    b = b<br>  <span class="hljs-keyword">if</span> n == <span class="hljs-number">1</span>:<br>    b = ~b<br></code></pre></td></tr></table></figure>
+<p>引入异或 <code>^</code> 运算后化简为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> a == <span class="hljs-number">1</span>:<br>  b = <span class="hljs-number">0</span><br><span class="hljs-keyword">if</span> a == <span class="hljs-number">0</span>:<br>  b = b ^ n<br></code></pre></td></tr></table></figure>
+<p>进一步可化简为 <code>b = ~a &amp; (b ^ n)</code>。由此我们获得了更新
+<code>b</code> 的式子，使用更新后的 <code>b</code> 同理可发现更新
+<code>a</code> 的规律。实际上，我们将状态转移图中的 <code>b</code>
+替换为下一状态的 <code>b</code>，并颠倒 <code>a</code> <code>b</code>
+的位置，会发现状态转移图是等价的。具体见下图：</p>
+<figure>
+<img src="/assets/images/49-2.svg" alt="图 2 更新b后的状态转移图" />
+<figcaption aria-hidden="true">图 2 更新b后的状态转移图</figcaption>
+</figure>
+<p>上图将原状态图的 <code>b</code> 值更新，然后颠倒 <code>a</code>
+<code>b</code> 的位置：</p>
+<figure>
+<img src="/assets/images/49-3.svg" alt="图 3 颠倒 a b 的位置" />
+<figcaption aria-hidden="true">图 3 颠倒 a b 的位置</figcaption>
+</figure>
+<p>可以发现上图和原状态转移图 1 是等价的。因此立马得到 <code>a = ~b
+&amp; (a ^ n)</code>，其中 <code>b</code> 是更新后的
+<code>b</code>。</p>
+<p>如此一来，对于每个数位上代表余数的 <code>a</code> <code>b</code>
+两个值，每当一个新的加数 <code>n</code> 加入时，就有如下的变化规律：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs javascript">b = ~a &amp; (b ^ n)<br>a = ~b &amp; (a ^ n)<br></code></pre></td></tr></table></figure>
+<p>当所有加数遍历完毕，便可以根据 <code>a</code> 和 <code>b</code>
+的值来确定该数位上待求的具体值。由于位运算是可以<strong>并行</strong>的，所以不需要对每个数位都进行遍历，由此降低了时间复杂度。具体的代码实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@param</span> &#123;<span class="hljs-type">number[]</span>&#125; <span class="hljs-variable">nums</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@return</span> &#123;<span class="hljs-type">number</span>&#125;</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">var</span> singleNumber = <span class="hljs-keyword">function</span> (<span class="hljs-params">nums</span>) &#123;<br>  <span class="hljs-keyword">let</span> a = <span class="hljs-number">0</span><br>  <span class="hljs-keyword">let</span> b = <span class="hljs-number">0</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> n <span class="hljs-keyword">of</span> nums) &#123;<br>    b = ~a &amp; (b ^ n)<br>    a = ~b &amp; (a ^ n)<br>  &#125;<br>  <span class="hljs-keyword">return</span> b<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意，由于最后每个数位上的值只可能是 <code>1</code> 或
+<code>0</code>，也就是说 <code>a</code> 一定为
+<code>0</code>，所以只返回 <code>b</code> 即可。</p>
+<p>该算法时间复杂度为 <span
+class="math inline">\(O(n)\)</span>，空间复杂度为 <span
+class="math inline">\(O(1)\)</span>。</p>
+<h2 id="总结与思考">总结与思考</h2>
+<p>这道题并不算难，难点在于设计出空间复杂度为 <span
+class="math inline">\(O(1)\)</span> 的算法。尤其看到如此简洁的解法 3
+时，我深受震撼，发觉自己知识的浅薄。但实际业务场景中，我觉得解法 1
+应该是更好的算法，因为后面两种算法的应用场景限制更多，只能查找唯一出现的那一个数，并且代码难以阅读。但做题的目的不是为了解决题目本身，而是从中积累和学习思路方法。尤其后面解法中涉及的自动机和位运算的知识和技巧，需要学习和积累。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/50/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>刷题笔记(5)：力扣-167.两数之和 II - 输入有序数组</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/48/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      刷题笔记(3)：力扣-338.比特位计数
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/Algorithm/" class="post-tag">#Algorithm</a>
+  
+    <a href="/tags/leetcode/" class="post-tag">#leetcode</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/46/" title="刷题笔记(1)：力扣-50.Pow(x,n): 快速幂算法" rel="bookmark">刷题笔记(1)：力扣-50.Pow(x,n): 快速幂算法</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/47/" title="刷题笔记(2)：力扣-67.二进制求和" rel="bookmark">刷题笔记(2)：力扣-67.二进制求和</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/48/" title="刷题笔记(3)：力扣-338.比特位计数" rel="bookmark">刷题笔记(3)：力扣-338.比特位计数</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

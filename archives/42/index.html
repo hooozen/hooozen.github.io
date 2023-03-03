@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        熵与信息量 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">熵与信息量</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/%E4%BF%A1%E6%81%AF%E7%86%B5/" class="post-tag">#信息熵</a>
+  
+    <a href="/tags/%E4%BF%A1%E6%81%AF%E9%87%8F/" class="post-tag">#信息量</a>
+  
+
+
+          <span class="post-date">2021-06-22</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>本文主要结合公式和定义解释了信息熵（Entropy）和信息量（Quantities of
+information）的含义和联系.</p>
+<span id="more"></span>
+<h3 id="背景">背景</h3>
+<p>信息熵是由信息论之父，克劳德·艾尔伍德·香农（Claude Elwood Shannon）于
+1948 年发表的论文《通信的数学理论》（<a
+target="_blank" rel="noopener" href="https://web.archive.org/web/19980715013250/http://cm.bell-labs.com/cm/ms/what/shannonday/shannon1948.pdf">A
+Mathematical Theory of Communication</a>）中提出.</p>
+<p>熵这个词是香农从热力学中借用的：热力学中的热熵是表示分子状态的混乱程度的物理量，香农则使用信息熵来描述信源的<strong>不确定度</strong>.</p>
+<p><strong>信息熵的提出解决了对信息的量化度量问题</strong>.（应注意，信息量不等同于信息熵）</p>
+<h3 id="定义">定义</h3>
+<p><strong>熵</strong>（Entropy）：对于给定的离散随机变量 <span
+class="math inline">\(X\)</span>，以可能性 <span
+class="math inline">\(P(x_1), \cdots, P(x_n)\)</span> 取值为 <span
+class="math inline">\(x_1, \cdots, x_n\)</span>，则 <span
+class="math inline">\(X\)</span> 的熵为：</p>
+<p><span class="math display">\[ H(X) = -\sum_{i=1}^nP(x_i)\log_2 P(x_i)
+\]</span></p>
+<p>上述定义可以看出，熵是对于随机变量而言的，那么又是如何与信息量联系起来的呢？</p>
+<h3 id="熵与信息量">熵与信息量</h3>
+<p>虽然我们有了信息熵的公式，但抽象且不容易理解.
+应该如何理解信息熵呢？下面是维基百科中给出的一句解释：</p>
+<blockquote>
+<p>In information theory, the entropy of a random variable is the
+average level of "information", "surprise", or "uncertainty" inherent in
+the variable's possible outcomes.</p>
+</blockquote>
+<p>也就是说，一个随机变量的熵是指该变量可能的结果所蕴含的<strong>不确定性</strong>的平均水平.</p>
+<p>举个例子，对于一枚不均衡的硬币，抛掷它时以概率 <span
+class="math inline">\(p\)</span> 正面朝上，以概率 <span
+class="math inline">\(1-p\)</span> 反面朝上. 则容易理解，当 <span
+class="math inline">\(p=1/2\)</span>
+时，抛出一枚硬币的不确定性最大，即很难判断抛出后哪一面朝上；当 <span
+class="math inline">\(p\)</span> 接近 <span
+class="math inline">\(1\)</span>（或 <span
+class="math inline">\(0\)</span>）时，这种不确定性减小，直到 <span
+class="math inline">\(p=1\)</span>（或 <span
+class="math inline">\(p=0\)</span>）时不确定性最小，这时即使不抛该硬币，我们也确定的知道哪一面朝上.</p>
+<p>我们就用熵来定量衡量这种随机事件的不确定性，至于如何定量先不讨论，先来看看熵与信息量有什么联系.</p>
+<p>信息论中有一句常见的口诀：“不确定性越多（概率越低），信息量越大；不确定性越低（概率越高），信息量越小“，也就是对信源来说，所发出的信号对于接受者可以看作随机变量，接受者在接受前对该变量的不确定性越大，则接收到后所“消除”的不确定越大，则获得的信息量越大.</p>
+<p>举个例子：你<strong>知道</strong>你每天起床后你妈<strong>一定</strong>会对你说：“你看你像猪一样起这么晚！”，这句话对你来说没有任何不确定性（概率为
+<span
+class="math inline">\(1\)</span>），那么你听到这句话后也就不会消除任何不确定性，也即没有获得信息量.
+然后你还知道，你妈接下来会告诉你早餐吃什么，虽然不是包子就是油条.
+这时你妈开口了：“还不快点起，包子都凉了！”，在你听到这句话前对于你妈这句话说什么是有不确定性的，你不知道是“包子都凉了”还是“油条都软了”，因此你妈的这句话消除了你对于吃包子还是吃油条的不确定性，你因此获得了一定的信息量.</p>
+<p>以上通俗的解释了“熵”、“信息量”的概念，但需要注意的是信息熵不等同于信息量，但它们在量上是相等的.
+即，“熵”度量了不确定性，而接受信息后所消除的不确定性即为该信息的“量”.</p>
+<p>信息量和熵都是相对于某一主体来说的，即同一个信息对于不同的人而言信息量不同，同一件不确定的事情对于不同的人所蕴含的熵也不同.</p>
+<h3 id="定量">定量</h3>
+<p>以上定性的解释了“熵”的含义，那么公式中熵的值是怎么确定的呢？</p>
+<p>类似于质量、长度等物理量，信息熵同样作为物理量也需要有一个基本度量单位.
+类似于光年作为长度单位被定义为光行驶一年的长度，熵的基本单位被定义为等概率
+<span class="math inline">\(0-1\)</span> 分布随机变量的不确定性，记作
+<span class="math inline">\(1\mathrm{bit}\)</span>.
+也就是说抛一枚均匀的硬币，对于哪面朝上这一事件包含的不确定性的量是 <span
+class="math inline">\(1\ \mathrm{bit}\)</span> 熵.</p>
+<p>有了基本单位，衡量其他随机变量的熵就有了基准，类似于光行驶 <span
+class="math inline">\(3\)</span> 年的距离为 <span
+class="math inline">\(3\)</span> 光年，那么抛掷 <span
+class="math inline">\(2\)</span> 均匀枚硬币结果的不确定性即为 <span
+class="math inline">\(2\ \mathrm{bit}\)</span>. 容易理解，对于抛掷 <span
+class="math inline">\(n\)</span> 枚硬币而言，其熵为 <span
+class="math inline">\(n\ \mathrm{bit}\)</span>.
+因此，所有与抛掷硬币分布相同的随机变量其熵都可以被类似的计算.</p>
+<p>对于等概率事件仍可以类似量化，比如对于猜一道有四个选项的选择题的答案，那么四个答案的概率均等分布，与先后掷两枚硬币的分布是等同的，因此其熵为
+<span class="math inline">\(2\ \mathrm{bit}\)</span>. 类似地，对于有
+<span class="math inline">\(8 = 2^3\)</span> 个等可能结果的分布，与掷
+<span class="math inline">\(3\)</span> 枚硬币等同，其熵为 <span
+class="math inline">\(\log_2 8 = 3\ \mathrm{bit}\)</span>.
+将其<strong>推广</strong>至有 <span class="math inline">\(n\)</span>
+个等可能结果的概率分布，其熵为</p>
+<p><span class="math display">\[
+\log_2n = \log_2\frac1{p} \ \mathrm{bit}
+\]</span></p>
+<p>其中 <span class="math inline">\(p = \frac 1n\)</span>
+为每个结果发生的概率.</p>
+<p>至此，已经解决了等概率分布的随机变量的熵的计算，那么对于不等概率的分布将如何计算呢？公式中展示出了加权的思想，即把每一个结果都看作等可能事件中的一个结果，按照其发生的概率加权求和.</p>
+<p>例如，通过某些“手段”答题人得知选项 A、B、C、D 为正确答案的概率分别为
+<span
+class="math inline">\(\frac12,\frac14,\frac18,\frac18\)</span>，那么此时如何求熵呢？首先把
+A 选项看作投掷一枚硬币某一面朝上，对应的熵为 <span
+class="math inline">\(1\ \mathrm{bit}\)</span>，但 A
+为正确答案的可能性只有 <span class="math inline">\(\frac
+12\)</span>，因此将 <span class="math inline">\(\frac12\)</span> 作为
+<span class="math inline">\(1\ \mathrm{bit}\)</span> 的权值.
+类似地，得到 B、C、D 对应的数值项：<span class="math inline">\(\frac14
+\log_24\)</span>，<span class="math inline">\(\frac18\log_2
+8\)</span>，<span class="math inline">\(\frac18\log_28\)</span>.
+将以上各项相加就得到此时正确答案 <span class="math inline">\(X\)</span>
+的熵：</p>
+<p><span class="math display">\[ \begin{aligned}
+H(X) &amp;= \frac12\log_2 2 + \frac14\log_24+\frac18\log_28 +
+\frac18\log_28 \\
+&amp; = -\frac12\log_2\frac12 - \frac14\log_2\frac14-
+\frac18\log_2\frac18 - \frac18\log_2\frac18 \\
+&amp; = -\sum_{i=1}^4P(x_i)\log_2P(x_i)
+\end{aligned}
+\]</span></p>
+<p>至此，便得到了熵的定义中的公式形式.</p>
+<p><span class="math display">\[
+\begin{aligned}
+H(X) &amp; = \sum_{i=1}^nP(x_i)\log_2\frac1{P(x_i)} \\
+&amp;= -\sum_{i=1}^nP(x_i)\log_2 P(x_i)
+\end{aligned}
+\]</span></p>
+<h3 id="性质">性质</h3>
+<p>香农总结出了信息熵的三条性质：</p>
+<ol type="1">
+<li>单调性，即发生概率越高的事件，其所携带的信息熵越低.</li>
+<li>非负性，即信息熵不能为负.</li>
+<li>累加性，即多随机事件同时发生的的总不确定性的度量可以表示为各事件不确定性的度量的和，也即：</li>
+</ol>
+<p>对于相互独立的随机变量 <span class="math inline">\(X,Y\)</span>：
+<span class="math display">\[ P(X=A, Y=B) = P(X=A)\cdot P(Y=B) \]</span>
+有: <span class="math display">\[ H(XY) = H(X) + H(Y) \]</span></p>
+<p>香农从数学上，严格证明了满足上述三个条件的随机变量不确定度量具有唯一的形式：</p>
+<p><span class="math display">\[ H(X) = -C\sum_{x\in \mathcal{X}}
+P(x)\log_2P(x) \]</span></p>
+<h3 id="信息量quantities-of-information">信息量（Quantities of
+information）</h3>
+<p>信息量是衡量信息多少的度量，其值等于获得该信息后减少的随机变量不确定性量.</p>
+<p>例如，对于一个有四个选项的选择题，我根本不会做，则正确答案对应的随机变量
+<span class="math inline">\(X\)</span> 的熵 <span
+class="math inline">\(H_1(X)\)</span> 为</p>
+<p><span class="math display">\[
+-\sum_{i=1}^4 P(x_i)\log_2P(x_i) = -4\times\frac14\times \log_2\frac14 =
+2\ \mathrm{bit}
+\]</span></p>
+<p>若此时老师说 A 选项是错的，不选，根据公式则有 <span
+class="math display">\[
+H_2(X) = -3\times\frac13\times\log_2\frac13 \approx 1.5850\ \mathrm{bit}
+\]</span></p>
+<p>那么老师这句话带给我的信息量则为:</p>
+<p><span class="math display">\[H_1(X) - H_2(X) \approx 0.4150\
+\mathrm{bit}\]</span></p>
+<p>如果我的同桌小农一开始就知道这题选
+D，那么关于这道题答案的熵对于他来说即为 <span
+class="math inline">\(0\)</span>，老师的话对于他来说信息量为 <span
+class="math inline">\(0\)</span>.
+（当然这里讨论的假设必须都是客观的：小农是真正的知道正确答案，而不是错误的知道“正确答案”，即熵和信息量作为物理量虽然相对于主客体的不同而不同，但具有不以主观意志转移的客观性）</p>
+<hr />
+<h4 id="参考资料"><em>参考资料</em></h4>
+<ul>
+<li><p><a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Entropy_(information_theory)">Entropy
+(information theory), wikipedia.org</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Quantities_of_information">Quantities
+of information, wikipedia.org</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E4%BF%A1%E6%81%AF%E7%86%B5/7302318?fr=aladdin">信息熵,
+百度百科</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/22178202">“信息熵是什么？”，知乎</a></p></li>
+</ul>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/43/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>多 Git 仓库的 SSH-key 配置</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/41/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      Swift 函数作为参数的写法
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/%E4%BF%A1%E6%81%AF%E7%86%B5/" class="post-tag">#信息熵</a>
+  
+    <a href="/tags/%E4%BF%A1%E6%81%AF%E9%87%8F/" class="post-tag">#信息量</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/33/" title="机器学习基础-“逻辑”回归(logistic regression)的数学原理" rel="bookmark">机器学习基础-“逻辑”回归(logistic regression)的数学原理</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/34/" title="机器学习基础-BP(Error Back Propagation)算法的数学原理" rel="bookmark">机器学习基础-BP(Error Back Propagation)算法的数学原理</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>
