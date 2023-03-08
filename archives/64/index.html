@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        前端工程师需要知道的字体知识 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">前端工程师需要知道的字体知识</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/CSS/" class="post-tag">#CSS</a>
+  
+    <a href="/tags/%E5%AD%97%E4%BD%93/" class="post-tag">#字体</a>
+  
+    <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#性能优化</a>
+  
+
+
+          <span class="post-date">2023-03-04</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>随着网页个性化设计和品牌特色的需要，在网页中使用特定的字体将成为越来越常见的需求。现代字体设计经历了数十年的发展，已经积累了成熟的标准和规范，但对于许多前端开发者来说可能可能还比较陌生，本文就前端开发过程中可能遇到的字体知识做一个梳理和介绍。</p>
+<span id="more"></span>
+<h2 id="字体基础">字体基础</h2>
+<h3 id="字体标准">字体标准</h3>
+<p>字体的设计和使用和其他任何工业设计产品一样，需要统一的标准和规范。</p>
+<p>最初的计算机字体是点阵字体，放大后会有明显的马赛克。为了高清打印和缩放的需求，Adobe
+公司于 1984 年发布了 <a
+target="_blank" rel="noopener" href="https://www.adobe.com/cn/products/postscript.html">PostScript</a>
+语言，使用三次贝塞尔曲线来绘制字体，极大的提高了字体打印和屏幕显示质量<a
+href="#ref1"><sup>[1]</sup></a>。很快苹果又推出了 <a
+target="_blank" rel="noopener" href="https://developer.apple.com/fonts/TrueType-Reference-Manual/">TrueType</a>
+字体标准，采用二次贝塞尔曲线绘制字体，被广泛应用于 macOS 和 Windows
+系统中<a href="#ref2"><sup>[2]</sup></a>。</p>
+<p>1996 年微软联合 Adobe 在 TrueType 的基础上推出了 <a
+target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/typography/opentype/">OpenType</a>
+字体标准，该标准整合了 PostScript 字体和 TrueType
+字体的特点，并新增了许多新的特性。OpenType
+陆续得到苹果和谷歌等公司的支持，在主流计算机平台应用广泛，目前已经成为字体设计的主要发展趋势<a
+href="#ref3"><sup>[3]</sup></a>。</p>
+<p>总的来说，字体（轮廓字体 <a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Computer_font#Outline_fonts">Outline
+fonts</a>）标准整体上有 3 种，但对于普通用户和开发者来说 TrueType 和
+Opentype 比较常见。</p>
+<h3 id="字体文件">字体文件</h3>
+<p>字体设计完成后将打包成特定文件分发给用户，字体文件根据标准的不同采用不同的后缀名。TrueType
+字体以 <code>.ttf</code> 作为后缀名。OpenType 字体根据不同的情况采用
+<code>.otf</code>, <code>.ttf</code>, <code>.otc</code> 和
+<code>.ttc</code> 为后缀，其中 OTF 一般表示基于 PostScript
+技术，对应地，TTF 表示使用 TrueType 技术。而 OTC 和 TTC
+则表示字体集合（Collection），即一个文件中包含多种字体（例如多种语言）<a
+href="#ref4"><sup>[4]</sup></a>。这 4
+种字体文件在主流操作系统和网页设计中都是可用的。</p>
+<p>除此之外，还有专用于网页的网页开放字体（Web Open Font
+Format）格式，其设计标准通常为 OpenType 或
+TureType，但在文件打包和压缩中专门为网络传输做了优化。WOFF
+字体在主流浏览器中都得到很好的支持，文件后缀名为 <code>.woff</code> 以及
+<code>.woff2</code>。</p>
+<h3 id="字体类型">字体类型</h3>
+<p>常见的字体可以分为“衬线（serif）”、“无衬线（sans
+serif）”、“等宽（monospace）”等类型。衬线是指在字体笔画末端有小装饰。在论文写作中常用的
+Times New Roman
+字体和中文宋体便是衬线字体。无衬线字体的字体线条则相对简约，例如 Arial
+和“微软雅黑”以及“苹方”。等宽字体则表示每个字符占据相等的宽度，这一点衬线和无衬线字体是无法保证的，例如小写字母
+<code>i</code> 在非等宽字体中往往占据较小的字宽。</p>
+<p>由于衬线字体具有更丰富的细节且更加精致，所以多用于印刷和高清显示。无衬线字体在屏幕显示上更加普遍，主流浏览器和操作系统的默认字体一般都是无衬线字体。但随着屏幕分辨率的提高和显示技术的提升，在屏幕显示中使用衬线字体可以使文本页面更加精致具备设计感。例如<a
+href="https://www.hozen.site">我的主页首页</a>部分字体就使用了思源宋体。等宽字体由于具备字符等宽的特点往往被用于代码的编辑和显示。</p>
+<h3 id="字体家族-font-family">字体家族 Font Family</h3>
+<p>前文提到的诸如“Times New
+Roman“，“微软雅黑”等字体其实都是字体家族的概念。字体家族代表了统一的设计风格，但字体往往需要不同的粗细（字重）和样式（斜体、字宽等）。因此一个字体家族可以包含不同的子字体来实现不同的字体样式。具体地，字体样式包括字重、字宽、倾斜和视觉尺寸等方面，通过这些样式的组合便产生不同的子字体。但除非特别需要，对于屏幕显示来说常用的子字体样式一般只包括字重和倾斜。例如，苹方字体家族字体包括常规体（Regular）、极细体（Ultralight）、纤细体（Thin）、细体（Light）、中黑体（Medium）和中粗体（Semibold）6
+个子字体。当然也有一些发布较早的字体只包含一种样式，即一个字体文件。</p>
+<p>当我们使用文字处理软件或者 CSS
+属性对字体应用“加粗”和“倾斜”等样式时，系统会查找对应样式的子字体是否可用，如果可用则使用对应的子字体，否则则通过计算对字体进行强制的加粗和倾斜。虽然这两种方式最终都将字体进行了加粗或倾斜，但效果是完全不一样的。子字体不同的样式通过了严格的设计，使其具备统一的美感。而后者只是简单粗暴的加粗或倾斜，视觉效果往往比不上前者。例如，下图中分别使用思源宋体的常规体进行计算加粗（上）和直接使用思源宋体的
+Bold 字体（下），可以明显看出上面的文字在细节和观感上相去甚远。</p>
+<figure>
+<img src="/assets/images/64-1.png" alt="计算加粗和子字体的效果对比" />
+<figcaption aria-hidden="true">计算加粗和子字体的效果对比</figcaption>
+</figure>
+<h3 id="可变字体variable-font">可变字体（Variable Font）</h3>
+<p>一款优秀的字体会提供多种字重的子字体，这样能保证在使用不同字重时能够保持优秀的观感。但每一款单独的字重或样式的字体往往需要单独的字体文件，这导致了当字体样式变多时字体文件数量增加，尤其对于网络页面来说会增加请求次数和流量负担。</p>
+<p>为了解决这一问题，在 OpenType 规范的中，Adobe、微软、苹果和谷歌于
+2016 年共同推出了<strong>可变字体</strong>（<a
+target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/typography/develop/font-variations">Variable
+font</a>）的标准，这一标准改变了字体样式的设计和使用<a
+href="#ref5"><sup>[5]</sup></a>。就字重来说，不再需要多个字重的字体文件，一个字体文件即可使用多种字重。并且，字体字重不再被离散的划分为“常规”，“中黑”等有限的个数，而是能够通过调整字重参数获得任意粗细，实现字重的无级调节。像下图中
+MIUI 的动态交互效果在没有可变字体时是很难实现的。</p>
+<figure>
+<img src="/assets/images/64-2.gif"
+alt="基于小米兰亭可变字体实现的字重无极动态变化" />
+<figcaption
+aria-hidden="true">基于小米兰亭可变字体实现的字重无极动态变化</figcaption>
+</figure>
+<p>OpenType 要求可变字体文件需要在命名使用 <code>VF</code>标注，例如
+<code>Selawik-VF.ttf</code>。因此我们从字体文件名往往可以分辨该字体是否是可变字体。</p>
+<h2 id="css-属性">CSS 属性</h2>
+<h3 id="默认字体名称">默认字体名称</h3>
+<p>CSS 属性 <code>font-family</code> 用于指定字体，并且规定了 5
+种默认的字体名称：<code>serif</code>, <code>sans-serif</code>,
+<code>monospace</code>, <code>cursive</code>,
+<code>fantasy</code>，除了前面提到的 3 种字体，<code>cursive</code> 和
+<code>fantasy</code>
+分别表示手写字体和装饰字体。当使用这些默认字体名称时，具体使用何种字体是由浏览器决定的，往往也会根据操作系统的不用有所不同。以下是五种默认字体在当前浏览器的显示效果：</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>font-family</code></th>
+<th>显示效果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>serif</code></td>
+<td><span style="font-family: serif">这是衬线字体 This is serif
+font</span></td>
+</tr>
+<tr class="even">
+<td><code>sans-serif</code></td>
+<td><span style="font-family: sans-serif">这是无衬线字体 This is sans
+serif font</span></td>
+</tr>
+<tr class="odd">
+<td><code>monospace</code></td>
+<td><span style="font-family: monospace">这是等宽字体 This is monospace
+font</span></td>
+</tr>
+<tr class="even">
+<td><code>cursive</code></td>
+<td><span style="font-family: cursive">这是手写字体 This is cursive
+font</span></td>
+</tr>
+<tr class="odd">
+<td><code>fantasy</code></td>
+<td><span style="font-family: fantasy">这是装饰字体 This is fantasy
+font</span></td>
+</tr>
+</tbody>
+</table>
+<p>虽然使用默认的字体属性可能会造成跨平台字体表现不一致的情况，但对于大多数功能性网页来说不必过分担心，因为在主流平台中字体经过了严格设计，规范性和易用性是完全经得住考验的。</p>
+<h3 id="字体栈">字体栈</h3>
+<p>使用 <code>font-family</code> 除了上述 5
+种默认字体名称外，可以指定具体的字体名称，例如 <code>Times New
+Roman</code>。当指定的字体不可用（系统未安装该字体或远程字体加载失败）时则会使用浏览器默认字体。</p>
+<p>为了防止字体退化为默认字体，可以为 <code>font-family</code>
+指定多个字体，例如 <code>font-family: "Times New Roman", Times,
+serif</code>。浏览器会按照属性列出的先后顺序查找和使用字体，直到找到第一个可用的字体，当字体都不可用时则使用浏览器默认的字体。</p>
+<p>在字体栈的最后使用一个默认字体名称是不错的选择，因为即使浏览器没有找到合适的字体也会使用一个还算合适的字体。否则，当所有字体都不可用时，为了强调这一点，相应文字将被赋予浏览器的默认<strong>衬线字体</strong>
+- 通常是 Time New Roman - 这对于 sans-serif 字体是不利的！</p>
+<h3 id="网络安全字体">网络安全字体</h3>
+<p>前文提到，在不同的浏览器和操作系统中网页的默认字体会有所不同。当对页面有跨平台时保持字体统一的要求时，可以使用“网络安全字体“，安全字体即挑选出在主流平台都默认安装的字体，来保证跨平台时字体的可用性。</p>
+<p>以下是拉丁文字体的网络安全字体：</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 13%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>字体名称</th>
+<th>泛型</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Arial</td>
+<td>sans-serif</td>
+<td>使用 Helvetica 作为 Arial 首选替代</td>
+</tr>
+<tr class="even">
+<td>Georgia</td>
+<td>serif</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Times New Roman</td>
+<td>serif</td>
+<td>使用 Times 作为 Times New Roman 的首选替代方案</td>
+</tr>
+<tr class="even">
+<td>Courier New</td>
+<td>monospace</td>
+<td>使用 Courier 作为 Courier New 的首选替代方案</td>
+</tr>
+<tr class="odd">
+<td>Trebuchet MS</td>
+<td>sans-serif</td>
+<td>应该小心使用这种字体——它在移动操作系统上并不广泛</td>
+</tr>
+<tr class="even">
+<td>Verdana</td>
+<td>sans-serif</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>其中“首选替代方案”往往是因为同一款字体的不同版本在新旧操作系统上安装情况或名称不一致，使用字体栈包含各种可能的名称来保证可用性。</p>
+<h2 id="css-自定义字体">CSS 自定义字体</h2>
+<p>CSS3 引入 <span class="citation"
+data-cites="font-face">@font-face</span>
+规则，可以从远程服务器加载字体文件或使用户本安装的字体。这一特性使得网页设计不必局限于默认字体或“网络安全字体”，使得网页设计更具个性和品牌表达力。</p>
+<p>一个使用 <span class="citation"
+data-cites="font-face">@font-face</span> 的加载远程字体的典型例子：</p>
+<p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="LYJjwbG" data-user="Hozen" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+<span>See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/Hozen/pen/LYJjwbG">
+Untitled</a> by Hozen (<a target="_blank" rel="noopener" href="https://codepen.io/Hozen"><span
+class="citation" data-cites="Hozen">@Hozen</span></a>) on
+<a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
+<p><strong>但是，请注意</strong>！上面例子中的文字将以“Times New
+Roman”字体展示，这是因为 <span class="citation"
+data-cites="font-face">@font-face</span>
+的远程字体文件加载同样需要遵循<strong>同源策略</strong>，我们在
+codepen.io 加载 github.io
+的跨域资源将加载失败。还记得前文提到，当字体栈不可用时会使用浏览器的默认衬线字体作为提醒吗？这就是为什么上例的文字最终会以“Times
+New Roman”字体展示。</p>
+<p><span class="citation" data-cites="font-face">@font-face</span>
+常用的属性有：</p>
+<ul>
+<li><p><code>font-family</code>，指定字体的名字，将会被用于 font 或
+font-family 属性</p></li>
+<li><p><code>src</code>，远程字体文件位置的 URL
+或者用户计算机上的字体名称，可以使用 <code>local</code>
+语法通过名称指定用户的本地计算机上的字体 ( i.e. <code>src:
+local('Arial');</code>
+)。如果找不到该字体，将会尝试其他来源，直到找到它。</p></li>
+<li><p><code>font-weight</code>，定义该字体的字重，如果所需字体符合描述，则采用本
+font-face 所定义的字体。</p></li>
+<li><p><code>font-style</code>，定义该字体的样式。如果所需字体符合描述，则采用本
+font-face 所定义的字体。</p></li>
+</ul>
+<p>除此之外还有 <code>font-variant</code>，<code>font-stretch</code> 和
+<code>unicode-range</code> 等属性，可以参照 <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@font-face"><span
+class="citation" data-cites="font-face">@font-face</span> -
+CSS：层叠样式表 | MDN</a>。</p>
+<h3 id="font-face-定义多字重字体"><span class="citation"
+data-cites="font-face">@font-face</span> 定义多字重字体</h3>
+<p>上文提到，虽然浏览器可以对常规字体进行强制加粗但视觉效果并不理想，但不同的样式又对应不同的字体文件，如何使用
+<span class="citation" data-cites="font-face">@font-face</span>
+加载不同样式的子字体文件呢？答案是通过定义不同的字体样式来加载不用的字体文件，例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">      <span class="hljs-keyword">@font-face</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&#x27;Source Han Serif&#x27;</span>;</span><br><span class="language-css">        <span class="hljs-attribute">src</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">/font/SourceHanSerifCN/regular.ttf</span>);</span><br><span class="language-css">      &#125;</span><br><span class="language-css">      <span class="hljs-keyword">@font-face</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&#x27;Source Han Serif&#x27;</span>; <span class="hljs-comment">/* 同一个字体名称 */</span></span><br><span class="language-css">        <span class="hljs-attribute">src</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">/font/SourceHanSerifCN/bold.ttf</span>); <span class="hljs-comment">/* 但不同的字体文件 */</span></span><br><span class="language-css">        <span class="hljs-attribute">font-weight</span>: bold; <span class="hljs-comment">/* 根据字重应用不同的文件 */</span></span><br><span class="language-css">      &#125;</span><br><span class="language-css"></span><br><span class="language-css">      <span class="hljs-selector-class">.regular</span>&#123;</span><br><span class="language-css">        <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&quot;Source Han Serif&quot;</span>;</span><br><span class="language-css">        <span class="hljs-attribute">font-size</span>: <span class="hljs-number">30px</span>;</span><br><span class="language-css">        <span class="hljs-comment">/* 常规字体，应用 regular.ttf 字体文件 */</span></span><br><span class="language-css">      &#125;</span><br><span class="language-css">      <span class="hljs-selector-class">.bold</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&quot;Source Han Serif&quot;</span>;</span><br><span class="language-css">        <span class="hljs-attribute">font-size</span>: <span class="hljs-number">30px</span>;</span><br><span class="language-css">        <span class="hljs-attribute">font-weight</span>: bold;</span><br><span class="language-css">        <span class="hljs-comment">/* 加粗字体，应用 bold.ttf 字体文件 */</span></span><br><span class="language-css">      &#125;</span><br><span class="language-css">    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;regular&quot;</span>&gt;</span>海内存知己，天涯若比邻。<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;bold&quot;</span>&gt;</span>海内存知己，天涯若比邻。<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+显示效果如下：
+<style>
+      @font-face {
+        font-family: 'Source Han Serif';
+        src: url(/font/SourceHanSerifCN/regular.ttf);
+      }
+      @font-face {
+        font-family: 'Source Han Serif';
+        src: url(/font/SourceHanSerifCN/bold.ttf); font-weight: bold;
+      }
+
+      #id64-regular{
+        font-family: "Source Han Serif";
+        font-size: 30px;
+        line-height: 40px;
+      }
+      #id64-bold {
+        font-family: "Source Han Serif";
+        font-size: 30px;
+        font-weight: bold;
+        line-height: 40px;
+      }
+</style>
+<div style="padding: 10px">
+<div id="id64-regular">
+海内存知己，天涯若比邻。
+</div>
+<div id="id64-bold">
+海内存知己，天涯若比邻。
+</div>
+</div>
+<p>类似地，还可以为斜体等字体效果单独指定字体文件。</p>
+<p>如果你使用的字体有可变字体版本，那么只需要加载一个字体文件就可以把全部样式搞定了！</p>
+<h2 id="字体提取压缩">字体提取压缩</h2>
+<p>对于拉丁文语言来说，一个完整的字体文件通常不过几百
+KB，因为只需要很少的一些字符就能完整地表达所有单词和句子。但对于汉字这种象形文字来说，每一个字符都需要单独的设计，因此完整的汉字字体包往往达到数十兆大小。这对于网络页面加载来说是十分不利的。</p>
+<p>因此，在页面设计中如无必要往往不会对汉字正文字体使用自定义的远程字体。但在有些时候，我们为了页面设计的美观和各种文本的区分，可能需要对主页标题或重要信息使用特定设计的字体。在这种情况下，使用特殊字体的字符数往往很少，如果因此就引入一个数十兆的字体文件显然得不偿失。</p>
+<p>应对这种情况，使用切图可能是一种解决方案。但切图不利于
+SEO，且当字体内容频繁更新时需要依赖设计人员，十分不便。此时，可以考虑使用自动化的脚本将页面中使用到特殊字体的字符进行提取，然后重新压缩成一个只包含特定字符的字体包来取代完整的字体包，这将大大提高页面加载速度。</p>
+<p>页面字体提取和压缩已经有一些第三方库可用，例如 <a
+target="_blank" rel="noopener" href="https://github.com/ghost-axe/font-snake">font-snake</a>、<a
+target="_blank" rel="noopener" href="https://github.com/ecomfe/fontmin">fontmin</a> 和 <a
+target="_blank" rel="noopener" href="https://github.com/aui/font-spider">font-spider</a>
+等。除此之外还有专门针对字体设计的 <a
+target="_blank" rel="noopener" href="https://github.com/opentypejs/opentype.js">opentype.js</a>，该库保持积极的更新和活跃的用户群体，我的主页主题
+<a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">hexo-theme-tranquility</a>
+便使用了该库进行字体压缩。但需要注意，这些库目前都不支持可变字体的提取，所以当你进行字体提取时仍然可能需要加载多字重子字体文件。</p>
+<hr />
+<p><em>参考资料</em></p>
+<div id="ref1">
+
+</div>
+<p>[1] PostScript[EB/OL]//Wikipedia. (2023-02-06)[2023-03-08].
+https://en.wikipedia.org/w/index.php?title=PostScript&amp;oldid=1137755001.</p>
+<div id="ref2">
+
+</div>
+<p>[2] TrueType[EB/OL]//Wikipedia. (2023-02-14)[2023-03-08].
+https://en.wikipedia.org/w/index.php?title=TrueType&amp;oldid=1139357629.</p>
+<div id="ref3">
+
+</div>
+<p>[3] OpenType[EB/OL]//Wikipedia. (2023-02-12)[2023-03-08].
+https://en.wikipedia.org/w/index.php?title=OpenType&amp;oldid=1138857238.</p>
+<div id="ref4">
+
+</div>
+<p>[4] PETERCON. Recommendations for OpenType Fonts (OpenType 1.9) -
+Typography[EB/OL]. (2021-12-09)[2023-03-08].
+https://learn.microsoft.com/en-us/typography/opentype/spec/recom.</p>
+<div id="ref5">
+
+</div>
+<p>[5] 可变字体[EB/OL]//维基百科，自由的百科全书.
+(2021-08-19)[2023-03-08].
+https://zh.wikipedia.org/w/index.php?title=%E5%8F%AF%E5%8F%98%E5%AD%97%E4%BD%93&amp;oldid=67230919.</p>
+<p>等</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/61/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      Hexo 主题「致远」发布
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/CSS/" class="post-tag">#CSS</a>
+  
+    <a href="/tags/%E5%AD%97%E4%BD%93/" class="post-tag">#字体</a>
+  
+    <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#性能优化</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/27/" title="CSS 实现水平垂直居中布局" rel="bookmark">CSS 实现水平垂直居中布局</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/28/" title="CSS3 制作常见几何图形" rel="bookmark">CSS3 制作常见几何图形</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://marie0909.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>
