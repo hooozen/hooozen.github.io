@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        大学毕业 | hozen.site
+        个人账号和应用 | hozen.site
       
     </title>
     <meta name="description" content="开发者，数理知识和文学创作"/>
@@ -76,34 +76,145 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">大学毕业</div>
+        <div class="post-title">个人账号和应用</div>
         <div class="post-info">
           
-  
 
-
-          <span class="post-date">2018-06-21</span>
+          <span class="post-date">2023-03-12</span>
         </div>
       </div>
       <div class="post-content__body">
         
-          <div class="post-gallery">
-            
-          </div>
         
-        <span id="more"></span>
-<figure>
-<img src="/assets/images/58-1.jpg" alt="长安" />
-<figcaption aria-hidden="true">长安</figcaption>
-</figure>
-<figure>
-<img src="/assets/images/58-2.jpg" alt="软件一班" />
-<figcaption aria-hidden="true">软件一班</figcaption>
-</figure>
-<blockquote>
-<p>清风拂渭水，明月满长安。</p>
-</blockquote>
+<style>
+  .main {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-end;
+    flex-wrap: wrap;
+    margin: 0 30px;
+  }
 
+  .item:hover {
+    transform: translateY(-3px);
+  }
+
+  .item:hover .ecode {
+    transform: scale(1);
+    top: -200px;
+    visibility: visible;
+  }
+
+  .item {
+    position: relative;
+    text-decoration: none !important;
+    cursor: pointer;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 200ms ease-out;
+  }
+
+  .ecode {
+    transition: all 200ms ease-out;
+    transform: scale(0.1);
+    visibility: hidden;
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    top: -50px;
+    z-index: -1;
+  }
+
+  .ecode img {
+    height: 200px;
+    width: 200px;
+  }
+
+  .face {
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    overflow: hidden;
+  }
+
+  .title {
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  .plat-logo {
+    height: 20px;
+    width: 20px;
+    background: center center / contain no-repeat;
+    margin-right: 4px;
+  }
+
+  .logo-wx {
+    background-image: url(/assets/link/logo-wx.svg);
+  }
+
+  .logo-wxmp {
+    background-image: url(/assets/link/logo-wxmp.svg);
+  }
+
+  .logo-zh {
+    background-image: url(/assets/link/logo-zh.svg);
+    width: 40px
+  }
+
+  .face-img {
+    display: block;
+    width: 80px;
+    height: 80px;
+  }
+
+  .user-id {}
+</style>
+
+<div class="main">
+  <div class="item">
+    <div class="ecode"><img src="/assets/link/ecode-wx.jpg" /></div>
+    <div class="face">
+      <img class="face-img" src="/assets/link/wx.jpg" />
+    </div>
+    <div class="title">
+      <div class="plat-logo logo-wx"></div>
+      <div class="user-id">
+        谁在胡言乱语
+      </div>
+    </div>
+  </div>
+  <div class="item">
+    <div class="ecode"><img src="/assets/link/ecode-mp.jpg" /></div>
+    <div class="face">
+      <img class="face-img" src="/assets/link/wxmp.jpg" />
+    </div>
+    <div class="title">
+      <div class="plat-logo logo-wxmp"></div>
+      <div class="user-id">
+        篮球裁判手势挑战
+      </div>
+    </div>
+  </div>
+  <a target="_blank" rel="noopener" href="https://www.zhihu.com/people/da-bo-shu-dan-jian-zhuan-zu" class="item">
+    <div class="face">
+      <img class="face-img" src="/assets/link/wx.jpg" />
+    </div>
+    <div class="title">
+      <div class="plat-logo logo-zh"></div>
+      <div class="user-id">
+        Mundooo
+      </div>
+    </div>
+  </a>
+
+</div>
       </div>
     </div>
   </article>
@@ -138,48 +249,21 @@
     
     <div class="post-nav">
   
-    <a class="post-nav-item-left" href="/archives/23/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>Git 子模块 submodule 的使用</div>
-    </a>
+    <div class="post-nav-item-left"></div>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/archives/22/">
-      <div class="text-align">
-        <span class="text-small">下一篇</span>
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             transform="scale(-1,-1)"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
-        </svg>
-      </div>
-      别君去兮何时还
-    </a>
+    <div class="post-nav-item-right"></div>
   
 </div>
 
     
       <div class="related-post">
   <div class="related__head">
-  
-
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/59/" title="「篮球裁判手势挑战」小程序发布" rel="bookmark">「篮球裁判手势挑战」小程序发布</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/60/" title="Wallpaper Enginner 创意工坊更新" rel="bookmark">Wallpaper Enginner 创意工坊更新</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/11/" title="排序算法（一）——插入排序（直接插入+希尔排序）" rel="bookmark">排序算法（一）——插入排序（直接插入+希尔排序）</a></div></div></div>
     
   </div>
 </div>
