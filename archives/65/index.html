@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        记住两个函数轻松处理 Go 语言 OJ 输入 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者，数理知识和文学创作"/>
+    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href="/" class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">记住两个函数轻松处理 Go 语言 OJ 输入</div>
+        <div class="post-info">
+          
+  
+    <a href="/tags/Go/" class="post-tag">#Go</a>
+  
+    <a href="/tags/OJ/" class="post-tag">#OJ</a>
+  
+    <a href="/tags/stdio/" class="post-tag">#stdio</a>
+  
+
+
+          <span class="post-date">2023-03-29</span>
+        </div>
+      </div>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>处理操作系统的标准输入输出在 Web 项目开发中并不常用，像 <a
+target="_blank" rel="noopener" href="https://leetcode.cn">LeetCode</a>
+一些现代刷题平台也取消了输入输出的处理，让用户专注于算法的实现。但对于传统的
+OJ
+平台和算法竞赛，往往需要用户从标准输入中读取指定格式的数据，然后使用标准输出返回答案。如果平时没有经验的话，在比赛或笔试时可能会浪费不必要的时间。本文主要介绍
+Go 语言的 <code>fmt.Scan</code> 和 <code>Scanner.Scan</code>
+函数来应对常见的 OJ 输入。</p>
+<span id="more"></span>
+<h2 id="两个函数">两个函数</h2>
+<p>先考虑常规的 OJ
+数据格式：使用空格分隔数据元素，使用换行符分隔不同组数据。</p>
+<h3 id="fmt.scan"><a
+target="_blank" rel="noopener" href="https://pkg.go.dev/fmt@go1.20.2#Scan"><code>fmt.Scan</code></a></h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Scan</span><span class="hljs-params">(a ...any)</span></span> (n <span class="hljs-type">int</span>, err <span class="hljs-type">error</span>)<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Scan scans text read from standard input, storing successive
+space-separated values into successive arguments. Newlines count as
+space. It returns the number of items successfully scanned. If that is
+less than the number of arguments, err will report why.</p>
+</blockquote>
+<p><code>fmt.Scan</code>
+方法会从标准输入中<strong>连续读入</strong>由空格（<strong>或换行</strong>）分隔的变量到传入的参数。当读入的变量个数小于传入的参数个数时，<code>err</code>
+会报告错误。也就是说，<code>Scan</code>
+方法会一直读取变量直至读取完毕所有输入。</p>
+<p>根据 <code>fmt.Scan</code>
+方法的这个特性，可以方便地处理空格对数据的划分，但由于换行也视作空格，导致无法区分数据组。因此使用该方法读入数据时，我们需要<strong>提前知道每组数据的长度</strong>，根据这个长度来对数据组进行划分即可。具体见下面两个例子。</p>
+<h4 id="例-1.-两数之和">例 1. <a
+target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5657/A">两数之和</a></h4>
+<figure class="highlight bash"><figcaption><span>输入描述</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">输入包括两个正整数a,b(1 &lt;= a, b &lt;= 1000),输入数据包括多组。<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>输出描述</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">输出a+b的结果。<br></code></pre></td></tr></table></figure>
+<p><strong>示例</strong></p>
+<figure class="highlight bash"><figcaption><span>输入</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">1 5<br>10 20<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>输出</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">6<br>30<br></code></pre></td></tr></table></figure>
+<p><strong>解答</strong></p>
+<p>由于每个用例固定有两个数据，只需要两个两个输入读入，然后计算两数之和即可：</p>
+<figure class="highlight go"><figcaption><span>两数之和</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> a, b <span class="hljs-type">int</span><br>    <span class="hljs-keyword">for</span> &#123;<br>        _, err := fmt.Scan(&amp;a, &amp;b)  <span class="hljs-comment">// 两个两个变量读入</span><br>        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123; <span class="hljs-keyword">break</span> &#125;  <span class="hljs-comment">// 读到末尾结束循环</span><br>        fmt.Println(a + b)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="例-2.-数列之和">例 2. <a
+target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5657/F">数列之和</a></h4>
+<figure class="highlight bash"><figcaption><span>输入描述</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">输入数据有多组, 每行表示一组输入数据。<br>每行的第一个整数为整数的个数n(1 &lt;= n &lt;= 100)。<br>接下来n个正整数, 即需要求和的每个正整数。<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>输出描述</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">每组数据输出求和的结果<br></code></pre></td></tr></table></figure>
+<p><strong>示例</strong></p>
+<figure class="highlight bash"><figcaption><span>输入</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">4 1 2 3 4<br>5 1 2 3 4 5<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>输出</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">10<br>15<br></code></pre></td></tr></table></figure>
+<p><strong>解答</strong></p>
+<p>这一题输入虽然每组的变量数不固定，但通过读入的第一个变量可以预先知道每组的变量数，因此通过循环控制即可对数据正确分组。</p>
+<figure class="highlight go"><figcaption><span>数列之和</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;fmt&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">var</span> n <span class="hljs-type">int</span><br>    <span class="hljs-keyword">for</span> &#123;<br>        _, err := fmt.Scan(&amp;n) <span class="hljs-comment">// 获取该组数据长度</span><br>        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123; <span class="hljs-keyword">break</span> &#125;<br>        <br>        sum := <span class="hljs-number">0</span><br>        <span class="hljs-comment">// 通过循环控制每一组的数据读入</span><br>        <span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; n; i++ &#123;<br>            <span class="hljs-keyword">var</span> v <span class="hljs-type">int</span><br>            fmt.Scan(&amp;v)<br>            sum += v<br>        &#125;<br>        <br>        fmt.Println(sum)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="fmt.scan-小结"><code>fmt.Scan</code> 小结</h4>
+<p><code>fmt.Scan</code>
+方法简单易用，无需提前知道用例的组数，可以一直从标准输入读取由空格以及换行分隔的数据直至结束。但需要能够（从题目规定或输入变量）提前获知<strong>每组数组的长度</strong>。因此当每组数据长度无法提前获知时，该方法使用起来就不方便了。</p>
+<h3 id="bufio.scanner"><a
+target="_blank" rel="noopener" href="https://pkg.go.dev/bufio@go1.20.2#Scanner"><code>bufio.Scanner</code></a></h3>
+<p>首先查看 <a
+target="_blank" rel="noopener" href="https://pkg.go.dev/bufio@go1.20.2#Scanner"><code>Scanner</code></a>
+的定义：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> Scanner <span class="hljs-keyword">struct</span> &#123;<br>    <span class="hljs-comment">// contains filtered or unexported fields</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Scanner provides a convenient interface for reading data such as a
+file of newline-delimited lines of text. Successive calls to the Scan
+method will step through the 'tokens' of a file, skipping the bytes
+between the tokens. The specification of a token is defined by a split
+function of type SplitFunc; the default split function breaks the input
+into lines with line termination stripped. Split functions are defined
+in this package for scanning a file into lines, bytes, UTF-8-encoded
+runes, and space-delimited words. The client may instead provide a
+custom split function.</p>
+</blockquote>
+<p>简言之，Scanner 提供了<strong>每次读入一行输入</strong>的接口。</p>
+<p>然后查看 <code>Scanner</code> 的 <a
+target="_blank" rel="noopener" href="https://pkg.go.dev/bufio@go1.20.2#Scanner.Scan"><code>Scan</code></a>
+方法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Scanner)</span></span> Scan() <span class="hljs-type">bool</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Scan advances the Scanner to the next token, which will then be
+available through the Bytes or Text method. It returns false when the
+scan stops, either by reaching the end of the input or an error. After
+Scan returns false, the Err method will return any error that occurred
+during scanning, except that if it was io.EOF, Err will return nil. Scan
+panics if the split function returns too many empty tokens without
+advancing the input. This is a common error mode for scanners.</p>
+</blockquote>
+<p><code>Scanner</code> 的 <code>Scan</code> 方法（默认情况下）将
+<code>Scanner</code> 推进到下一行，读取的该行数据可以被 <a
+target="_blank" rel="noopener" href="https://pkg.go.dev/bufio@go1.20.2#Scanner.Text"><code>Text</code></a>
+方法使用。当扫描结束时，该方法返回 <code>false</code>。</p>
+<p>其中 <code>Text</code> 方法将读取的该行输入转换为字符串返回：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Scanner)</span></span> Text() <span class="hljs-type">string</span><br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>Text returns the most recent token generated by a call to Scan as a
+newly allocated string holding its bytes.</p>
+</blockquote>
+<p>因此通过使用 <code>bufio.Scanner</code>
+我们可以逐行读取输入为一个字符串变量，然后通过
+<code>strings.Split</code>
+方法将每行字符串转变为数组便成功读入了一组数据。</p>
+<p><code>bufio.Scanner</code>
+在具体使用中需要注意一些细节，包括传入标准输入，字符串分隔和类型转换等，具体见下例：</p>
+<h4 id="例-4.-数列求和">例 4. <a
+target="_blank" rel="noopener" href="https://ac.nowcoder.com/acm/contest/5657/G">数列求和</a></h4>
+<figure class="highlight bash"><figcaption><span>输入描述</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">输入数据有多组, 每行表示一组输入数据。<br><br>每行不定有n个整数，空格隔开。(1 &lt;= n &lt;= 100)。<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>输出描述</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">每组数据输出求和的结果<br></code></pre></td></tr></table></figure>
+<p><strong>示例</strong></p>
+<figure class="highlight bash"><figcaption><span>输入</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">1 2 3<br>4 5<br>0 0 0 0 0<br></code></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>输出</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">6<br>9<br>0<br></code></pre></td></tr></table></figure>
+<p><strong>解答</strong></p>
+<p>该题和例 3 是同一个问题，但缺少对每组数据个数的规定，因此无法使用
+<code>fmt.Scan</code> 方法读取，需要使用 <code>bufio.Scanner</code>
+逐行读取数据：</p>
+<figure class="highlight go"><figcaption><span>数列之和</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;fmt&quot;</span><br>    <span class="hljs-string">&quot;os&quot;</span><br>    <span class="hljs-string">&quot;bufio&quot;</span><br>    <span class="hljs-string">&quot;strings&quot;</span><br>    <span class="hljs-string">&quot;strconv&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    scanner := bufio.NewScanner(os.Stdin)<br>    <br>    <span class="hljs-keyword">for</span> scanner.Scan() &#123;<br>        nums := strings.Split(scanner.Text(), <span class="hljs-string">&quot; &quot;</span>)<br>        <br>        sum := <span class="hljs-number">0</span><br>        <span class="hljs-keyword">for</span> _, x := <span class="hljs-keyword">range</span> nums &#123;<br>            v, _ := strconv.Atoi(x)<br>            sum += v<br>        &#125;<br>        fmt.Println(sum)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>从上文以及例题中可以发现，<code>bufio.Scanner</code>
+的应用场景是可以完全覆盖 <code>fmt.Scan</code>
+的，但前者使用起来需要配合很多其他的库，比较繁琐。因此当每组用例的变量数是可知的情况下优先使用
+<code>fmt.Scan</code> 方法即可。当 <code>fmt.Scan</code>
+方法不适用时再考虑使用 <code>bufio.Scanner</code>。</p>
+<p>另外还有一点需要注意，<code>fmt.Scan</code>
+只处理空格分隔的变量，因此当输入格式由其他字符分隔变量时，则考虑使用
+<code>bufio.Scanner</code> 读入后再调用 <code>strings.Split</code>
+进行相应的分隔即可。</p>
+<p>读取 OJ
+常见输入的方法有很多，我查阅相关文章后发现上述两种方法最简单方便。如果有其他更好的方法请留言讨论。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/64/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      前端工程师需要知道的字体知识
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/Go/" class="post-tag">#Go</a>
+  
+    <a href="/tags/OJ/" class="post-tag">#OJ</a>
+  
+    <a href="/tags/stdio/" class="post-tag">#stdio</a>
+  
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+            </div>
+          
+            <div class="foot-line">
+              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link"
+                         height="20px"
+                         width="20px"
+                         src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link"
+                       height="20px"
+                       width="20px"
+                       src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link"
+                     height="20px"
+                     width="20px"
+                     src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
+            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
+            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
+            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>
