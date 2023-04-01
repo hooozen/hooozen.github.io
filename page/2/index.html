@@ -89,7 +89,7 @@
           <div class="cursor"></div>
         </div>
         <div class="normal-eqt">
-          <img alt="normal" width="300px" height="" src="/images/normal.svg" />
+          <img alt="normal" width="300px" height="" src="/images/normal.svg"/>
         </div>
         <canvas width="400" height="400" id="heart-curve"></canvas>
         <div class="motto">应无所住 而生其心</div>
@@ -110,19 +110,21 @@
          style="background-image: url(/assets/images/about.jpg)"></div>
     <div class="about-text">
       <div class="about-title">
-        <div class="matts">我</div>
+        
+          <div class="matts">我</div>
+        
       </div>
       <div class="about-detail">
         <div class="about-text-p">
           
             
               人类的八十亿分之一，宇宙的尘埃
-              <br />
+              <br/>
             
           
             
               匆忙也踟蹰，消沉也坚定。 爱，也冷漠
-              <br />
+              <br/>
             
           
             
@@ -131,41 +133,47 @@
           
             
               自省并实践，守温暖和正直，求理想与自由
-              <br />
+              <br/>
             
           
         </div>
       </div>
     </div>
   </div>
-  <div class="timeline">
-    <div class="timeline-head">
-      <div class="title">时间线</div>
-      <div class="radio-wrapper">
-        <div class="radio">
-          <input id="radio-article" type="checkbox" />
-          <label class="radio-skin--yellow" for="radio-article"></label>
+  
+    <div class="timeline">
+      <div class="timeline-head">
+        <div class="title">时间线</div>
+        <div class="radio-wrapper">
+          
+            <div class="radio">
+              <input id="radio-article" type="checkbox" />
+              <label class="radio-skin--article" for="radio-article"></label>
+            </div>
+          
+            <div class="radio">
+              <input id="radio-app" type="checkbox"  checked />
+              <label class="radio-skin--app" for="radio-app"></label>
+            </div>
+          
+            <div class="radio">
+              <input id="radio-event" type="checkbox" />
+              <label class="radio-skin--event" for="radio-event"></label>
+            </div>
+          
         </div>
-        <div class="radio">
-          <input id="radio-app" type="checkbox" checked />
-          <label class="radio-skin--green" for="radio-app"></label>
+      </div>
+      <div class="timeline-body">
+        <div class="timeline-item-first">
+          <div class="line-anchor line-anchor--now"></div>
         </div>
-        <div class="radio">
-          <input id="radio-event" type="checkbox" checked />
-          <label class="radio-skin--blue" for="radio-event"></label>
+        <div class="timeline-list" id="timeline-list"></div>
+        <div class="timeline-item-last">
+          <div class="line-anchor line-anchor--end"></div>
         </div>
       </div>
     </div>
-    <div class="timeline-body">
-      <div class="timeline-item-first">
-        <div class="line-anchor line-anchor--now"></div>
-      </div>
-      <div class="timeline-list" id="timeline-list"></div>
-      <div class="timeline-item-last">
-        <div class="line-anchor line-anchor--end"></div>
-      </div>
-    </div>
-  </div>
+  
 
     </div>
     <div class="foot">
@@ -408,52 +416,61 @@
 </script>
   
   
+    
   <script type="text/javascript">
-    const timelineData = [{"title":"前端工程师需要知道的字体知识","path":"archives/64/","type":"article","date":"2023-03-04"},{"title":"Hexo 主题「致远」发布","path":"archives/61/","type":"app","date":"2022-12-22"},{"title":"多少冬天","path":"archives/57/","type":"article","date":"2022-11-30"},{"title":"Wallpaper Enginner 创意工坊更新","path":"archives/60/","type":"app","date":"2022-10-26"},{"title":"JS探幽——移位运算符 <<，>> 和 >>> ","path":"archives/56/","type":"article","date":"2022-09-09"},{"title":"JS探幽——从数据类型到包装器对象","path":"archives/55/","type":"article","date":"2022-09-06"},{"title":"「篮球裁判手势挑战」小程序发布","path":"archives/59/","type":"app","date":"2022-09-01"},{"title":"一致最小方差无偏估计 UMVUE 的求法归纳","path":"archives/45/","type":"article","date":"2021-12-04"},{"title":"多 Git 仓库的 SSH-key 配置","path":"archives/43/","type":"article","date":"2021-08-02"},{"title":"熵与信息量","path":"archives/42/","type":"article","date":"2021-06-22"},{"title":"机器学习基础-“逻辑”回归(logistic regression)的数学原理","path":"archives/33/","type":"article","date":"2020-02-11"},{"title":"在 Windows 上真机调试 iPhone(iOS) Safari Web 页面","path":"archives/30/","type":"article","date":"2019-03-18"},{"title":"秋天的味道","path":"archives/26/","type":"article","date":"2018-09-23"},{"title":"Web 开发中如何终止一个 Http 请求","path":"archives/25/","type":"article","date":"2018-08-27"},{"title":"Git 子模块 submodule 的使用","path":"archives/23/","type":"article","date":"2018-07-15"},{"title":"大学毕业","path":"archives/58/","type":"event","date":"2018-06-21"}]
+    const timelineData = {"types":["article","app","event"],"posts":[{"title":"前端工程师需要知道的字体知识","path":"archives/64/","icon":"/images/icon/icon-article.svg","type":"article","date":"2023-03-04"},{"title":"Hexo 主题「致远」发布","path":"archives/61/","icon":"/images/icon/icon-app.svg","type":"app","date":"2022-12-22"},{"title":"多少冬天","path":"archives/57/","icon":"/images/icon/icon-article.svg","type":"article","date":"2022-11-30"},{"title":"Wallpaper Enginner 创意工坊更新","path":"archives/60/","icon":"/images/icon/icon-app.svg","type":"app","date":"2022-10-26"},{"title":"JS探幽——移位运算符 <<，>> 和 >>> ","path":"archives/56/","icon":"/images/icon/icon-article.svg","type":"article","date":"2022-09-09"},{"title":"JS探幽——从数据类型到包装器对象","path":"archives/55/","icon":"/images/icon/icon-article.svg","type":"article","date":"2022-09-06"},{"title":"「篮球裁判手势挑战」小程序发布","path":"archives/59/","icon":"/images/icon/icon-app.svg","type":"app","date":"2022-09-01"},{"title":"一致最小方差无偏估计 UMVUE 的求法归纳","path":"archives/45/","icon":"/images/icon/icon-article.svg","type":"article","date":"2021-12-04"},{"title":"多 Git 仓库的 SSH-key 配置","path":"archives/43/","icon":"/images/icon/icon-article.svg","type":"article","date":"2021-08-02"},{"title":"熵与信息量","path":"archives/42/","icon":"/images/icon/icon-article.svg","type":"article","date":"2021-06-22"},{"title":"机器学习基础-“逻辑”回归(logistic regression)的数学原理","path":"archives/33/","icon":"/images/icon/icon-article.svg","type":"article","date":"2020-02-11"},{"title":"在 Windows 上真机调试 iPhone(iOS) Safari Web 页面","path":"archives/30/","icon":"/images/icon/icon-article.svg","type":"article","date":"2019-03-18"},{"title":"秋天的味道","path":"archives/26/","icon":"/images/icon/icon-article.svg","type":"article","date":"2018-09-23"},{"title":"Web 开发中如何终止一个 Http 请求","path":"archives/25/","icon":"/images/icon/icon-article.svg","type":"article","date":"2018-08-27"},{"title":"Git 子模块 submodule 的使用","path":"archives/23/","icon":"/images/icon/icon-article.svg","type":"article","date":"2018-07-15"},{"title":"大学毕业","path":"archives/58/","icon":"/images/icon/icon-event.svg","type":"event","date":"2018-06-21"}]}
+    const {types, posts} = timelineData
     listEl = document.querySelector("#timeline-list");
-    radioApp = document.querySelector("#radio-app");
-    radioArticle = document.querySelector("#radio-article");
-    radioEvent = document.querySelector("#radio-event");
-    const visibleType = {
-      app: true,
-      article: false,
-      event: true
-    };
-    radioApp.addEventListener('change', e => updateList('app', e.target.checked));
-    radioArticle.addEventListener('change', e => updateList('article', e.target.checked));
-    radioEvent.addEventListener('change', e => updateList('event', e.target.checked));
+
+    elRefs = getElRefs(types)
+    bindListener(types, elRefs)
+
+    setTimeout(init.bind(this, types, elRefs))
+
+    function getElRefs(types) {
+      return types.map(type => document.querySelector(`#radio-${type}`))
+    }
+
+    function bindListener(names, els) {
+      names.map((name, i) => els[i].addEventListener('change', e => updateList(name, e.target.checked)))
+    }
 
     function updateList(type, value) {
-      listDom.filter(line => line.type === type)
+      listDom
+        .filter(line => line.type === type)
         .forEach(line => {
-          if (value) {
-            line.el.className = line.el.className
-              .replace(/--hidden$/, "");
-          } else
-            line.el.className += "--hidden";
+          line.el.className = line
+            .el
+            .className
+            .replace(
+              /(--hidden)?$/, value
+              ? ""
+              : "--hidden");
         });
     }
-    const listDom = timelineData.map(t => getLine(t));
+
+    const listDom = posts.map(t => getLine(t));
     listEl.append(...listDom.map(i => i.el));
-    updateList('article', false);
 
     function getLine(data) {
       const item = document.createElement("DIV");
-      item.className = `timeline-item-${data.type} timeline-item`;
+      item.className = `timeline-item-${data.type} timeline-item--hidden`;
       item.innerHTML = `
                           <div class="line-date">
                           <div class="line-date-tag">${data.date}</div></div>
                           <div class="line-anchor"></div>
                           <div class="line-title">
-                              <img class="text-icon" src="/images/icon/icon-${data.type}.svg"/><a class="timeline-post" href="${data.path}">${data.title}</a>
+                              <img class="text-icon" src="${data.icon}"/><a class="timeline-post" href="${data.path}">${data.title}</a>
                           </div>
                           `;
-      return {
-        el: item,
-        type: data.type,
-      };
+      return {el: item, type: data.type};
     };
+
+    function init(names, els) {
+      names.map((name, i) => updateList(name, els[i].checked))
+    }
   </script >
+
   
 
   </body>
