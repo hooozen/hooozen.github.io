@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        Git | hozen.site
+        读书 | hozen.site
       
     </title>
     <meta name="description" content="开发者，数理知识和文学创作"/>
@@ -46,7 +46,8 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/category.css" />
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
 
   <meta name="generator" content="Hexo 6.3.0"></head>
   <body>
@@ -72,83 +73,108 @@
     </div>
     <div class="body">
       
-  <div class="tag-page-title">#Git</div>
-  <div class="post-list">
-    
-      <div class="post-card">
-        <div class="post__head">
-          <a href="/archives/43/" class="post-title hover-line">多 Git 仓库的 SSH-key 配置</a>
-        </div>
-        <div class="post__body">
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">读书</div>
+        <div class="post-info">
           
-          <div class="post-excerpt"><p>本文介绍了在一个设备上配置多个 SSH-key 以用于不同的远程 Git
-仓库的方法.</p></div>
-        </div>
-        <div class="post__foot">
-          <div class="post-tags">
-            
-              <a href="/tags/Tools/" class="post-tag">#Tools</a>
-            
-              <a href="/tags/Git/" class="post-tag">#Git</a>
-            
-          </div>
+  
+    <a href="/tags/%E6%95%A3%E6%96%87/" class="post-tag">#散文</a>
+  
+    <a href="/tags/%E9%9A%8F%E7%AC%94/" class="post-tag">#随笔</a>
+  
+
+
+          <span class="post-date">2023-04-07</span>
         </div>
       </div>
-    
-      <div class="post-card">
-        <div class="post__head">
-          <a href="/archives/32/" class="post-title hover-line">编写一个自动推送 Git Page 的 nodejs 脚本</a>
-        </div>
-        <div class="post__body">
-          
-          <div class="post-excerpt"><h3 id="背景">背景</h3>
-<p>写了一个简单的个人主页，由于使用了一些 CSS3
-的属性，考虑到浏览器兼容性问题，就使用了 webpack 的一些 loader
-给这些属性加前缀。所以简单的静态单页面用了 webpack，又因为这个页面要放在
-Github Pages 上，每次打包后还得手动切换分支推送到 Github
-上，干脆趁这个机会写一个自动推送的脚本。</div>
-        </div>
-        <div class="post__foot">
-          <div class="post-tags">
-            
-              <a href="/tags/Git/" class="post-tag">#Git</a>
-            
-              <a href="/tags/Node-js/" class="post-tag">#Node.js</a>
-            
-              <a href="/tags/Github-page/" class="post-tag">#Github page</a>
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
             
           </div>
-        </div>
+        
+        <p>身边一些朋友开始读书，我总会半调侃地说，“你有烦恼了，有烦恼的人才会想读书”。读书不是一件轻松的事，甚至枯燥。生来爱读书的人少之又少，我不是。我认识的人里，没有缘由的爱读书的大概屈指可数。这是一种我未有却能感受到的天分。
+<span id="more"></span></p>
+<p>有人说，人到四十岁还不信命那么这个人悟性太差。我二十多岁的年龄便开始信命，确切的说是从不相信到接受。因为有些人是不关心命的，便谈不上信不信。信命不是迷信，想得总可得到才是迷信。夏天出生的虫子，不知冰是什么，这就是他的命。人生来便带着一些特质，这些特质是强求不来也舍弃不掉的。这是一个人的命。我能做的是找到这些特质，找到我的命。</p>
+<p>阿城说，每个人都会碰到绝境。我非常赞同，若用更技术性的语句来阐述便是，大概率每个人都会碰到绝境，至少每个人都无法避免地具有碰到绝境的可能。以我的观察，普通人往往在成家立业后才会碰到人生的绝境，大概便是四十岁前后。年轻的，活力的，激扬的，往往未曾感受到过绝境。每个人的绝境不尽相同，但对于没经历过绝境的人，有些事是不可说的。说了便是无趣。</p>
+<p>既如此，如何穿越绝境便是人生一个重要的课题。这个方法在心里，如何从心里找出这个方法？有很多途径，但都脱不了孤独。读书是其中之一。</p>
+
       </div>
+    </div>
+  </article>
+  <div class="post__foot">
     
-      <div class="post-card">
-        <div class="post__head">
-          <a href="/archives/23/" class="post-title hover-line">Git 子模块 submodule 的使用</a>
-        </div>
-        <div class="post__body">
-          
-          <div class="post-excerpt"><p>Git 子模块具有一定的应用场景。</p>
-<p>比如在一个项目 P 中，该项目被分为两部分，由 A 和 B
-两个团队并行开发。而 B
-团队开发的内容属于公共支持类的项目，不止会被该项目使用，其他项目也可能会使用。因此
-B 团队开发的内容不可能和团队 A
-共用一个仓库。因为这样的话别人拉取该公共内容时会连带拉取不需要的内容。而
-A 团队项目的开发又依赖于 B 团队所做的内容，并希望能随时获得团队 B
-得最新成果。</p>
-<p></div>
-        </div>
-        <div class="post__foot">
-          <div class="post-tags">
-            
-              <a href="/tags/Tools/" class="post-tag">#Tools</a>
-            
-              <a href="/tags/Git/" class="post-tag">#Git</a>
-            
-          </div>
-        </div>
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg"/>
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg"/>
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/65/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
       </div>
+      记住两个函数轻松处理 Go 语言 OJ 输入
+    </a>
+  
+</div>
+
     
+      <div class="related-post">
+  <div class="related__head">
+  
+    <a href="/tags/%E6%95%A3%E6%96%87/" class="post-tag">#散文</a>
+  
+    <a href="/tags/%E9%9A%8F%E7%AC%94/" class="post-tag">#随笔</a>
+  
+
+</div>
+  <div class="realated__body">
     
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/13/" title="我与明二" rel="bookmark">我与明二</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/22/" title="别君去兮何时还" rel="bookmark">别君去兮何时还</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/26/" title="秋天的味道" rel="bookmark">秋天的味道</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/18/" title="捕梦 - 尼尔·盖曼" rel="bookmark">捕梦 - 尼尔·盖曼</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/29/" title="日记-下雨天" rel="bookmark">日记-下雨天</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
   </div>
 
     </div>
@@ -262,6 +288,14 @@ A 团队项目的开发又依赖于 B 团队所做的内容，并希望能随时
       <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     
-    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
   </body>
 </html>
