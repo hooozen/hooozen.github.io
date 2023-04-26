@@ -134,6 +134,7 @@
 .timeline-head {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .timeline-head .title {
   font-size: 40px;
@@ -146,9 +147,9 @@
 }
 .radio {
   position: relative;
-  height: 20px;
   width: 20px;
-  margin: 10px;
+  margin: 0 10px;
+  height: 40px;
 }
 .radio>label {
   position: absolute;
@@ -157,24 +158,56 @@
   left: 0;
   bottom: 0;
   right: 0;
-  width: 20px;
-  height: 20px;
+  height: 100%;
+  margin: auto;
 }
 .radio>input {
+  position: absolute;
   opacity: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  margin: auto;
 }
 .radio-skin,
 .radio-skin--article,
 .radio-skin--app,
 .radio-skin--event {
-  border-radius: 50%;
-  box-sizing: border-box;
+  height: 100%;
+  width: 2px;
+  border-radius: 1px;
+  background: #ccc;
+  transition: all 0.4s ease;
 }
-.radio-skin--article {
-  border: 2px solid #ee936c;
+.radio-skin::after,
+.radio-skin--article::after,
+.radio-skin--app::after,
+.radio-skin--event::after {
+  transition: all 0.4s ease;
+  display: block;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #fafafa;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 22px;
+  box-shadow: 1px 0 5px rgba(0,0,0,0.2);
+}
+.radio-skin--article::after {
+  border-color: #ee936c;
 }
 #radio-article:checked+.radio-skin--article {
   background-color: #ee936c;
+}
+#radio-article:checked+.radio-skin--article::after {
+  background-color: #ee936c;
+  top: -2px;
 }
 .timeline-item-article .line-anchor::after,
 .timeline-item-article--hidden .line-anchor::after {
@@ -189,11 +222,15 @@
     font-weight: bold;
   }
   */
-.radio-skin--app {
-  border: 2px solid #60a465;
+.radio-skin--app::after {
+  border-color: #60a465;
 }
 #radio-app:checked+.radio-skin--app {
   background-color: #60a465;
+}
+#radio-app:checked+.radio-skin--app::after {
+  background-color: #60a465;
+  top: -2px;
 }
 .timeline-item-app .line-anchor::after,
 .timeline-item-app--hidden .line-anchor::after {
@@ -208,11 +245,15 @@
     font-weight: bold;
   }
   */
-.radio-skin--event {
-  border: 2px solid #568dc4;
+.radio-skin--event::after {
+  border-color: #568dc4;
 }
 #radio-event:checked+.radio-skin--event {
   background-color: #568dc4;
+}
+#radio-event:checked+.radio-skin--event::after {
+  background-color: #568dc4;
+  top: -2px;
 }
 .timeline-item-event .line-anchor::after,
 .timeline-item-event--hidden .line-anchor::after {
@@ -293,6 +334,7 @@
   font-size: 18px;
   overflow: hidden;
   transition: all 200ms ease-out;
+  transition-delay: 200ms;
   height: 80px;
 }
 .timeline-item-first,

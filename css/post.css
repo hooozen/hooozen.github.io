@@ -39,6 +39,77 @@
 .post-content__head {
   margin: 40px 0;
 }
+.post-content__body {
+  position: relative;
+}
+.post-content__body--toc {
+  max-width: 700px;
+}
+.toc-anchor {
+  text-align: right;
+  position: relative;
+}
+.post-toc,
+.post-toc--attached,
+.post-toc--bottom,
+.post-toc--attached--bottom {
+  width: 300px;
+  text-align: left;
+  margin: 0;
+  padding-left: 30px;
+  padding-top: 60px;
+  display: inline-block;
+  position: absolute;
+  text-align: left;
+  top: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  line-height: 1.25em;
+}
+.post-toc a,
+.post-toc--attached a,
+.post-toc--bottom a,
+.post-toc--attached--bottom a {
+  text-decoration: none;
+}
+.post-toc ol,
+.post-toc--attached ol,
+.post-toc--bottom ol,
+.post-toc--attached--bottom ol,
+.post-toc li,
+.post-toc--attached li,
+.post-toc--bottom li,
+.post-toc--attached--bottom li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.post-toc--attached,
+.post-toc--attached--attached,
+.post-toc--bottom--attached,
+.post-toc--attached--bottom--attached {
+  position: fixed;
+}
+.post-toc .toc-number,
+.post-toc--attached .toc-number,
+.post-toc--bottom .toc-number,
+.post-toc--attached--bottom .toc-number {
+  font-size: 80%;
+}
+.post-toc .toc-level-2,
+.post-toc--attached .toc-level-2,
+.post-toc--bottom .toc-level-2,
+.post-toc--attached--bottom .toc-level-2 {
+  font-size: 15px;
+  margin: 5px 0;
+}
+.post-toc .toc-level-3,
+.post-toc--attached .toc-level-3,
+.post-toc--bottom .toc-level-3,
+.post-toc--attached--bottom .toc-level-3 {
+  font-size: 14px;
+  padding-left: 16px;
+}
 .post__foot {
   max-width: 900px;
   margin: 100px auto;

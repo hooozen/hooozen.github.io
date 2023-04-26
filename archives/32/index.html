@@ -47,7 +47,7 @@
     
     
   <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 6.3.0"></head>
   <body>
@@ -91,7 +91,12 @@
           <span class="post-date">2020-02-03</span>
         </div>
       </div>
-      <div class="post-content__body">
+      <div id="postBody" class="post-content__body">
+        <div id="tocAnchor" class="toc-anchor">
+          <ol id="toc" class="post-toc">
+            
+          </ol>
+        </div>
         
           <div class="post-gallery">
             
@@ -257,7 +262,9 @@ debug 几遍才能确保命令的执行达到预期的效果。</p>
 </div>
 
     
-    <div id="gitalk-container"></div>
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -379,6 +386,8 @@ debug 几遍才能确保命令的执行达到预期的效果。</p>
   gitalk.render('gitalk-container')
 </script>
 
+  
+  
 
   </body>
 </html>

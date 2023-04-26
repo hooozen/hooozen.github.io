@@ -47,7 +47,7 @@
     
     
   <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
 
   <meta name="generator" content="Hexo 6.3.0"></head>
   <body>
@@ -89,7 +89,12 @@
           <span class="post-date">2018-11-10</span>
         </div>
       </div>
-      <div class="post-content__body">
+      <div id="postBody" class="post-content__body">
+        <div id="tocAnchor" class="toc-anchor">
+          <ol id="toc" class="post-toc">
+            
+          </ol>
+        </div>
         
           <div class="post-gallery">
             
@@ -277,13 +282,15 @@ Workers</a>。</p>
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/2/" title="IndexedDB 中文教程（2）基本使用" rel="bookmark">IndexedDB 中文教程（2）基本使用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/15/" title="requestAnimationFrame——HTML5动画利器" rel="bookmark">requestAnimationFrame——HTML5动画利器</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/14/" title="为DOM2级事件函数传参——bind的应用" rel="bookmark">为DOM2级事件函数传参——bind的应用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/12/" title="排序算法（二）——交换排序（冒泡排序+快速排序）" rel="bookmark">排序算法（二）——交换排序（冒泡排序+快速排序）</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/2/" title="IndexedDB 中文教程（2）基本使用" rel="bookmark">IndexedDB 中文教程（2）基本使用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/14/" title="为DOM2级事件函数传参——bind的应用" rel="bookmark">为DOM2级事件函数传参——bind的应用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/15/" title="requestAnimationFrame——HTML5动画利器" rel="bookmark">requestAnimationFrame——HTML5动画利器</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/12/" title="排序算法（二）——交换排序（冒泡排序+快速排序）" rel="bookmark">排序算法（二）——交换排序（冒泡排序+快速排序）</a></div></div></div>
     
   </div>
 </div>
 
     
-    <div id="gitalk-container"></div>
+    
+      <div id="gitalk-container"></div>
+    
   </div>
 
     </div>
@@ -405,6 +412,8 @@ Workers</a>。</p>
   gitalk.render('gitalk-container')
 </script>
 
+  
+  
 
   </body>
 </html>
