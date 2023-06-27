@@ -74,7 +74,7 @@
     <div class="body">
       
   <article class="post-content">
-    <div class="post-inner">
+    <div class="post-inner--toc">
       <div class="post-content__head">
         <div class="post-title">前端工程师需要知道的字体知识</div>
         <div class="post-info">
@@ -91,14 +91,16 @@
           <span class="post-date">2023-03-04</span>
         </div>
       </div>
-      <div id="postBody" class="post-content__body--toc">
-        <div id="tocAnchor" class="toc-anchor">
-          <ol id="toc" class="post-toc">
-            
-              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E5%9F%BA%E7%A1%80"><span class="toc-text">字体基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E6%A0%87%E5%87%86"><span class="toc-text">字体标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E6%96%87%E4%BB%B6"><span class="toc-text">字体文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E7%B1%BB%E5%9E%8B"><span class="toc-text">字体类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E5%AE%B6%E6%97%8F-font-family"><span class="toc-text">字体家族 Font Family</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E5%8F%98%E5%AD%97%E4%BD%93variable-font"><span class="toc-text">可变字体（Variable Font）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-%E5%B1%9E%E6%80%A7"><span class="toc-text">CSS 属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E5%AD%97%E4%BD%93%E5%90%8D%E7%A7%B0"><span class="toc-text">默认字体名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E6%A0%88"><span class="toc-text">字体栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%97%E4%BD%93"><span class="toc-text">网络安全字体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93"><span class="toc-text">CSS 自定义字体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#font-face-%E5%AE%9A%E4%B9%89%E5%A4%9A%E5%AD%97%E9%87%8D%E5%AD%97%E4%BD%93"><span class="toc-text">@font-face 定义多字重字体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E6%8F%90%E5%8F%96%E5%8E%8B%E7%BC%A9"><span class="toc-text">字体提取压缩</span></a></li></ol>
-            
-          </ol>
-        </div>
+      <aside class="toc-outer">
+        <ol class="post-toc">
+          
+            <div class="toc-title">目录</div>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E5%9F%BA%E7%A1%80"><span class="toc-text">字体基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E6%A0%87%E5%87%86"><span class="toc-text">字体标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E6%96%87%E4%BB%B6"><span class="toc-text">字体文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E7%B1%BB%E5%9E%8B"><span class="toc-text">字体类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E5%AE%B6%E6%97%8F-font-family"><span class="toc-text">字体家族 Font Family</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E5%8F%98%E5%AD%97%E4%BD%93variable-font"><span class="toc-text">可变字体（Variable Font）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-%E5%B1%9E%E6%80%A7"><span class="toc-text">CSS 属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E5%AD%97%E4%BD%93%E5%90%8D%E7%A7%B0"><span class="toc-text">默认字体名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E6%A0%88"><span class="toc-text">字体栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%97%E4%BD%93"><span class="toc-text">网络安全字体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93"><span class="toc-text">CSS 自定义字体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#font-face-%E5%AE%9A%E4%B9%89%E5%A4%9A%E5%AD%97%E9%87%8D%E5%AD%97%E4%BD%93"><span class="toc-text">@font-face 定义多字重字体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E4%BD%93%E6%8F%90%E5%8F%96%E5%8E%8B%E7%BC%A9"><span class="toc-text">字体提取压缩</span></a></li></ol>
+            <a href="#" class="toc-top">回到顶部</a>
+          
+        </ol>
+      </aside>
+      <div class="post-content__body">
         
           <div class="post-gallery">
             
@@ -410,6 +412,7 @@ https://zh.wikipedia.org/w/index.php?title=%E5%8F%AF%E5%8F%98%E5%AD%97%E4%BD%93&
 <p>等</p>
 
       </div>
+
     </div>
   </article>
   <div class="post__foot">
@@ -490,7 +493,7 @@ https://zh.wikipedia.org/w/index.php?title=%E5%8F%AF%E5%8F%98%E5%AD%97%E4%BD%93&
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/27/" title="CSS 实现水平垂直居中布局" rel="bookmark">CSS 实现水平垂直居中布局</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/28/" title="CSS3 制作常见几何图形" rel="bookmark">CSS3 制作常见几何图形</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/12/" title="排序算法（二）——交换排序（冒泡排序+快速排序）" rel="bookmark">排序算法（二）——交换排序（冒泡排序+快速排序）</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/27/" title="CSS 实现水平垂直居中布局" rel="bookmark">CSS 实现水平垂直居中布局</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/28/" title="CSS3 制作常见几何图形" rel="bookmark">CSS3 制作常见几何图形</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
     
   </div>
 </div>
@@ -620,9 +623,6 @@ https://zh.wikipedia.org/w/index.php?title=%E5%8F%AF%E5%8F%98%E5%AD%97%E4%BD%93&
   gitalk.render('gitalk-container')
 </script>
 
-  
-  
-    <script type="text/javascript" src=/js/toc.js></script>
   
 
   </body>

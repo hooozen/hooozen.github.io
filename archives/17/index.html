@@ -91,12 +91,12 @@
           <span class="post-date">2018-04-20</span>
         </div>
       </div>
-      <div id="postBody" class="post-content__body">
-        <div id="tocAnchor" class="toc-anchor">
-          <ol id="toc" class="post-toc">
-            
-          </ol>
-        </div>
+      <aside class="toc-outer">
+        <ol class="post-toc">
+          
+        </ol>
+      </aside>
+      <div class="post-content__body">
         
           <div class="post-gallery">
             
@@ -124,6 +124,7 @@
 <p>在大多数情况下实现单例模式时很简单的。尤其是使用了模块化时，只需使用一个变量将第一次实例化的对象保存起来，再次调用直接返回即可。</p>
 
       </div>
+
     </div>
   </article>
   <div class="post__foot">
@@ -204,7 +205,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/55/" title="JS探幽——从数据类型到包装器对象" rel="bookmark">JS探幽——从数据类型到包装器对象</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/56/" title="JS探幽——移位运算符 <<，>> 和 >>> " rel="bookmark">JS探幽——移位运算符 <<，>> 和 >>> </a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/12/" title="排序算法（二）——交换排序（冒泡排序+快速排序）" rel="bookmark">排序算法（二）——交换排序（冒泡排序+快速排序）</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/55/" title="JS探幽——从数据类型到包装器对象" rel="bookmark">JS探幽——从数据类型到包装器对象</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/56/" title="JS探幽——移位运算符 <<，>> 和 >>> " rel="bookmark">JS探幽——移位运算符 <<，>> 和 >>> </a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
     
   </div>
 </div>
@@ -334,7 +335,6 @@
   gitalk.render('gitalk-container')
 </script>
 
-  
   
 
   </body>

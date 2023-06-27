@@ -89,12 +89,12 @@
           <span class="post-date">2019-01-16</span>
         </div>
       </div>
-      <div id="postBody" class="post-content__body">
-        <div id="tocAnchor" class="toc-anchor">
-          <ol id="toc" class="post-toc">
-            
-          </ol>
-        </div>
+      <aside class="toc-outer">
+        <ol class="post-toc">
+          
+        </ol>
+      </aside>
+      <div class="post-content__body">
         
           <div class="post-gallery">
             
@@ -144,6 +144,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs nginx-config">...<br><br>location / &#123;<br>    root   html;<br>    index  index.html index.htm;<br>&#125;<br><br>location /project1 &#123;<br>    root html;<br>    try_files $uri $uri/ /project1/index.html;<br>    index index.html index.htm;<br>&#125;<br><br>location /project2 &#123;<br>    root ./;<br>    try_files $uri $uri/ /project2/index.html;<br>    index index.html index.htm;<br>&#125;<br><br>...<br></code></pre></td></tr></table></figure>
 
       </div>
+
     </div>
   </article>
   <div class="post__foot">
@@ -222,7 +223,7 @@
 </div>
   <div class="realated__body">
     
-      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/8/" title="谨以此文祭奠我的前博客" rel="bookmark">谨以此文祭奠我的前博客</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/9/" title="为 CentOS 添加回收站功能" rel="bookmark">为 CentOS 添加回收站功能</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/12/" title="排序算法（二）——交换排序（冒泡排序+快速排序）" rel="bookmark">排序算法（二）——交换排序（冒泡排序+快速排序）</a></div></div></div>
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/9/" title="为 CentOS 添加回收站功能" rel="bookmark">为 CentOS 添加回收站功能</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/8/" title="谨以此文祭奠我的前博客" rel="bookmark">谨以此文祭奠我的前博客</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/12/" title="排序算法（二）——交换排序（冒泡排序+快速排序）" rel="bookmark">排序算法（二）——交换排序（冒泡排序+快速排序）</a></div></div></div>
     
   </div>
 </div>
@@ -352,7 +353,6 @@
   gitalk.render('gitalk-container')
 </script>
 
-  
   
 
   </body>
