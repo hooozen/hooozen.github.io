@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8"/>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+    <title>
+      
+        Web性能优化——网络篇 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/regular.ttf);
+        font-weight: regular;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css" />
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">Web性能优化——网络篇</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#性能优化</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="post-tag">#计算机网络</a>
+
+
+          <span class="post-date">2023-07-08</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#web-%E7%BD%91%E7%BB%9C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="post-toc-text">1. Web 网络性能分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BF%A1%E5%8F%B7%E4%BC%A0%E8%BE%93%E6%97%B6%E5%BB%B6"><span class="post-toc-text">1.1. 信号传输时延</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE%E7%9A%84%E6%8F%A1%E6%89%8B%E6%9C%BA%E5%88%B6"><span class="post-toc-text">1.2. 传输协议的握手机制</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%BD%91%E7%BB%9C%E8%B5%84%E6%BA%90%E8%AF%B7%E6%B1%82%E7%9A%84%E4%B8%B2%E8%A1%8C"><span class="post-toc-text">1.3. 网络资源请求的串行</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%A7%BB%E5%8A%A8%E7%BD%91%E7%BB%9C%E7%9A%84%E4%B8%8D%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="post-toc-text">1.4. 移动网络的不稳定性</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%BD%91%E7%BB%9C%E6%80%A7%E8%83%BD%E7%9A%84%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95"><span class="post-toc-text">2. 网络性能的优化方法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%8D%87%E7%BA%A7%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%9A%84-http-%E5%8D%8F%E8%AE%AE"><span class="post-toc-text">2.1. 升级服务端的 HTTP 协议</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BD%BF%E7%94%A8-cdn"><span class="post-toc-text">2.2. 使用 CDN</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%8F%90%E9%AB%98%E7%BD%91%E7%BB%9C%E8%B5%84%E6%BA%90%E7%9A%84%E5%B9%B6%E8%A1%8C%E6%95%88%E7%8E%87"><span class="post-toc-text">2.3. 提高网络资源的并行效率</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B8%B2%E6%9F%93%E5%92%8C%E7%BC%93%E5%AD%98%E6%8E%A7%E5%88%B6"><span class="post-toc-text">2.4. 服务端渲染和缓存控制</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%90%88%E7%90%86%E7%9A%84%E7%BB%84%E7%BB%87-html"><span class="post-toc-text">2.5. 合理的组织 HTML</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="post-toc-text">3. 小结</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>Web
+性能优化是一个复杂的问题，往往涉及从需求到维护的软件工程的各个方面。并且根据具体业务的不同也会采取不尽相同的针对性措施。本文主要针对
+Web 网络性能，从问题产生的原因以及对应的一些优化措施，对 Web
+的性能优化做一些简单的总结和思考。</p>
+<span id="more"></span>
+<h2 id="web-网络性能分析">1. Web 网络性能分析</h2>
+<p>随着计算机性能的提升和现代浏览器的不断进步，客户端的性能完全能够胜任普通的
+Web 页面甚至是复杂的 Web 应用和具有炫酷特效的 Web
+游戏。客户端性能对于绝大多数 Web 开发者来说不再是性能优化的瓶颈。Web
+性能优化的焦点来到计算机网络的传输能力。但随着家庭用户的网络带宽和通信质量不断提升，入户带宽能达到数百兆甚至上千兆，这对于通常只有数兆大小的
+Web 页面资源来说是完全足够的。似乎一切有关 Web
+性能的软硬件环境看起来都很美好，那么 Web 性能的瓶颈出现在哪呢？</p>
+<p>答案是<strong>网络延迟</strong>。网络延迟之所以成为影响 Web
+性能的重要因素，有很多方面的原因，下面结合我个人的知识和经验简单分析。</p>
+<h3 id="信号传输时延">1.1. 信号传输时延</h3>
+<p>网络信号传输的延迟受很多因素影响，包括</p>
+<ul>
+<li>信号在链路中的传播速度</li>
+<li>消息长度和链路速率 (带宽)</li>
+<li>网络设备对网络信号的处理能力</li>
+<li>以及网络拥塞造成的排队时间等</li>
+</ul>
+<p>即使抛开其他因素，只考虑信号在链路中的传播速度也会发现这是一个不容忽视的数值
+(见下表)。并且根据现有的物理学理论，信号传播速度无法突破光速上限，所以信号传播的时延已经很难得到像客户端性能和网络带宽那样大幅的提升了。</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>路线</th>
+<th>距离(km)</th>
+<th>时间: 光在真空中</th>
+<th>时间: 光在光纤中</th>
+<th>RTT(Roud-Trip Time)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>纽约到旧金山</td>
+<td>4148</td>
+<td>14ms</td>
+<td>21ms</td>
+<td>42ms</td>
+</tr>
+<tr class="even">
+<td>纽约到伦敦</td>
+<td>5585</td>
+<td>19ms</td>
+<td>28ms</td>
+<td>56ms</td>
+</tr>
+<tr class="odd">
+<td>纽约到悉尼</td>
+<td>15993</td>
+<td>53ms</td>
+<td>80ms</td>
+<td>160ms</td>
+</tr>
+</tbody>
+</table>
+<p>上表摘自《Web 性能权威指南》<a
+href="#ref2"><sup>[2]</sup></a>，列举了理想情况下光纤信号在全球一些城市之间的传播延迟，可以发现当距离较远时光纤的
+RTT 会达到较高的数值。</p>
+<h3 id="传输协议的握手机制">1.2. 传输协议的握手机制</h3>
+<p>由于 HTTP 最初是基于 TCP 实现的，所以在建立 HTTP
+连接前不可避免地要先进行 TCP 的三次握手。并且目前安全传输又成了很多 Web
+应用的必要需求，HTTPS 几乎成为 Web 页面的“标配”。因此 TLS
+等安全传输协议的握手机制也要在正式建立 HTTP
+通信之前进行。这就导致了在数据正式开始传输之前至少要经历 2 至 3 个 RTT
+才能开始。也就是说即使不考虑数据传输所需要的时间，单是准备工作就要消耗上百毫秒的时间。</p>
+<figure>
+<img src="/assets/images/68-1.jpg"
+alt="TLS 1.0 握手流程，至少消耗 3 个 RTT" />
+<figcaption aria-hidden="true">TLS 1.0 握手流程，至少消耗 3 个
+RTT</figcaption>
+</figure>
+<h3 id="网络资源请求的串行">1.3. 网络资源请求的串行</h3>
+<p>由于 Web
+应用越来越复杂，一个页面往往伴随着十数个甚至数十上百个资源请求。如果这些请求串行执行，那么再大的网络带宽也得不到有效利用，网络延迟造成的资源加载时间被成倍扩大。等到几十个资源的依次加载完成时用户早已失去了耐心。</p>
+<p>不过好消息是，现代浏览器会对页面进行资源预扫描，然后并行地对网络资源进行请求和加载。但坏消息是，为了避免服务器因接接受过多的
+TCP 请求而不堪重负，各浏览器都会对同一个域名发起的 TCP
+请求数进行限制，一般是 6
+个左右。这就意味当页面中需要的资源请求太多时，很多请求还是不可避免地要串行执行。</p>
+<h3 id="移动网络的不稳定性">1.4. 移动网络的不稳定性</h3>
+<p>随着移动设备的大规模普及和应用，移动网络环境成为开发者不得不考虑的因素。移动网络相较有线网络，不仅网络延迟更高、带宽更低，更致命的是移动网络的不稳定性会导致
+TCP 连接的丢包甚至中断。而 TCP
+连接一旦出现问题就会触发拥塞避免机制降低网络传输的速率，甚至重新执行握手算法！这对于本就不快的移动网络来说更是雪上加霜。而移动设备用户因为有更丰富的
+APP 可以使用，可能对 Web
+应用的包容度更低，这就意味着缓慢的加载速度将极大地摧毁用户的好感。</p>
+<h2 id="网络性能的优化方法">2. 网络性能的优化方法</h2>
+<p>以上对影响网络性能的因素进行了分析。可以发现核心就在于网络信号传播的时延无法避免，而其他因素如多资源的串行请求、协议的握手算法、移动网络的不稳定等因素又加剧了网络的延迟。那么解决方自然也要从这些因素入手。</p>
+<h3 id="升级服务端的-http-协议">2.1. 升级服务端的 HTTP 协议</h3>
+<p>如果只能选一个优化 Web 网络性能的方法我一定会选择把服务端的 HTTP
+协议升级至 HTTP/3。因为从 HTTP/2
+开始就引入了数据分帧的技术，在建立一个连接的基础上能实现对数据进行并行请求。同时还进行了一系列的性能优化。而
+HTTP/3 更是使用 UDP 重写了 HTTP，从根本上避免了很多由于 TCP
+握手以及拥塞控制等机制导致的延迟。并且更重要的是从开发者的角度来看，这几乎是一个零成本的举措，由于
+HTTP/3 的兼容性客户端和服务端几乎不需要对原有的软件进行任何修改
+(当然要升级服务端的 web server)。现代浏览器也对 HTTP/2 和 HTTP/3
+有了很好的支持。</p>
+<p>下表是截止到该文章发表我的主页 <a
+href="https://www.hozen.site">hozen.site</a> 7 天内的访问请求的客户端
+HTTP 版本统计。从统计结果可以看出，HTTP/2 和 HTTP/3
+的访问占比已经高达三分之二，并且我估计其中真实用户的 HTTP/2 和 HTTP/3
+的占比会更高。因为应该有很多网络爬虫使用了低版本的 HTTP 协议。</p>
+<table>
+<thead>
+<tr class="header">
+<th>版本</th>
+<th>请求</th>
+<th>请求百分比</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HTTP/2</td>
+<td>8,045</td>
+<td>49.72%</td>
+</tr>
+<tr class="even">
+<td>HTTP/1.1</td>
+<td>5,344</td>
+<td>33.03%</td>
+</tr>
+<tr class="odd">
+<td>HTTP/3</td>
+<td>2,767</td>
+<td>17.1%</td>
+</tr>
+<tr class="even">
+<td>HTTP/1.0</td>
+<td>23</td>
+<td>0.1%</td>
+</tr>
+</tbody>
+</table>
+<p>当然由于用户群体的不同 HTTP
+协议版本的分布会有差别，但毫无疑问的是客户端使用高版本 HTTP
+的占比会不断的提高。所以低成本带来的高性能提升使得所以 HTTP/3
+非常值得尝试。</p>
+<h3 id="使用-cdn">2.2. 使用 CDN</h3>
+<p>在 1.1
+节中的表格可以看出，信号传播的时延与距离成正比。若服务器离客户端非常远，那么信号传播时延无疑会非常高。而
+Contente Delivery Network 正是为了解决此问题而生的。CDN
+将就近为用户分配资源服务器，以缩短由于距离造成的传播时延过长。并且 CDN
+已经有非常成熟的技术和提供商，唯一的问题可能就是需要支付一定的费用。</p>
+<h3 id="提高网络资源的并行效率">2.3. 提高网络资源的并行效率</h3>
+<p>由于浏览器对于同一个域名下的并行请求数量有限制，那么当网络资源过多时可以将它们分别放置在不同的域名下，这样浏览器就会为该页面使用更多的并行连接。</p>
+<p>另一方面，对于一些体积很小但数量很多的资源，例如图标文件。要想办法将这些资源整合起来减少资源的数量。因为无论网络资源体积的大小有多大，建立连接和<strong>传播</strong>消耗的时间都是相同的常数时间。当资源体积较小时，资源的<strong>传输</strong>时间占据的相对比例就会变得很小，整个网络的利用率就会降低。另一方面这些数量众多的资源还会消耗很多并行请求，使得其他资源的请求不得不进入排队队列。解决该问题的一个常见的例子就是使用“雪碧图”技术拼接一些小体积的图片以减少请求次数。</p>
+<p>但还要注意，当某个资源体积过大造成数据的<strong>传输</strong>时间占据过高比重时。那么就需要对该资源进行拆分，以利用浏览器的并行请求加快对该资源的加载。这种思路在单页面应用中比较常见，由于主要的
+JS
+文件融合许多依赖库导致体积过大，当该文件加载完成前页面可能会面临白屏的风险。所以一些“拆包”插件应运而生。</p>
+<p>但是问题是进行拆包或者资源合并这两个看似矛盾的举措之间的分界线在哪里？也就是说当资源文件多小时要整合，又当达到多大时要拆分？很显然这个阈值和用户的网络带宽和网络延迟有关，因此需要对用户群体的网络状况进行统计分析后才有可能得到整体较优的阈值。</p>
+<p><strong>但是</strong>！当你使用了 HTTP/2 或 HTTP/3
+之后，你就无需考虑这些问题了。因为 HTTP/2 和 HTTP/3
+使用数据分帧技术只需要建立一个连接就可以并行传输资源。甚至以上的方法可能产生负优化的效果，例如将资源放在不同的域名反而会额外增加建立连接的时间。当这里的负优化是相对
+HTTP/3 自身来说的，相对与 HTTP/1.1 仍然具有性能的提升。</p>
+<h3 id="服务端渲染和缓存控制">2.4. 服务端渲染和缓存控制</h3>
+<p>使用服务端渲染的对网络性能提升的好处很明显，那便是减少客户端网络资源请求的次数。但并不是所有的资源都适合服务端渲染，服务端渲染的目的是提高
+Web
+的响应速度，所以服务端渲染最好用于一些长时间有效的静态资源或者用户共享资源。否则可能会给服务端造成过大的压力，导致资源响应过慢反而降低了页面的加载速度。</p>
+<p>缓存是一个老生常谈但却并不简单的问题，网上的材料很多这里不再赘述。</p>
+<blockquote>
+<p>There are only two hard things in Computer Science: cache
+invalidation and naming things. -- Phil Karlton</p>
+</blockquote>
+<h3 id="合理的组织-html">2.5. 合理的组织 HTML</h3>
+<p>合理的组织 HTML 页面包括:</p>
+<ul>
+<li>合理放置样式文件和脚本文件的位置</li>
+<li>使用 script 标签的 <code>async</code> 和 <code>defer</code>
+属性加快资源加载</li>
+<li>尽可能使用 image 标签提前向浏览器暴露资源请求 (而不是使用
+<code>background-images</code> 属性)</li>
+<li>合理使用 base64 编码减少资源请求</li>
+</ul>
+<p>等。由于这些方法和 Web 性能优化的其他方面产生重合，本文不再展开。</p>
+<h2 id="小结">3. 小结</h2>
+<p>本文对最近对于 Web
+网络性能的学习和实践做了一个小的总结，主要的资料和经验来自于《计算机网络》<a
+href="#ref1"><sup>[1]</sup></a>、《Web 性能权威指南》<a
+href="#ref2"><sup>[2]</sup></a>、各大开发者社区及开放文档，以及对个人项目
+<a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">hexo-theme-tranquility</a>
+的优化实践。正如文章开头所讲 Web
+性能是一个复杂但重要的问题，所以难免有所疏漏，恳请读者批评。</p>
+<hr />
+<p><em>参考资料</em></p>
+<div id="ref1">
+
+</div>
+<p>[1] 谢希仁. 计算机网络[M/OL]. 6 版. 电子工业出版社,
+2013[2023-07-09].</p>
+<div id="ref2">
+
+</div>
+<p>[2] GRIGORIK I. Web性能权威指南[M/OL]. 李松峰, 译. 人民邮电出版社,
+2013[2023-07-09].</p>
+<p>[3] 等</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg" />
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/69/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Vue3+Typescript 开发一个图片拼接 PWA</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/67/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      Hexo 的多主题自动化部署
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#性能优化</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="post-tag">#计算机网络</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/64/" title="前端工程师需要知道的字体知识" rel="bookmark">前端工程师需要知道的字体知识</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              
+                <div class="matts">海</div>
+              
+                <div class="matts">内</div>
+              
+                <div class="matts">存</div>
+              
+                <div class="matts">知</div>
+              
+                <div class="matts">己</div>
+              
+            </div>
+          
+            <div class="foot-line">
+              
+                <div class="matts">天</div>
+              
+                <div class="matts">涯</div>
+              
+                <div class="matts">若</div>
+              
+                <div class="matts">比</div>
+              
+                <div class="matts">邻</div>
+              
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z"/>
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z"/>
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z"/>
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

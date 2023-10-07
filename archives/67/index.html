@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8"/>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+    <title>
+      
+        Hexo 的多主题自动化部署 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/regular.ttf);
+        font-weight: regular;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css" />
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">Hexo 的多主题自动化部署</div>
+        <div class="post-info">
+          
+  <a href="/tags/Git/" class="post-tag">#Git</a><a href="/tags/Github-Pages/" class="post-tag">#Github Pages</a><a href="/tags/%E9%85%8D%E7%BD%AE%E5%8C%96/" class="post-tag">#配置化</a><a href="/tags/Docker/" class="post-tag">#Docker</a>
+
+
+          <span class="post-date">2023-07-05</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#hexo-%E5%A4%9A%E4%B8%BB%E9%A2%98%E9%83%A8%E7%BD%B2"><span class="post-toc-text">Hexo 多主题部署</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%85%8D%E7%BD%AE%E5%88%86%E7%A6%BB"><span class="post-toc-text">配置分离</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AD%90%E6%A8%A1%E5%9D%97%E7%AE%A1%E7%90%86%E4%B8%A4%E4%B8%AA%E4%B8%BB%E9%A2%98"><span class="post-toc-text">使用子模块管理两个主题</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E7%BD%91%E7%AB%99"><span class="post-toc-text">自动部署网站</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%88%9B%E5%BB%BA-docker-%E9%95%9C%E5%83%8F"><span class="post-toc-text">创建 Docker 镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%BC%96%E5%86%99-workflows-%E9%85%8D%E7%BD%AE"><span class="post-toc-text">编写 workflows 配置</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%80%BB%E7%BB%93"><span class="post-toc-text">总结</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>“对项目进行配置化改造可以提高开发效率，让开发者将精力集中在业务开发中，减少琐碎重复工作对心情的影响。更重要的是，配置化可以减少因人工操作带来的失误，并且利于排查问题。”</p>
+<span id="more"></span>
+<p>上面正是我在对自己的项目进行改造后的感受。我维护了两个 Hexo
+主题项目， <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">hexo-theme-tranquility</a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-academic">hexo-theme-academic</a>（未正式发布）。由于两个主题的测试用例重合度非常高，每次新增测试用例都得手动在两个主题上测试，很不方便。并且为了方便用户使用和查看示例，我想构建一个专门的演示网站对两个主题进行展示，并且希望每当我更新测试用的项目时，演示网站的两套主题都会自动更新部署。</p>
+<p>于是考虑通过配置化利用一个博客资源同时部署若干主题，并通过 Github
+Actions 让两个主题更新后都自动部署，方便用户查看更新内容和测试示例。</p>
+<p>最终实现的效果是这样的，建立测试项目 <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-test">hexo-theme-test</a>。每当该项目进行推送时，自动在网址
+<a
+target="_blank" rel="noopener" href="https://theme.hozen.site/tranquility">theme.hozen.site/tranquility</a>
+和 <a
+target="_blank" rel="noopener" href="https://theme.hozen.site/academic">theme.hozen.site/academic</a>
+部署使用了主题 <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">hexo-theme-tranquility</a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-academic">hexo-theme-academic</a>
+的网站。</p>
+<p>简言之，需要解决两个问题，一个就是同一个博客资源部署多个主题，另一个是
+Github Actions 的自动部署。下面分别介绍。</p>
+<h2 id="hexo-多主题部署">Hexo 多主题部署</h2>
+<p>Hexo 在 <code>themes/</code> 目录下可以存放多个主题文件，但只能通过
+<code>_config.yml</code>
+指定一个主题进行部署，并且部署到网站根目录。当修改主题后，之前生成的内容会被覆盖。我希望
+<code>themes/</code> 目录下的主题都能部署，并且互不影响。</p>
+<p>部署多个主题的解决方法很简单，只需要通过更改 <code>_config.yml</code>
+的配置，修改主题的输出目录，使不同的主题使用不同的子目录即可。例如我要部署【致远】和【academic】两个主题时分别修改
+<code>_config.yml</code> 的以下部分：</p>
+<figure class="highlight yml"><figcaption><span>致远主题</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">url:</span> <span class="hljs-string">http://theme.hozen.site/tranquility</span><br><span class="hljs-attr">public_dir:</span> <span class="hljs-string">public/tranquility</span><br><span class="hljs-attr">theme:</span> <span class="hljs-string">tranquility</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight yml"><figcaption><span>academic 主题</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">url:</span> <span class="hljs-string">http://theme.hozen.site/academic</span><br><span class="hljs-attr">public_dir:</span> <span class="hljs-string">public/academic</span><br><span class="hljs-attr">theme:</span> <span class="hljs-string">academic</span><br></code></pre></td></tr></table></figure>
+<p>这样在两个 URL 下就输出了使用不同主题渲染的网站了。</p>
+<h3 id="配置分离">配置分离</h3>
+<p>通过以上方法虽然解决了业务需求，但是由于每次部署主题都得去修改
+<code>_config.yml</code>
+文件。并且万一忘记修改，那么另一个主题网站就会被当前的主题所覆盖，很不方便。因此这里利用
+Hexo 的配置融合机制。将两个主题不同的配置项分别放入配置文件:
+<code>_build.tranquility.yml</code> 和 <code>_build.academic.yml</code>
+中。通用的配置仍然放在 <code>_config.yml</code>。</p>
+<p>最后编写两个 <code>scripts</code> 命令来加载不同的配置文件：</p>
+<figure class="highlight json"><figcaption><span>package.json</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;scritps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    ...<br>    <span class="hljs-attr">&quot;build-tranquility&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;hexo generate --config _config.yml,_build.tranquility.yml&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;build-academic&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;hexo generate --config _config.yml,_build.academic.yml&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;trqlt&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;hexo server --config _config.yml,_build.tranquility.yml&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;acdmc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;hexo server --config _config.yml,_build.academic.yml&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br>  ...<br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+<p>这样我们就可以通过执行 <code>npm run trqlt</code> 和 <code>npm run
+acdmc</code> 来在本地运行不同的主题，并通过执行
+<code>build-tranquility</code> 和 <code>build-academic</code>
+来构建不同的主题了。并且两个主题互不影响，构建后的文件分别放置在
+<code>public/tranquility</code> 和 <code>public/academic</code> 下。</p>
+<h3 id="使用子模块管理两个主题">使用子模块管理两个主题</h3>
+<p>需要注意，由于这个博客网站只是为了测试和演示，其使用到的主题都是单独的项目，并且以后可能加入其他主题。所以需要使用
+Git 的子模块 submodule 功能来管理模块。具体来说就是在该仓库下将 <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">hooozen/hexo-theme-tranquility</a>
+和 <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-academic">hooozen/hexo-theme-academic</a>
+两个项目作为子模块分别导入到 <code>themes/tranquility</code> 和
+<code>themes/academic</code>
+目录下。这样做的好处是，可以在该仓库下直接对两个项目进行更新和维护，同时又保证了这两个项目的独立性。</p>
+<p>有关 Git 子模块的使用方法，可以参考 <a
+href="https://www.hozen.site/archives/23/">Git 子模块 submodule
+的使用</a></p>
+<h2 id="自动部署网站">自动部署网站</h2>
+<p>Hexo 官网给出了利用 Github Actions 自动部署网站的<a
+target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/github-pages">示例</a>，但并不能完全满足我的需求，主要有以下几点需要改进：</p>
+<ol type="1">
+<li><p>网页的生成依赖到了第三方软件 <a
+target="_blank" rel="noopener" href="https://www.pandoc.org/">pandoc</a>，Github Actions
+的默认环境中没有该软件</p></li>
+<li><p>需要部署两个主题网站到子目录下</p></li>
+<li><p>需要移动 CNAME 文件到根目录</p></li>
+</ol>
+<p>对于第 1 个问题，需要利用 Docker 来解决。第 2 和第 3
+个问题增加相应的指令即可。</p>
+<h3 id="创建-docker-镜像">创建 Docker 镜像</h3>
+<p>创建具备 Node 和 Pandoc 环境的镜像，可以 Node 镜像为基础在其中安装
+Pandoc 软件包。由于把项目生成和部署的操作在 Github Actions 中执行，因此
+Docker
+镜像中并不放入项目代码也不执行任何项目命令，只是创建运行环境。所以
+Dockerfile 非常简单，如下：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs Dockerfile"><span class="hljs-comment"># 使用一个包含 Node.js 的基础镜像</span><br><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">18</span><br><br><span class="hljs-comment"># 设置工作目录</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /app</span><br><br><span class="hljs-comment"># 安装 Pandoc</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> apt-get update &amp;&amp; apt-get install -y pandoc</span><br></code></pre></td></tr></table></figure>
+<p>使用以上 Dockerfile 创建镜像后，将该镜像上传到 <a
+target="_blank" rel="noopener" href="https://hub.docker.com/">Dockerhub</a> 就能在 Github Actions
+中拉取镜像并创建容器了。</p>
+<h3 id="编写-workflows-配置">编写 workflows 配置</h3>
+<p>准备好镜像后，只需要子啊 Github Actions
+中使用该镜像创建容器，并执行相应的项目命令就能构建项目代码了，并使用相关的插件实现网站的自动部署。</p>
+<p>首先在项目根目录下创建 <code>.github/workflows/pages.yml</code>
+文件，然后编写以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs workflows">name: Pages<br><br>on:<br>  push:<br>    branches:<br>      - main # default branch<br><br>jobs:<br>  pages:<br>    runs-on: ubuntu-22.04<br>    permissions:<br>      contents: write<br>    container:<br>      image: docker://hooozen/node-pandoc:latest<br>    steps:<br>      - name: Checkout<br>        uses: actions/checkout@v3<br>        with:<br>          submodules: recursive<br>      - name: Cache NPM dependencies<br>        uses: actions/cache@v3<br>        with:<br>          path: node_modules<br>          key: $&#123;&#123; runner.OS &#125;&#125;-npm-cache<br>          restore-keys: |<br>            $&#123;&#123; runner.OS &#125;&#125;-npm-cache<br>      - name: Install Dependencies<br>        run: npm install<br>      - name: Build tranquility<br>        run: npm run build-tranquility<br>      - name: Clean config<br>        run: rm -f db.json<br>      - name: Build academic<br>        run: npm run build-academic<br>      - name: Set CNAME<br>        run: cp source/CNAME public/CNAME<br>      - name: Deploy<br>        uses: peaceiris/actions-gh-pages@v3<br>        with:<br>          github_token: $&#123;&#123; secrets.GITHUB_TOKEN &#125;&#125;<br>          publish_dir: ./public<br></code></pre></td></tr></table></figure>
+<p>在该配置文件中:</p>
+<ul>
+<li><p>使用 <code>container</code> 项指定了上文中创建并上传的具备 Node
+和 Pandoc 的 Docker 镜像。Github actions 在执行时会使用该镜像创建 Docker
+容器，接下的操作都会在该容器中进行。</p></li>
+<li><p>使用 <code>actions/cache@v3</code> 检出项目主分支，然后使用
+<code>actions/cache@v3</code> 缓存 <code>node_modules</code>
+目录以提高构建速度。</p></li>
+<li><p>接下来执行 <code>npm install</code> 安装依赖，然后依次运行
+<code>npm run build-tranduility</code> 和 <code>npm run
+build-academic</code>
+来使用两个不同的主题构建页面。注意两个构建命令之间执行 <code>rm -f
+db.json</code> 来清除 Hexo 的缓存文件。</p></li>
+<li><p>构建完成后，在 <code>public</code> 文件夹下会生成两个子目录
+<code>tranquility</code> 和 <code>academic</code>
+分别存放了两个主题的页面。</p></li>
+<li><p>由于我使用了自定义域名，因此使用 <code>mv</code> 命令将 CNAME
+文件移动到 <code>public</code> 目录下。</p></li>
+<li><p>最后使用 <code>peaceiris/actions-gh-pages@v3</code> 来将
+<code>public</code> 下所有的文件部署到 gh-pages 分支。</p></li>
+</ul>
+<p>经过以上操作，每当我在 <code>hexo-theme-test</code>
+项目中推送代码时，Github Actions
+都会自动将更新内容使用两个主题分别部署在 <a
+target="_blank" rel="noopener" href="https://theme.hozen.site/tranquility">theme.hozen.site/tranquility</a>
+和 <a
+target="_blank" rel="noopener" href="https://theme.hozen.site/academic">theme.hozen.site/academic</a>
+上。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>对于 Node 项目不同环境和子项目的配置化，可以通过编写
+<code>scripts</code> 命令和编写 Node 或者 Bash
+脚本来读取配置文件实现。</li>
+<li>Github Actions 是对 Github
+仓库进行自动化配置的好工具，有非常强大的功能。</li>
+<li>Docker 的应用对于跨平台的项目运行和部署非常方便。</li>
+</ul>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg" />
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/68/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Web性能优化——网络篇</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/70/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      数学老师
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/Git/" class="post-tag">#Git</a><a href="/tags/Github-Pages/" class="post-tag">#Github Pages</a><a href="/tags/%E9%85%8D%E7%BD%AE%E5%8C%96/" class="post-tag">#配置化</a><a href="/tags/Docker/" class="post-tag">#Docker</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/23/" title="Git 子模块 submodule 的使用" rel="bookmark">Git 子模块 submodule 的使用</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/32/" title="编写一个自动推送 Git Page 的 nodejs 脚本" rel="bookmark">编写一个自动推送 Git Page 的 nodejs 脚本</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/43/" title="多 Git 仓库的 SSH-key 配置" rel="bookmark">多 Git 仓库的 SSH-key 配置</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              
+                <div class="matts">海</div>
+              
+                <div class="matts">内</div>
+              
+                <div class="matts">存</div>
+              
+                <div class="matts">知</div>
+              
+                <div class="matts">己</div>
+              
+            </div>
+          
+            <div class="foot-line">
+              
+                <div class="matts">天</div>
+              
+                <div class="matts">涯</div>
+              
+                <div class="matts">若</div>
+              
+                <div class="matts">比</div>
+              
+                <div class="matts">邻</div>
+              
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z"/>
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z"/>
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z"/>
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

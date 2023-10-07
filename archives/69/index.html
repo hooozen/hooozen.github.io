@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8"/>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+    <title>
+      
+        Vue3+Typescript 开发一个图片拼接 PWA | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/regular.ttf);
+        font-weight: regular;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css" />
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">Vue3+Typescript 开发一个图片拼接 PWA</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" class="post-tag">#个人项目</a>
+
+
+          <span class="post-date">2023-09-04</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>一个简单的长图拼接工具，主要应用了 Vue3 技术栈和 HTML5 的 Canvas
+技术。最后包装成
+PWA，可以从手机桌面直接访问。本文做一个项目回顾和总结，源码和地址附下：</p>
+<p>线上地址: <a target="_blank" rel="noopener" href="https://ps.hozen.site/">picStitch</a><br />
+源码: <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/picStitch">hooozen/picStitch</a></p>
+<span id="more"></span>
+<h2 id="技术总结">技术总结</h2>
+<p>主要涉及的技术：</p>
+<ul>
+<li>面向对象技术</li>
+<li>Vue3 + Typescript 组合式 API</li>
+<li>Vue-router@4 和 pinia 状态管理</li>
+<li>Vite 构建和 PWA 包装</li>
+<li>HTML5 Canvas API 和 Drag API</li>
+<li>移动端触摸事件适配</li>
+<li>Vue3 深层组件封装</li>
+</ul>
+<h3 id="面向对象开发">面向对象开发</h3>
+<p>无论是主动还是被迫，随着业务逻辑变得复杂，开发者必然要引入面向对象技术。对于这个项目，采用面向对象技术主要有两个原因：</p>
+<p>从主观方面来讲，我想把这个项目做成 Web
+和小程序多端应用，于是把一些图片裁剪、绘制的核心代码封装成公共基础类。这样可以方便地实现复用和维护，为后面多端的开发和维护节省大量精力。</p>
+<p>客观方面，这个项目涉及了图片预览和图片编辑两块画布。两块画布在图片绘制方面有共同的逻辑，同时又分别承担保存和编辑等不同的职责。最重要的是，在两块画布之间要做状态的复制和同步：当从预览画布到编辑画布时，需要把预览画布的图片状态复制到编辑画布。当编辑画布编辑成功时，要把编辑画布的状态同步回预览画布。为了避免性能问题，两块画布要共用图片对象，也就是两块画布仅保存图片的裁剪信息，这样可以极大地节约内存。示意图如下：</p>
+<figure>
+<img src="/assets/images/69-1.jpg" alt="两块画布与图片之间的关联" />
+<figcaption aria-hidden="true">两块画布与图片之间的关联</figcaption>
+</figure>
+<p>在对业务逻辑反复梳理后，以及开发过程中的反复实验，最终封装了以下几个基础的类(<a
+target="_blank" rel="noopener" href="https://github.com/hooozen/picStitch/tree/main/src/class/base">源码</a>)：</p>
+<ul>
+<li><code>ImageClipView</code>:
+图像的裁剪视图，用来保存图片的裁剪状态，并对外提供裁剪方法</li>
+<li><code>ImageCavnasView</code>:
+图像的绘制视图，用来保存图片在画布上的绘制状态</li>
+<li><code>PicStitchCavnas</code>: 项目的 Canvas 基类，封装了 HTML5
+Canvas 的绘制、刷新和保存等方法，以及一些抽像接口.</li>
+<li><code>FlexCanvas</code>: 弹性画布类.
+因为预览图片时画布的高度以及图片的缩放比例要根据所有图片动态计算，因此封装成类.</li>
+<li><code>JointCanva</code>: “连接”画布类.
+用于编辑图片的连接处，主要封装了对画布上图片进行裁剪的方法.</li>
+<li><code>ImageClipViewManager</code>: 图像管理类.
+单例模式，通过管理图片对象来生成视图，以及实现视图的复制和状态同步.</li>
+</ul>
+<p>经过以上封装后，对于同一个 Image 对象，可以通过生成多个
+<code>ImageClipView</code> 来保存对图片的不同裁剪状态。然后在画布和
+<code>ImageClipView</code> 之间封装一层 <code>ImageCanvasView</code>
+来提供对裁剪后图片的绘制缩放以及绘制坐标等方法和属性，便于图片的绘制。而
+<code>ImageClipViewManager</code> 类使用单例模式，对所有的
+<code>ImageClipView</code>
+进行管理，可以复制指定的视图使其能将一个画布的图片转移到另一个画布上。这样
+<code>FlexCanvas</code> 和 <code>JointCanvas</code>
+只需要管绘制和编辑的责任，而不需要关系画布间的通信。</p>
+<p>以上类的封装主要遵循了单一职责原则，在我看来这是面向对象最重要的原则。单一原则使得类的扩展和使用变得十分简单清晰.</p>
+<p>最后，<strong>写 JS 的面向对象一定要用
+Typescript</strong>，这将节约大量宝贵时间。</p>
+<h3 id="vue3-技术栈">Vue3 技术栈</h3>
+<p>我个人对各种技术栈的态度是很冷静的，我认为“Vue 和 React
+以及其他个各种技术栈的区别不会大于警犬和猎狗之间的区别”。所以对于这些前端库我只是看作一种时兴的工具，用到的时候去翻阅文档或者源码即可。我觉得对于前端开发者来说原生
+JavaScript
+以及编程思想和经典模式才是最重要的。因此对此就不过多介绍了。</p>
+<p>尝试下来，Vite + Vue3 + pinia
+确实是一套特别省力和轻量的生产力工具，尤其是引入 TypeScript 和组合式 API
+后，可以抛弃之前 Vue2 时代很多复杂的概念。例如 pinia
+实现的状态管理几乎可以不使用 <code>action</code> 和 <code>getter</code>
+就可以实现绝大部分业务逻辑，对于小型项目来说要比 Vuex “人性化”得多。Vite
+的构建速度和配置速度也要甩 webpack 好几道街。</p>
+<p>总的来说，Vite + Vue3
+是一套离“开箱即用”又近了一大步的前端技术栈，非常推荐。</p>
+<h3 id="利用-vue-底层-api-封装组件">利用 Vue 底层 API 封装组件</h3>
+<p>大家一定用过 ElementUI 的 Message 组件和 Notify
+等组件。这些组件和常见的 Vue
+组件有个不同点是它们可以通过方法调用，而不用将组件写在模板了。并且像
+Message 组件是直接插入到 <code>body</code> 上关闭后又会从
+<code>body</code> 终移除的。同时可以多次调用一次产生多个 Message
+弹出。如下图所示：</p>
+<figure>
+<img src="/assets/images/69-3.gif"
+alt="element 的 Message 组件可以通过方法调用产生多个实例" />
+<figcaption aria-hidden="true">element 的 Message
+组件可以通过方法调用产生多个实例</figcaption>
+</figure>
+<figure>
+<img src="/assets/images/69-4.gif"
+alt="Message 用后即毁，不会造成性能问题" />
+<figcaption aria-hidden="true">Message
+用后即毁，不会造成性能问题</figcaption>
+</figure>
+<p>由于项目中我也要用到类似的组件，于是我参照 Element-plush Message
+的源码自己封装了两个类似的组件 (<a
+target="_blank" rel="noopener" href="https://github.com/hooozen/picStitch/tree/main/src/components/Tip">源码</a>)。主要的有以下细节和技巧需要注意：</p>
+<ul>
+<li><p>通过 <code>index.ts</code> 导出的方法调用后生成一个
+<code>Tip</code> 实例，在生产实例时创建 <code>VNode</code>
+并渲染。同时返回实例的关闭方法。</p></li>
+<li><p>创建实例利用 Vue 的 <code>createVNode</code> 和
+<code>render</code> 方法来生成和渲染</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; createVNode, render &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span><br><span class="hljs-keyword">import</span> <span class="hljs-title class_">TipConstructor</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;Tip.vue&#x27;</span><br><br><span class="hljs-keyword">const</span> container = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&quot;div&quot;</span>);<br>...<br><span class="hljs-keyword">const</span> <span class="hljs-title function_">createTip</span> = (<span class="hljs-params">&#123; ...options &#125;, context?: AppContext | <span class="hljs-literal">null</span></span>) =&gt; &#123;<br>  ...<br>  <span class="hljs-keyword">const</span> vnode = <span class="hljs-title function_">createVNode</span>(<span class="hljs-title class_">TipConstructor</span>, props);<br>  vnode.<span class="hljs-property">appContext</span> = context || tip.<span class="hljs-property">_context</span>;<br>  <span class="hljs-title function_">render</span>(vnode, container);<br>  <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-title function_">appendChild</span>(container.<span class="hljs-property">firstElementChild</span>!);<br>  ...<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p><code>createVNode(TipConstructor, props)</code> 方法中的
+<code>props</code> 参数包含了属性和事件，其中方法是以
+<code>onMethodName</code> 方式命名的。例如，如果 <code>props</code>
+中包含了 <code>onClose()&#123;&#125;</code> 方法，意味着在 Tip 组件中可以触发
+<code>emit('close')</code>
+事件。这一点官方文档中没有介绍，但对组件的销毁非常 重要。</p></li>
+<li><p>组件的销毁通过 <code>render(null, ...)</code> 来实现：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">render</span>(<span class="hljs-literal">null</span>, container); <span class="hljs-comment">// container 与渲染 vnode 时传入的相同</span><br></code></pre></td></tr></table></figure></li>
+<li><p>对 Message 实例的管理，来实现弹出的位置有正确的偏移，以及限制
+Message 实例的最大数量</p></li>
+</ul>
+<p>以上仅作为一个简单笔记和提示，想要完整说明 Message
+的实现思路恐怕需要一篇文章的篇幅或者阅读 element 的源码。</p>
+<h3 id="pwa">PWA</h3>
+<p>虽然经过这么多年的发展，PWA
+仍旧不温不火，尤其在国内已经被各种“小程序”掩没，但不妨碍我仍觉得 PWA
+是一个非常优秀的构想和伟大的尝试。在 Vite 下只需要一个插件，就可以将 Web
+应用包装成 PWA：<a target="_blank" rel="noopener" href="https://vite-pwa-org.netlify.app/">Vite
+PWA</a></p>
+<h3 id="图片拖动">图片拖动</h3>
+<figure>
+<img src="/assets/images/69-2.gif"
+alt="在 Web 端实现图片的拖动以及自适应布局并不如想象中简单" />
+<figcaption aria-hidden="true">在 Web
+端实现图片的拖动以及自适应布局并不如想象中简单</figcaption>
+</figure>
+<p>图片的拖动排序看似是一个简单的功能，其实里面有很多细节和难点。尤其是
+Web
+端需要对不同窗口大小做自适应，就显得更加复杂了。简单介绍下我踩的坑以及最终的解决方案：</p>
+<p>首先是 HTML5 的 Drag 事件❌。Drag
+事件最大的问题就在于拖动时，元素本身是不移动的，而只是一个半透明的元素投影跟随鼠标移动。其实这有没有什么大问题，但是如果想实现流畅和优美的动画效果，就需要各种
+track。因此反而不如使用鼠标事件更方便。(但本 App 还是利用了 Drag
+事件实现了文件的拖拽上传)</p>
+<p>其次是使用 Flex 定位来布局元素的初始定位，当元素排序变化时使用
+<code>Translate</code>
+来移动元素的位置❌。这样做的最大问题是，当移除某个元素时，元素在文档流中的初始位置会发生变化。这就意味着还要实时跟踪元素的在文档流中的位置变化，然后使用不同的参数去计算各个元素的
+<code>Translate</code>，非常复杂。但这个方法也有好处，那就是窗口 resize
+时元素会自动确定合适的位置，但前提是得解决好前面提到的问题。</p>
+<p>直接改变 DOM
+节点的真实位置❓。这个方案我根本没有尝试。因为在拖动过程中，划过元素时许多元素的位置都要更新，虽然有
+Vue 的虚拟节点算法，但我仍然觉得这是对性能的浪费。更重要的是直接改变 DOM
+节点的位置意味着将无法使用过渡动画！不能接受！</p>
+<p>我最后采用了【绝对定位+鼠标事件+Translate】位移的方案，大体的思路如下：</p>
+<p>首先通过外层元素的大小来划分格子。然后让所有的图片都 absolute
+定位在外层元素的左上角，然后根据它们的顺序计算应该偏移的位置。这样做的好处是，所有的图片计算偏移量的算法都一样，也不会随着图片数量的变化而变化。同时能够兼顾使用各种过渡动画。</p>
+<p>当然如何计算拖动过程中的元素位置，以及所处的格子和各个元素的顺序变化也需要仔细的考虑，但归根结底是一个数学问题，就不介绍了。</p>
+<p>虽然最终比较好的解决了这个问题，但我觉得拖动元素作为一个很常用的需求，仍需要开发者花费这么大的精力和代码逻辑进行开发非常不合理，浏览器应该封装更加易用的
+API。不知道大家在解决此类需求时采用了什么方案，我非常好奇。</p>
+<h3 id="移动端触摸事件">移动端触摸事件</h3>
+<p>移动端的触摸事件并不兼容鼠标事件！并且有很多反常的行为，例如
+<code>touchmove</code> 事件并不像 <code>mousemove</code>
+事件可以获得所处的元素，因为其 <code>target</code>
+永远指向初始点击的元素。并且像鼠标事件的 <code>offsetX</code>
+等属性在触摸事件上也是<strong>没有</strong>的。另外移动端的触摸事件还容易触发浏览器的返回和刷新等手势，非常难受。</p>
+<p>总之，如果你之前没有进行过移动端触摸事件的适配，那么一定为它预留好足够的时间来查阅文档和
+StackOverflow。</p>
+<h3 id="canvas-和-svg">Canvas 和 SVG</h3>
+<p>项目中用到的图片包括我自己设计的 LOGO 全都使用了 SVG
+技术，这是一个很优雅的图片解决方案。并且 SVG 还可以通过 base64
+编码嵌入到 CSS 作为 <code>background-url</code>。</p>
+<p>Canvas 用来处理图片非常方便，要注意保存图片的一些方法。例如
+<code>canvas.toBlob</code> 和 <code>canvas.toDataURL</code>
+方法的对比。</p>
+<h2 id="其他">其他</h2>
+<p>一定要事先进行 UI 和交互设计，否则可能写着写着发现一些功能在当前的 UI
+下很难实现，或者操作逻辑非常奇怪。而避免出现这种问题的最好的方法就是参考类似功能的
+APP，很明显我这款 APP 的 UI 很大部分借鉴了微信，而交互逻辑借鉴了<a
+target="_blank" rel="noopener" href="https://apps.apple.com/cn/app/id1589654548">App Store
+上的“PicTailor”
+(apple.com)</a>，如果这款软件有安卓版我也不会开发这个小工具了。</p>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg" />
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/71/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>平凡的世界</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/68/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      Web性能优化——网络篇
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" class="post-tag">#个人项目</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/44/" title="使用 Web 前端技术开发一个 Wallpaper Engine 壁纸" rel="bookmark">使用 Web 前端技术开发一个 Wallpaper Engine 壁纸</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/54/" title="如何从零开发一款微信小程序" rel="bookmark">如何从零开发一款微信小程序</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              
+                <div class="matts">海</div>
+              
+                <div class="matts">内</div>
+              
+                <div class="matts">存</div>
+              
+                <div class="matts">知</div>
+              
+                <div class="matts">己</div>
+              
+            </div>
+          
+            <div class="foot-line">
+              
+                <div class="matts">天</div>
+              
+                <div class="matts">涯</div>
+              
+                <div class="matts">若</div>
+              
+                <div class="matts">比</div>
+              
+                <div class="matts">邻</div>
+              
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z"/>
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z"/>
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z"/>
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>

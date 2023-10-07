@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
-    <meta charset="utf8" />
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <meta charset="utf8"/>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
     <title>
       
          | hozen.site
       
     </title>
-    <meta name="description" content="开发者，数理知识和文学创作"/>
-    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
     
       <link rel="apple-touch-icon"
             sizes="180x180"
@@ -33,15 +33,39 @@
             color=""/>
     
     
-    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/regular.ttf);
+        font-weight: regular;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
     
       <script>
         var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
         })();
       </script>
     
@@ -52,8 +76,8 @@
   <body>
     <div class="head">
       <div class="nav">
-        <a href="/" class="nav-logo">
-          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
         </a>
         <input id="navBtn" type="checkbox"/>
         <div class="nav-menu">
@@ -66,13 +90,14 @@
               <a class="nav-menu-item" href="/life">生活</a>
             
           
+          
         </div>
         <label class="nav-btn" for="navBtn"></label>
       </div>
     </div>
     <div class="body">
       
-  <div class="wall wall-category">
+  <div class="wall wall-category--plain">
     <div class="wall-main">
       <div class="wall-category-title">
         <div class="title-icon"
@@ -81,266 +106,202 @@
       </div>
       <div class="wall-category-description"></div>
       <div class="wall-category-tags">
-        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.min.js"></script>
-        <script type = "text/javascript">
-          window.onload = function() {
-              try {
-                  TagCanvas.Start('tagCanvas', '', {
-                      outlineThickness: 1,
-                      maxSpeed: 0.03,
-                      // freezeActive: true,
-                      // freezeDecel: true,
-                      textColour: null,
-                      textColour: null,
-                      outlineColour: "#aaa",
-                      weight: true,
-                      padding: 4,
-                      // clickToFront: 200,
-                      fadIn: 200,
-                      // pinchZoom: true,
-                      wheelZoom: false,
-                      initial: [0.1, -0.03]
-                  });
-              } catch (e) {
-                  // something went wrong, hide the canvas container
-                  document.getElementById('tags-outer').style.display = 'none';
-              }
-          };
-        </script>
-        <div id="tags-outer">
-          <canvas width="500" height="500" id="tagCanvas">
-            
-              <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Axios/" rel="tag">Axios</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS-%E5%B8%83%E5%B1%80/" rel="tag">CSS 布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS-%E7%89%B9%E6%95%88/" rel="tag">CSS 特效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/" rel="tag">CentOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ClientScript/" rel="tag">ClientScript</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM%E4%BA%8B%E4%BB%B6/" rel="tag">DOM事件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ECMAScript/" rel="tag">ECMAScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fetch-API/" rel="tag">Fetch API</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github-page/" rel="tag">Github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/" rel="tag">Go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/" rel="tag">HTML5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTPS/" rel="tag">HTTPS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS%E6%8E%A2%E5%B9%BD/" rel="tag">JS探幽</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/" rel="tag">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OJ/" rel="tag">OJ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/" rel="tag">SSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Server/" rel="tag">Server</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/" rel="tag">Tools</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UMVUE/" rel="tag">UMVUE</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wallpaper-Engine/" rel="tag">Wallpaper Engine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XHR/" rel="tag">XHR</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/" rel="tag">bash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/indexedDB/" rel="tag">indexedDB</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requestAnimationFrame/" rel="tag">requestAnimationFrame</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/splitChunksPlugin/" rel="tag">splitChunksPlugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/stdio/" rel="tag">stdio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift/" rel="tag">swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack4/" rel="tag">webpack4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" rel="tag">个人项目</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E7%86%B5/" rel="tag">信息熵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E9%87%8F/" rel="tag">信息量</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%A8%E6%A0%88/" rel="tag">全栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" rel="tag">冒泡排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1/" rel="tag">包装器对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="tag">单例模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A5%87%E5%B9%BB/" rel="tag">奇幻</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E4%BD%93/" rel="tag">字体</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E8%AF%B4/" rel="tag">小说</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" rel="tag">希尔排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="tag">快速排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%A3%E6%96%87/" rel="tag">散文</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6%E6%80%9D%E7%BB%B4/" rel="tag">数学思维</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/" rel="tag">数理统计</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag">时间复杂度</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%A1%E5%9B%AD/" rel="tag">校园</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97/" rel="tag">欧几里得</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" rel="tag">移位运算符</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" rel="tag">线性表</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%A8%E6%95%B0/" rel="tag">质数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" rel="tag">顺序表</a><span class="tag-list-count">1</span></li></ul>
-            
-          </canvas>
-        </div>
+        <div id="tags-outer"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/" rel="tag">Algorithm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Axios/" rel="tag">Axios</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS-%E5%B8%83%E5%B1%80/" rel="tag">CSS 布局</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS-%E7%89%B9%E6%95%88/" rel="tag">CSS 特效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/" rel="tag">CentOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ClientScript/" rel="tag">ClientScript</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM%E4%BA%8B%E4%BB%B6/" rel="tag">DOM事件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ECMAScript/" rel="tag">ECMAScript</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fetch-API/" rel="tag">Fetch API</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github-Pages/" rel="tag">Github Pages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github-page/" rel="tag">Github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go/" rel="tag">Go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/" rel="tag">HTML5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTPS/" rel="tag">HTTPS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS%E6%8E%A2%E5%B9%BD/" rel="tag">JS探幽</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/" rel="tag">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/" rel="tag">Node.js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OJ/" rel="tag">OJ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSL/" rel="tag">SSL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Server/" rel="tag">Server</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/" rel="tag">Tools</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UMVUE/" rel="tag">UMVUE</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Wallpaper-Engine/" rel="tag">Wallpaper Engine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XHR/" rel="tag">XHR</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/app/" rel="tag">app</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/" rel="tag">bash</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/indexedDB/" rel="tag">indexedDB</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requestAnimationFrame/" rel="tag">requestAnimationFrame</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/splitChunksPlugin/" rel="tag">splitChunksPlugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/stdio/" rel="tag">stdio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift/" rel="tag">swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack4/" rel="tag">webpack4</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" rel="tag">个人项目</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E7%86%B5/" rel="tag">信息熵</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%A1%E6%81%AF%E9%87%8F/" rel="tag">信息量</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%A8%E6%A0%88/" rel="tag">全栈</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" rel="tag">冒泡排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1/" rel="tag">包装器对象</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" rel="tag">单例模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" rel="tag">响应式</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A5%87%E5%B9%BB/" rel="tag">奇幻</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%97%E4%BD%93/" rel="tag">字体</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B0%8F%E8%AF%B4/" rel="tag">小说</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" rel="tag">希尔排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="tag">快速排序</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%91%98%E6%8A%84/" rel="tag">摘抄</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%A3%E6%96%87/" rel="tag">散文</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6%E6%80%9D%E7%BB%B4/" rel="tag">数学思维</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/" rel="tag">数理统计</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="tag">时间复杂度</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%A1%E5%9B%AD/" rel="tag">校园</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97/" rel="tag">欧几里得</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" rel="tag">移位运算符</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" rel="tag">线性表</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%B4%A8%E6%95%B0/" rel="tag">质数</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag">运维</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE%E5%8C%96/" rel="tag">配置化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" rel="tag">顺序表</a><span class="tag-list-count">1</span></li></ul></div>
       </div>
     </div>
   </div>
   <div class="post-list">
     
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/35/" class="post-title hover-line">冬天</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>列车从南国缓缓驶入家乡时，我第一次得以突然进入北国的冬天。当窗外长青的树木和纵横的水道变为嶙峋的杨树和苍茫的黄土地，我突然意识到今年的冬天此刻方至。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
   
-    <a href="/tags/%E6%95%A3%E6%96%87/" class="post-tag">#散文</a>
-  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/45/" class="post-title hover-line">一致最小方差无偏估计 UMVUE 的求法归纳</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>一致最小方差无偏估计估计 UMVUE
+是参数估计中的重难点内容，也是很多高校考研专业课喜欢考察的问题.
+但在很多教材中的介绍并不全面，主要问题在于本科生教材浅尝辄止，研究生教材有些晦涩，所以我归纳整理了求解
+UMVUE 的背景知识和常用解法，供大家参阅批评.</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1/" class="post-tag">#数理统计</a><a href="/tags/UMVUE/" class="post-tag">#UMVUE</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/44/" class="post-title hover-line">使用 Web 前端技术开发一个 Wallpaper Engine 壁纸</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/34/" class="post-title hover-line">机器学习基础-BP(Error Back Propagation)算法的数学原理</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>本文就 <a target="_blank" rel="noopener" href="https://www.coursera.org/">coursera</a>
-上斯坦福大学吴恩达教授的<a
-target="_blank" rel="noopener" href="https://www.coursera.org/learn/machine-learning">《机器学习》</a>课程中的<a
-target="_blank" rel="noopener" href="https://baike.baidu.com/item/BP%E7%AE%97%E6%B3%95/1252294?fr=aladdin">误差反向传播算法</a>（<a
-target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Backpropagation">Error Back
-Propagation</a>）进行推导证明</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/ML/" class="post-tag">#ML</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>本文基于实例介绍使用 Web 技术开发一个实用的 Wallpaper Engine
+壁纸.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" class="post-tag">#个人项目</a><a href="/tags/Wallpaper-Engine/" class="post-tag">#Wallpaper Engine</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/43/" class="post-title hover-line">多 Git 仓库的 SSH-key 配置</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/33/" class="post-title hover-line">机器学习基础-“逻辑”回归(logistic regression)的数学原理</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>通过使用 logistic regression
-处理一个二分类问题来简要分析其中的数学原理。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/ML/" class="post-tag">#ML</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>本文介绍了在一个设备上配置多个 SSH-key 以用于不同的远程 Git
+仓库的方法.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Tools/" class="post-tag">#Tools</a><a href="/tags/Git/" class="post-tag">#Git</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/42/" class="post-title hover-line">熵与信息量</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/32/" class="post-title hover-line">编写一个自动推送 Git Page 的 nodejs 脚本</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><h3 id="背景">背景</h3>
-<p>写了一个简单的个人主页，由于使用了一些 CSS3
-的属性，考虑到浏览器兼容性问题，就使用了 webpack 的一些 loader
-给这些属性加前缀。所以简单的静态单页面用了 webpack，又因为这个页面要放在
-Github Pages 上，每次打包后还得手动切换分支推送到 Github
-上，干脆趁这个机会写一个自动推送的脚本。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Node-js/" class="post-tag">#Node.js</a>
-  
-    <a href="/tags/Git/" class="post-tag">#Git</a>
-  
-    <a href="/tags/Github-page/" class="post-tag">#Github page</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>本文主要结合公式和定义解释了信息熵（Entropy）和信息量（Quantities of
+information）的含义和联系.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E4%BF%A1%E6%81%AF%E7%86%B5/" class="post-tag">#信息熵</a><a href="/tags/%E4%BF%A1%E6%81%AF%E9%87%8F/" class="post-tag">#信息量</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/41/" class="post-title hover-line">Swift 函数作为参数的写法</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/31/" class="post-title hover-line">经济学的旁听生-张晓风</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>“什么是经济学呢？”他站在讲台上，戴眼镜，灰西装，声音平静，典型的中年学者。</p>
-<p>台下坐的是大学一年级的学生，而我，是置身在这二百人大教室里偷偷旁听的一个。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/%E6%95%A3%E6%96%87/" class="post-tag">#散文</a>
-  
-    <a href="/tags/%E6%91%98%E6%8A%84/" class="post-tag">#摘抄</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>本文主要介绍 Swift 中函数作为参数传递的几种写法.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/swift/" class="post-tag">#swift</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/39/" class="post-title hover-line">数据结构基础（4）线性表的顺序存储结构——顺序表</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/30/" class="post-title hover-line">在 Windows 上真机调试 iPhone(iOS) Safari Web 页面</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>在移动端页面开发中，需要处理 Android 和 iOS 的兼容性问题。在 Chrome
-DevTools
-中选择手机模式，可以一定程度上模拟移动端的页面，但更多的只是方便进行页面布局的调试和兼容。一些移动端的特性与表现，在真机和模拟情况下还是有存在很大差别的（比如软键盘的弹出等），尤其是
-iOS 出于某些“考虑”表现出不符合标准的 BUG，在 Windows Chrome
-中更是难以定位。</p>
-<p>本文介绍如何在 Windows 系统中连接 iPhone Web 页面进行真机调试。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Tools/" class="post-tag">#Tools</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>本文主要介绍了线性表的顺序存储结构，以及基于 C++ 的具体实现.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a><a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" class="post-tag">#线性表</a><a href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" class="post-tag">#顺序表</a><a href="/tags/C/" class="post-tag">#C++</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/38/" class="post-title hover-line">数据结构基础（3）线性表的逻辑结构</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/29/" class="post-title hover-line">日记-下雨天</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>写篇日记吧。</p>
-<p>今天是 3 月 7 号，这个城市难得的没下雨的日子。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/%E6%95%A3%E6%96%87/" class="post-tag">#散文</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>本文主要介绍了线性结构的典型代表——线性表的逻辑结构和抽象数据结构.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a><a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" class="post-tag">#线性表</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/37/" class="post-title hover-line">数据结构基础（2）算法及算法分析</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/16/" class="post-title hover-line">Nginx 配置前端 HTML5 History 路由</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>由于 Vue、React 等现代前端框架的前端 History
-路由，在服务端并没有实际对应的物理路径和文件，所以使用 Nginx
-的默认配置直接访问路由或刷新路由时，会导致 404 错误。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Server/" class="post-tag">#Server</a>
-  
-    <a href="/tags/Nginx/" class="post-tag">#Nginx</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>本文主要讲述了算法的基本概念和算法的分析方法，主要包括算法的时间复杂度分析.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a><a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" class="post-tag">#时间复杂度</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/36/" class="post-title hover-line">数据结构基础（1）数据结构的基本概念</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/2/" class="post-title hover-line">IndexedDB 中文教程（2）基本使用</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p><a href="https://www.hozen.site/archives/1/">IndexedDB
-中文教程（1）介绍</a></p>
-<p><a href="https://www.hozen.site/archives/2/">IndexedDB
-中文教程（2）基本使用</a></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
-  
-    <a href="/tags/indexedDB/" class="post-tag">#indexedDB</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>本文主要讲述了数据结构的基本概念及相关的理论基础，是“由远及近”认识数据结构的简要浏览.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/35/" class="post-title hover-line">冬天</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/1/" class="post-title hover-line">IndexedDB 中文教程（1）介绍</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p><a href="https://www.hozen.site/archives/1/">IndexedDB
-中文教程（1）介绍</a></p>
-<p><a href="https://www.hozen.site/archives/2/">IndexedDB
-中文教程（2）基本使用</a></p>
-<p>教程持续更新中……</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
-  
-    <a href="/tags/indexedDB/" class="post-tag">#indexedDB</a>
-  
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>列车从南国缓缓驶入家乡时，我第一次得以突然进入北国的冬天。当窗外长青的树木和纵横的水道变为嶙峋的杨树和苍茫的黄土地，我突然意识到今年的冬天此刻方至。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%95%A3%E6%96%87/" class="post-tag">#散文</a>
 
 </div>
-          </div>
-        </div>
-      
+    </div>
+  </div>
+
+
     
-    <div class="paginator"><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><a class="page-number" href="/blog/page/5/">5</a></div>
+    <div class="paginator"><a class="page-number" href="/blog/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><a class="page-number" href="/blog/page/5/">5</a><a class="page-number" href="/blog/page/6/">6</a></div>
   </div>
 
     </div>
@@ -349,11 +310,31 @@ iOS 出于某些“考虑”表现出不符合标准的 BUG，在 Windows Chrome
         <div class="foot__head">
           
             <div class="foot-line">
-              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+              
+                <div class="matts">海</div>
+              
+                <div class="matts">内</div>
+              
+                <div class="matts">存</div>
+              
+                <div class="matts">知</div>
+              
+                <div class="matts">己</div>
+              
             </div>
           
             <div class="foot-line">
-              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+              
+                <div class="matts">天</div>
+              
+                <div class="matts">涯</div>
+              
+                <div class="matts">若</div>
+              
+                <div class="matts">比</div>
+              
+                <div class="matts">邻</div>
+              
             </div>
           
         </div>
@@ -364,34 +345,22 @@ iOS 出于某些“考虑”表现出不符合标准的 BUG，在 Windows Chrome
               <div class="foot-item__body">
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
                   </div>
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
                   </div>
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
                   </div>
                 
                 <div class="text">
-                  <img alt="link"
-                       height="20px"
-                       width="20px"
-                       src="/images/icon/icon-link+.svg"/>
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg"/>
                   <a class="foot-link"
                      href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
                   申请友链</a>
@@ -426,10 +395,7 @@ iOS 出于某些“考虑”表现出不符合标准的 BUG，在 Windows Chrome
             <div class="foot-item__head">联系</div>
             <div class="foot-item__body">
               <div class="text">
-                <img alt="link"
-                     height="20px"
-                     width="20px"
-                     src="/images/icon/icon-email.svg"/>
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg"/>
                 <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
               </div>
             </div>
@@ -438,22 +404,17 @@ iOS 出于某些“考虑”表现出不符合标准的 BUG，在 Windows Chrome
         <div class="copyright">
           <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
           <svg width="20" height="20" viewBox="0 0 725 725">
-            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
-            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
-            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
-            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
-            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
-            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z"/>
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z"/>
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z"/>
           </svg>
           <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
         </div>
       </div>
     </div>
     
-      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
-    
-    
+  
+
   </body>
 </html>

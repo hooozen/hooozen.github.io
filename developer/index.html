@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
-    <meta charset="utf8" />
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <meta charset="utf8"/>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
     <title>
       
         开发者 | hozen.site
       
     </title>
-    <meta name="description" content="开发者，数理知识和文学创作"/>
-    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
     
       <link rel="apple-touch-icon"
             sizes="180x180"
@@ -33,15 +33,39 @@
             color=""/>
     
     
-    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/regular.ttf);
+        font-weight: regular;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
     
       <script>
         var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
         })();
       </script>
     
@@ -52,8 +76,8 @@
   <body>
     <div class="head">
       <div class="nav">
-        <a href="/" class="nav-logo">
-          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
         </a>
         <input id="navBtn" type="checkbox"/>
         <div class="nav-menu">
@@ -66,13 +90,14 @@
               <a class="nav-menu-item" href="/life">生活</a>
             
           
+          
         </div>
         <label class="nav-btn" for="navBtn"></label>
       </div>
     </div>
     <div class="body">
       
-  <div class="wall wall-category">
+  <div class="wall wall-category--plain">
     <div class="wall-main">
       <div class="wall-category-title">
         <div class="title-icon"
@@ -81,278 +106,234 @@
       </div>
       <div class="wall-category-description">记录计算机科学及软件项目开发的知识和经验</div>
       <div class="wall-category-tags">
-        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.min.js"></script>
-        <script type = "text/javascript">
-          window.onload = function() {
-              try {
-                  TagCanvas.Start('tagCanvas', '', {
-                      outlineThickness: 1,
-                      maxSpeed: 0.03,
-                      // freezeActive: true,
-                      // freezeDecel: true,
-                      textColour: null,
-                      textColour: null,
-                      outlineColour: "#aaa",
-                      weight: true,
-                      padding: 4,
-                      // clickToFront: 200,
-                      fadIn: 200,
-                      // pinchZoom: true,
-                      wheelZoom: false,
-                      initial: [0.1, -0.03]
-                  });
-              } catch (e) {
-                  // something went wrong, hide the canvas container
-                  document.getElementById('tags-outer').style.display = 'none';
-              }
-          };
-        </script>
-        <div id="tags-outer">
-          <canvas width="500" height="500" id="tagCanvas">
-            
-              <a href="/tags/Algorithm/" style="font-size: 18px;">Algorithm</a> <a href="/tags/Axios/" style="font-size: 14px;">Axios</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/CSS/" style="font-size: 22px;">CSS</a> <a href="/tags/CSS-%E5%B8%83%E5%B1%80/" style="font-size: 14px;">CSS 布局</a> <a href="/tags/CSS-%E7%89%B9%E6%95%88/" style="font-size: 14px;">CSS 特效</a> <a href="/tags/CentOS/" style="font-size: 14px;">CentOS</a> <a href="/tags/ClientScript/" style="font-size: 30px;">ClientScript</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 14px;">DOM事件</a> <a href="/tags/ECMAScript/" style="font-size: 22px;">ECMAScript</a> <a href="/tags/Fetch-API/" style="font-size: 14px;">Fetch API</a> <a href="/tags/Git/" style="font-size: 22px;">Git</a> <a href="/tags/Github-page/" style="font-size: 14px;">Github page</a> <a href="/tags/Go/" style="font-size: 14px;">Go</a> <a href="/tags/HTTPS/" style="font-size: 14px;">HTTPS</a> <a href="/tags/JS%E6%8E%A2%E5%B9%BD/" style="font-size: 18px;">JS探幽</a> <a href="/tags/Nginx/" style="font-size: 14px;">Nginx</a> <a href="/tags/Node-js/" style="font-size: 18px;">Node.js</a> <a href="/tags/OJ/" style="font-size: 14px;">OJ</a> <a href="/tags/React/" style="font-size: 14px;">React</a> <a href="/tags/SSL/" style="font-size: 14px;">SSL</a> <a href="/tags/Server/" style="font-size: 26px;">Server</a> <a href="/tags/Tools/" style="font-size: 22px;">Tools</a> <a href="/tags/Wallpaper-Engine/" style="font-size: 14px;">Wallpaper Engine</a> <a href="/tags/XHR/" style="font-size: 14px;">XHR</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/indexedDB/" style="font-size: 18px;">indexedDB</a> <a href="/tags/splitChunksPlugin/" style="font-size: 14px;">splitChunksPlugin</a> <a href="/tags/stdio/" style="font-size: 14px;">stdio</a> <a href="/tags/swift/" style="font-size: 14px;">swift</a> <a href="/tags/webpack4/" style="font-size: 14px;">webpack4</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" style="font-size: 18px;">个人项目</a> <a href="/tags/%E5%85%A8%E6%A0%88/" style="font-size: 14px;">全栈</a> <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" style="font-size: 14px;">冒泡排序</a> <a href="/tags/%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1/" style="font-size: 14px;">包装器对象</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px;">单例模式</a> <a href="/tags/%E5%AD%97%E4%BD%93/" style="font-size: 14px;">字体</a> <a href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" style="font-size: 14px;">希尔排序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 14px;">微信小程序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 14px;">快速排序</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 14px;">性能优化</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 18px;">排序算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 26px;">数据结构</a> <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" style="font-size: 14px;">时间复杂度</a> <a href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" style="font-size: 14px;">移位运算符</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" style="font-size: 18px;">线性表</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 14px;">转载</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 14px;">运维</a> <a href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" style="font-size: 14px;">顺序表</a>
-            
-          </canvas>
-        </div>
+        <div id="tags-outer"><a href="/tags/Algorithm/" style="font-size: 1em;">Algorithm</a> <a href="/tags/Axios/" style="font-size: 1em;">Axios</a> <a href="/tags/C/" style="font-size: 1em;">C++</a> <a href="/tags/CSS/" style="font-size: 1em;">CSS</a> <a href="/tags/CSS-%E5%B8%83%E5%B1%80/" style="font-size: 1em;">CSS 布局</a> <a href="/tags/CSS-%E7%89%B9%E6%95%88/" style="font-size: 1em;">CSS 特效</a> <a href="/tags/CentOS/" style="font-size: 1em;">CentOS</a> <a href="/tags/ClientScript/" style="font-size: 1em;">ClientScript</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 1em;">DOM事件</a> <a href="/tags/Docker/" style="font-size: 1em;">Docker</a> <a href="/tags/ECMAScript/" style="font-size: 1em;">ECMAScript</a> <a href="/tags/Fetch-API/" style="font-size: 1em;">Fetch API</a> <a href="/tags/Git/" style="font-size: 1em;">Git</a> <a href="/tags/Github-Pages/" style="font-size: 1em;">Github Pages</a> <a href="/tags/Github-page/" style="font-size: 1em;">Github page</a> <a href="/tags/Go/" style="font-size: 1em;">Go</a> <a href="/tags/HTTPS/" style="font-size: 1em;">HTTPS</a> <a href="/tags/JS%E6%8E%A2%E5%B9%BD/" style="font-size: 1em;">JS探幽</a> <a href="/tags/Nginx/" style="font-size: 1em;">Nginx</a> <a href="/tags/Node-js/" style="font-size: 1em;">Node.js</a> <a href="/tags/OJ/" style="font-size: 1em;">OJ</a> <a href="/tags/React/" style="font-size: 1em;">React</a> <a href="/tags/SSL/" style="font-size: 1em;">SSL</a> <a href="/tags/Server/" style="font-size: 1em;">Server</a> <a href="/tags/Tools/" style="font-size: 1em;">Tools</a> <a href="/tags/Vue/" style="font-size: 1em;">Vue</a> <a href="/tags/Wallpaper-Engine/" style="font-size: 1em;">Wallpaper Engine</a> <a href="/tags/XHR/" style="font-size: 1em;">XHR</a> <a href="/tags/bash/" style="font-size: 1em;">bash</a> <a href="/tags/indexedDB/" style="font-size: 1em;">indexedDB</a> <a href="/tags/splitChunksPlugin/" style="font-size: 1em;">splitChunksPlugin</a> <a href="/tags/stdio/" style="font-size: 1em;">stdio</a> <a href="/tags/swift/" style="font-size: 1em;">swift</a> <a href="/tags/webpack4/" style="font-size: 1em;">webpack4</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" style="font-size: 1em;">个人项目</a> <a href="/tags/%E5%85%A8%E6%A0%88/" style="font-size: 1em;">全栈</a> <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" style="font-size: 1em;">冒泡排序</a> <a href="/tags/%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1/" style="font-size: 1em;">包装器对象</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">单例模式</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 1em;">响应式</a> <a href="/tags/%E5%AD%97%E4%BD%93/" style="font-size: 1em;">字体</a> <a href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" style="font-size: 1em;">希尔排序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1em;">微信小程序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 1em;">快速排序</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">性能优化</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 1em;">排序算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 1em;">数据结构</a> <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" style="font-size: 1em;">时间复杂度</a> <a href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" style="font-size: 1em;">移位运算符</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" style="font-size: 1em;">线性表</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 1em;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 1em;">转载</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1em;">运维</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E5%8C%96/" style="font-size: 1em;">配置化</a> <a href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" style="font-size: 1em;">顺序表</a></div>
       </div>
     </div>
   </div>
   <div class="post-list">
     
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/65/" class="post-title hover-line">记住两个函数轻松处理 Go 语言 OJ 输入</a>
-          </div>
-          <div class="post__body">
-            
-              <a href="/archives/65/"
-                 class="post-cover"
-                 style="background-image: url(/assets/images/65-1.svg)"></a>
-            
-            <div class="post-excerpt"><p>处理操作系统的标准输入输出在 Web 项目开发中并不常用，像 <a
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/75/" class="post-title hover-line">Vue3 响应式(4)-Wacth 的实现原理</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>前几篇文章已经构建了较为完善的响应式系统，并且实现了计算属性 computed
+以及调度器、懒执行等特性。这一篇文章就来实现另外一个重要的功能—— watch
+监听。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/74/" class="post-title hover-line">Vue3 响应式(3)-计算属性 computed</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>上文<a href="https://www.hozen.site/archives/73/">Vue3
+响应式(2)-分支切换、嵌套、和无限递归</a>解决了原有响应式系统的一些问题，实现了较为完善的数据绑定。本文在此基础上实现简单的计算属性功能
+<code>computed</code>。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/73/" class="post-title hover-line">Vue3 响应式(2)-分支切换、嵌套、和无限递归</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>上文<a href="https://www.hozen.site/archives/72/">Vue3
+响应式(1)-基础原理</a>介绍了响应式系统的基本原理并利用 Proxy
+进行了简单的实现，能够应对简单的响应式场景。但该系统仍然面临着一些问题，比如当副作用函数中既包含对响应式对象的读取操作也包含设置操作时会使系统进入无限递归的死循环、当代码分支切换时冗余的关联没有被及时清理等问题。本文就来一一介绍这些问题以及解决方法。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/72/" class="post-title hover-line">Vue3 响应式(1)-基础原理</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>Vue 之所以能够实现声明式的 UI，是因为 Vue 通过响应式将数据和 UI
+进行了绑定，当数据发生变化时 Vue
+会自动调用相应的函数来重新渲染受到影响的 UI。本系列文章就来简单分析下
+Vue
+响应式系统的实现。本文先从响应式的基础原理开始，实现一个简单的响应式系统。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/69/" class="post-title hover-line">Vue3+Typescript 开发一个图片拼接 PWA</a>
+      
+    </div>
+    <div class="post__body">
+      
+        <a href="/archives/69/"
+           class="post-cover"
+           style="background-image: url(/assets/images/69-2.gif)"></a>
+      
+      <div class="post-excerpt"><p>一个简单的长图拼接工具，主要应用了 Vue3 技术栈和 HTML5 的 Canvas
+技术。最后包装成
+PWA，可以从手机桌面直接访问。本文做一个项目回顾和总结，源码和地址附下：</p>
+<p>线上地址: <a target="_blank" rel="noopener" href="https://ps.hozen.site/">picStitch</a><br />
+源码: <a
+target="_blank" rel="noopener" href="https://github.com/hooozen/picStitch">hooozen/picStitch</a></p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" class="post-tag">#个人项目</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/68/" class="post-title hover-line">Web性能优化——网络篇</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>Web
+性能优化是一个复杂的问题，往往涉及从需求到维护的软件工程的各个方面。并且根据具体业务的不同也会采取不尽相同的针对性措施。本文主要针对
+Web 网络性能，从问题产生的原因以及对应的一些优化措施，对 Web
+的性能优化做一些简单的总结和思考。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#性能优化</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="post-tag">#计算机网络</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/67/" class="post-title hover-line">Hexo 的多主题自动化部署</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>“对项目进行配置化改造可以提高开发效率，让开发者将精力集中在业务开发中，减少琐碎重复工作对心情的影响。更重要的是，配置化可以减少因人工操作带来的失误，并且利于排查问题。”</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Git/" class="post-tag">#Git</a><a href="/tags/Github-Pages/" class="post-tag">#Github Pages</a><a href="/tags/%E9%85%8D%E7%BD%AE%E5%8C%96/" class="post-tag">#配置化</a><a href="/tags/Docker/" class="post-tag">#Docker</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/65/" class="post-title hover-line">记住两个函数轻松处理 Go 语言 OJ 输入</a>
+      
+    </div>
+    <div class="post__body">
+      
+        <a href="/archives/65/"
+           class="post-cover"
+           style="background-image: url(/assets/images/65-1.svg)"></a>
+      
+      <div class="post-excerpt"><p>处理操作系统的标准输入输出在 Web 项目开发中并不常用，像 <a
 target="_blank" rel="noopener" href="https://leetcode.cn">LeetCode</a>
 一些现代刷题平台也取消了输入输出的处理，让用户专注于算法的实现。但对于传统的
 OJ
 平台和算法竞赛，往往需要用户从标准输入中读取指定格式的数据，然后使用标准输出返回答案。如果平时没有经验的话，在比赛或笔试时可能会浪费不必要的时间。本文主要介绍
 Go 语言的 <code>fmt.Scan</code> 和 <code>Scanner.Scan</code>
 函数来应对常见的 OJ 输入。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Go/" class="post-tag">#Go</a>
-  
-    <a href="/tags/OJ/" class="post-tag">#OJ</a>
-  
-    <a href="/tags/stdio/" class="post-tag">#stdio</a>
-  
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Go/" class="post-tag">#Go</a><a href="/tags/OJ/" class="post-tag">#OJ</a><a href="/tags/stdio/" class="post-tag">#stdio</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/64/" class="post-title hover-line">前端工程师需要知道的字体知识</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/64/" class="post-title hover-line">前端工程师需要知道的字体知识</a>
-          </div>
-          <div class="post__body">
-            
-              <a href="/archives/64/"
-                 class="post-cover"
-                 style="background-image: url(/assets/images/64-2.gif)"></a>
-            
-            <div class="post-excerpt"><p>随着网页个性化设计和品牌特色的需要，在网页中使用特定的字体将成为越来越常见的需求。现代字体设计经历了数十年的发展，已经积累了成熟的标准和规范，但对于许多前端开发者来说可能可能还比较陌生，本文就前端开发过程中可能遇到的字体知识做一个梳理和介绍。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/CSS/" class="post-tag">#CSS</a>
-  
-    <a href="/tags/%E5%AD%97%E4%BD%93/" class="post-tag">#字体</a>
-  
-    <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#性能优化</a>
-  
+    </div>
+    <div class="post__body">
+      
+        <a href="/archives/64/"
+           class="post-cover"
+           style="background-image: url(/assets/images/64-2.gif)"></a>
+      
+      <div class="post-excerpt"><p>随着网页个性化设计和品牌特色的需要，在网页中使用特定的字体将成为越来越常见的需求。现代字体设计经历了数十年的发展，已经积累了成熟的标准和规范，但对于许多前端开发者来说可能可能还比较陌生，本文就前端开发过程中可能遇到的字体知识做一个梳理和介绍。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/CSS/" class="post-tag">#CSS</a><a href="/tags/%E5%AD%97%E4%BD%93/" class="post-tag">#字体</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="post-tag">#性能优化</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/56/" class="post-title hover-line">JS探幽——移位运算符 <<，>> 和 >>> </a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/56/" class="post-title hover-line">JS探幽——移位运算符 <<，>> 和 >>> </a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>移位运算符在数据结构与算法中有着重要的作用，很多时候可以大大提高算法性能，简化问题求解。同时也是高级语言连接计算机机器码的工具。本文介绍了
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>移位运算符在数据结构与算法中有着重要的作用，很多时候可以大大提高算法性能，简化问题求解。同时也是高级语言连接计算机机器码的工具。本文介绍了
 JavaScript 中移位运算符 &lt;&lt;，&gt;&gt; 和 &gt;&gt;&gt;
 的规范和表现。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/ECMAScript/" class="post-tag">#ECMAScript</a>
-  
-    <a href="/tags/JS%E6%8E%A2%E5%B9%BD/" class="post-tag">#JS探幽</a>
-  
-    <a href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" class="post-tag">#移位运算符</a>
-  
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/ECMAScript/" class="post-tag">#ECMAScript</a><a href="/tags/JS%E6%8E%A2%E5%B9%BD/" class="post-tag">#JS探幽</a><a href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" class="post-tag">#移位运算符</a>
 
 </div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/55/" class="post-title hover-line">JS探幽——从数据类型到包装器对象</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>本文介绍了 JavaScript
-的数据类型、基本数据类的包装器对象，以及对应的“装箱”机制，对一些违反直觉的语言表现进行了解释和查证。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/ECMAScript/" class="post-tag">#ECMAScript</a>
-  
-    <a href="/tags/JS%E6%8E%A2%E5%B9%BD/" class="post-tag">#JS探幽</a>
-  
-    <a href="/tags/%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1/" class="post-tag">#包装器对象</a>
-  
+    </div>
+  </div>
 
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/54/" class="post-title hover-line">如何从零开发一款微信小程序</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>最近开发了一款小程序，本文将介绍这款小程序在两周之内从立项到上线的全部流程，为个人开发者开发自己的第一款微信小程序简单指南。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" class="post-tag">#个人项目</a>
-  
-    <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" class="post-tag">#微信小程序</a>
-  
-    <a href="/tags/%E5%85%A8%E6%A0%88/" class="post-tag">#全栈</a>
-  
 
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/44/" class="post-title hover-line">使用 Web 前端技术开发一个 Wallpaper Engine 壁纸</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>本文基于实例介绍使用 Web 技术开发一个实用的 Wallpaper Engine
-壁纸.</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" class="post-tag">#个人项目</a>
-  
-    <a href="/tags/Wallpaper-Engine/" class="post-tag">#Wallpaper Engine</a>
-  
-
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/43/" class="post-title hover-line">多 Git 仓库的 SSH-key 配置</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>本文介绍了在一个设备上配置多个 SSH-key 以用于不同的远程 Git
-仓库的方法.</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Tools/" class="post-tag">#Tools</a>
-  
-    <a href="/tags/Git/" class="post-tag">#Git</a>
-  
-
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/41/" class="post-title hover-line">Swift 函数作为参数的写法</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>本文主要介绍 Swift 中函数作为参数传递的几种写法.</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/swift/" class="post-tag">#swift</a>
-  
-
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/39/" class="post-title hover-line">数据结构基础（4）线性表的顺序存储结构——顺序表</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>本文主要介绍了线性表的顺序存储结构，以及基于 C++ 的具体实现.</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
-  
-    <a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" class="post-tag">#线性表</a>
-  
-    <a href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" class="post-tag">#顺序表</a>
-  
-    <a href="/tags/C/" class="post-tag">#C++</a>
-  
-
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/38/" class="post-title hover-line">数据结构基础（3）线性表的逻辑结构</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>本文主要介绍了线性结构的典型代表——线性表的逻辑结构和抽象数据结构.</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a>
-  
-    <a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" class="post-tag">#线性表</a>
-  
-
-</div>
-          </div>
-        </div>
-      
     
-    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/developer/page/2/">2</a><a class="page-number" href="/developer/page/3/">3</a></div>
+    <div class="paginator"><span class="page-number current">1</span><a class="page-number" href="/developer/page/2/">2</a><a class="page-number" href="/developer/page/3/">3</a><a class="page-number" href="/developer/page/4/">4</a></div>
   </div>
 
     </div>
@@ -361,11 +342,31 @@ JavaScript 中移位运算符 &lt;&lt;，&gt;&gt; 和 &gt;&gt;&gt;
         <div class="foot__head">
           
             <div class="foot-line">
-              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+              
+                <div class="matts">海</div>
+              
+                <div class="matts">内</div>
+              
+                <div class="matts">存</div>
+              
+                <div class="matts">知</div>
+              
+                <div class="matts">己</div>
+              
             </div>
           
             <div class="foot-line">
-              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+              
+                <div class="matts">天</div>
+              
+                <div class="matts">涯</div>
+              
+                <div class="matts">若</div>
+              
+                <div class="matts">比</div>
+              
+                <div class="matts">邻</div>
+              
             </div>
           
         </div>
@@ -376,34 +377,22 @@ JavaScript 中移位运算符 &lt;&lt;，&gt;&gt; 和 &gt;&gt;&gt;
               <div class="foot-item__body">
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
                   </div>
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
                   </div>
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
                   </div>
                 
                 <div class="text">
-                  <img alt="link"
-                       height="20px"
-                       width="20px"
-                       src="/images/icon/icon-link+.svg"/>
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg"/>
                   <a class="foot-link"
                      href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
                   申请友链</a>
@@ -438,10 +427,7 @@ JavaScript 中移位运算符 &lt;&lt;，&gt;&gt; 和 &gt;&gt;&gt;
             <div class="foot-item__head">联系</div>
             <div class="foot-item__body">
               <div class="text">
-                <img alt="link"
-                     height="20px"
-                     width="20px"
-                     src="/images/icon/icon-email.svg"/>
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg"/>
                 <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
               </div>
             </div>
@@ -450,22 +436,17 @@ JavaScript 中移位运算符 &lt;&lt;，&gt;&gt; 和 &gt;&gt;&gt;
         <div class="copyright">
           <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
           <svg width="20" height="20" viewBox="0 0 725 725">
-            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
-            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
-            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
-            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
-            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
-            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z"/>
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z"/>
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z"/>
           </svg>
           <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
         </div>
       </div>
     </div>
     
-      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
-    
-    
+  
+
   </body>
 </html>

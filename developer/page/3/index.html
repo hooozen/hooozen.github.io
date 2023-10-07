@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
-    <meta charset="utf8" />
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <meta charset="utf8"/>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
     <title>
       
         开发者 | hozen.site
       
     </title>
-    <meta name="description" content="开发者，数理知识和文学创作"/>
-    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
     
       <link rel="apple-touch-icon"
             sizes="180x180"
@@ -33,15 +33,39 @@
             color=""/>
     
     
-    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/regular.ttf);
+        font-weight: regular;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
     
       <script>
         var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
         })();
       </script>
     
@@ -52,8 +76,8 @@
   <body>
     <div class="head">
       <div class="nav">
-        <a href="/" class="nav-logo">
-          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
         </a>
         <input id="navBtn" type="checkbox"/>
         <div class="nav-menu">
@@ -66,13 +90,14 @@
               <a class="nav-menu-item" href="/life">生活</a>
             
           
+          
         </div>
         <label class="nav-btn" for="navBtn"></label>
       </div>
     </div>
     <div class="body">
       
-  <div class="wall wall-category">
+  <div class="wall wall-category--plain">
     <div class="wall-main">
       <div class="wall-category-title">
         <div class="title-icon"
@@ -81,278 +106,233 @@
       </div>
       <div class="wall-category-description">记录计算机科学及软件项目开发的知识和经验</div>
       <div class="wall-category-tags">
-        <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.min.js"></script>
-        <script type = "text/javascript">
-          window.onload = function() {
-              try {
-                  TagCanvas.Start('tagCanvas', '', {
-                      outlineThickness: 1,
-                      maxSpeed: 0.03,
-                      // freezeActive: true,
-                      // freezeDecel: true,
-                      textColour: null,
-                      textColour: null,
-                      outlineColour: "#aaa",
-                      weight: true,
-                      padding: 4,
-                      // clickToFront: 200,
-                      fadIn: 200,
-                      // pinchZoom: true,
-                      wheelZoom: false,
-                      initial: [0.1, -0.03]
-                  });
-              } catch (e) {
-                  // something went wrong, hide the canvas container
-                  document.getElementById('tags-outer').style.display = 'none';
-              }
-          };
-        </script>
-        <div id="tags-outer">
-          <canvas width="500" height="500" id="tagCanvas">
-            
-              <a href="/tags/Algorithm/" style="font-size: 18px;">Algorithm</a> <a href="/tags/Axios/" style="font-size: 14px;">Axios</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/CSS/" style="font-size: 22px;">CSS</a> <a href="/tags/CSS-%E5%B8%83%E5%B1%80/" style="font-size: 14px;">CSS 布局</a> <a href="/tags/CSS-%E7%89%B9%E6%95%88/" style="font-size: 14px;">CSS 特效</a> <a href="/tags/CentOS/" style="font-size: 14px;">CentOS</a> <a href="/tags/ClientScript/" style="font-size: 30px;">ClientScript</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 14px;">DOM事件</a> <a href="/tags/ECMAScript/" style="font-size: 22px;">ECMAScript</a> <a href="/tags/Fetch-API/" style="font-size: 14px;">Fetch API</a> <a href="/tags/Git/" style="font-size: 22px;">Git</a> <a href="/tags/Github-page/" style="font-size: 14px;">Github page</a> <a href="/tags/Go/" style="font-size: 14px;">Go</a> <a href="/tags/HTTPS/" style="font-size: 14px;">HTTPS</a> <a href="/tags/JS%E6%8E%A2%E5%B9%BD/" style="font-size: 18px;">JS探幽</a> <a href="/tags/Nginx/" style="font-size: 14px;">Nginx</a> <a href="/tags/Node-js/" style="font-size: 18px;">Node.js</a> <a href="/tags/OJ/" style="font-size: 14px;">OJ</a> <a href="/tags/React/" style="font-size: 14px;">React</a> <a href="/tags/SSL/" style="font-size: 14px;">SSL</a> <a href="/tags/Server/" style="font-size: 26px;">Server</a> <a href="/tags/Tools/" style="font-size: 22px;">Tools</a> <a href="/tags/Wallpaper-Engine/" style="font-size: 14px;">Wallpaper Engine</a> <a href="/tags/XHR/" style="font-size: 14px;">XHR</a> <a href="/tags/bash/" style="font-size: 14px;">bash</a> <a href="/tags/indexedDB/" style="font-size: 18px;">indexedDB</a> <a href="/tags/splitChunksPlugin/" style="font-size: 14px;">splitChunksPlugin</a> <a href="/tags/stdio/" style="font-size: 14px;">stdio</a> <a href="/tags/swift/" style="font-size: 14px;">swift</a> <a href="/tags/webpack4/" style="font-size: 14px;">webpack4</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" style="font-size: 18px;">个人项目</a> <a href="/tags/%E5%85%A8%E6%A0%88/" style="font-size: 14px;">全栈</a> <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" style="font-size: 14px;">冒泡排序</a> <a href="/tags/%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1/" style="font-size: 14px;">包装器对象</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 14px;">单例模式</a> <a href="/tags/%E5%AD%97%E4%BD%93/" style="font-size: 14px;">字体</a> <a href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" style="font-size: 14px;">希尔排序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 14px;">微信小程序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 14px;">快速排序</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 14px;">性能优化</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 18px;">排序算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 26px;">数据结构</a> <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" style="font-size: 14px;">时间复杂度</a> <a href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" style="font-size: 14px;">移位运算符</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" style="font-size: 18px;">线性表</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 14px;">转载</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 14px;">运维</a> <a href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" style="font-size: 14px;">顺序表</a>
-            
-          </canvas>
-        </div>
+        <div id="tags-outer"><a href="/tags/Algorithm/" style="font-size: 1em;">Algorithm</a> <a href="/tags/Axios/" style="font-size: 1em;">Axios</a> <a href="/tags/C/" style="font-size: 1em;">C++</a> <a href="/tags/CSS/" style="font-size: 1em;">CSS</a> <a href="/tags/CSS-%E5%B8%83%E5%B1%80/" style="font-size: 1em;">CSS 布局</a> <a href="/tags/CSS-%E7%89%B9%E6%95%88/" style="font-size: 1em;">CSS 特效</a> <a href="/tags/CentOS/" style="font-size: 1em;">CentOS</a> <a href="/tags/ClientScript/" style="font-size: 1em;">ClientScript</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 1em;">DOM事件</a> <a href="/tags/Docker/" style="font-size: 1em;">Docker</a> <a href="/tags/ECMAScript/" style="font-size: 1em;">ECMAScript</a> <a href="/tags/Fetch-API/" style="font-size: 1em;">Fetch API</a> <a href="/tags/Git/" style="font-size: 1em;">Git</a> <a href="/tags/Github-Pages/" style="font-size: 1em;">Github Pages</a> <a href="/tags/Github-page/" style="font-size: 1em;">Github page</a> <a href="/tags/Go/" style="font-size: 1em;">Go</a> <a href="/tags/HTTPS/" style="font-size: 1em;">HTTPS</a> <a href="/tags/JS%E6%8E%A2%E5%B9%BD/" style="font-size: 1em;">JS探幽</a> <a href="/tags/Nginx/" style="font-size: 1em;">Nginx</a> <a href="/tags/Node-js/" style="font-size: 1em;">Node.js</a> <a href="/tags/OJ/" style="font-size: 1em;">OJ</a> <a href="/tags/React/" style="font-size: 1em;">React</a> <a href="/tags/SSL/" style="font-size: 1em;">SSL</a> <a href="/tags/Server/" style="font-size: 1em;">Server</a> <a href="/tags/Tools/" style="font-size: 1em;">Tools</a> <a href="/tags/Vue/" style="font-size: 1em;">Vue</a> <a href="/tags/Wallpaper-Engine/" style="font-size: 1em;">Wallpaper Engine</a> <a href="/tags/XHR/" style="font-size: 1em;">XHR</a> <a href="/tags/bash/" style="font-size: 1em;">bash</a> <a href="/tags/indexedDB/" style="font-size: 1em;">indexedDB</a> <a href="/tags/splitChunksPlugin/" style="font-size: 1em;">splitChunksPlugin</a> <a href="/tags/stdio/" style="font-size: 1em;">stdio</a> <a href="/tags/swift/" style="font-size: 1em;">swift</a> <a href="/tags/webpack4/" style="font-size: 1em;">webpack4</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E9%A1%B9%E7%9B%AE/" style="font-size: 1em;">个人项目</a> <a href="/tags/%E5%85%A8%E6%A0%88/" style="font-size: 1em;">全栈</a> <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" style="font-size: 1em;">冒泡排序</a> <a href="/tags/%E5%8C%85%E8%A3%85%E5%99%A8%E5%AF%B9%E8%B1%A1/" style="font-size: 1em;">包装器对象</a> <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">单例模式</a> <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" style="font-size: 1em;">响应式</a> <a href="/tags/%E5%AD%97%E4%BD%93/" style="font-size: 1em;">字体</a> <a href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" style="font-size: 1em;">希尔排序</a> <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 1em;">微信小程序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 1em;">快速排序</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1em;">性能优化</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 1em;">排序算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 1em;">数据结构</a> <a href="/tags/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" style="font-size: 1em;">时间复杂度</a> <a href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/" style="font-size: 1em;">移位运算符</a> <a href="/tags/%E7%BA%BF%E6%80%A7%E8%A1%A8/" style="font-size: 1em;">线性表</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 1em;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 1em;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 1em;">转载</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1em;">运维</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E5%8C%96/" style="font-size: 1em;">配置化</a> <a href="/tags/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" style="font-size: 1em;">顺序表</a></div>
       </div>
     </div>
   </div>
   <div class="post-list">
     
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/19/" class="post-title hover-line">我们为什么构建React</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>现在已经存在很多 JavaScript MVC 框架了，为什么我们还要创建 React
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/30/" class="post-title hover-line">在 Windows 上真机调试 iPhone(iOS) Safari Web 页面</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>在移动端页面开发中，需要处理 Android 和 iOS 的兼容性问题。在 Chrome
+DevTools
+中选择手机模式，可以一定程度上模拟移动端的页面，但更多的只是方便进行页面布局的调试和兼容。一些移动端的特性与表现，在真机和模拟情况下还是有存在很大差别的（比如软键盘的弹出等），尤其是
+iOS 出于某些“考虑”表现出不符合标准的 BUG，在 Windows Chrome
+中更是难以定位。</p>
+<p>本文介绍如何在 Windows 系统中连接 iPhone Web 页面进行真机调试。</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Tools/" class="post-tag">#Tools</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/16/" class="post-title hover-line">Nginx 配置前端 HTML5 History 路由</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>由于 Vue、React 等现代前端框架的前端 History
+路由，在服务端并没有实际对应的物理路径和文件，所以使用 Nginx
+的默认配置直接访问路由或刷新路由时，会导致 404 错误。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Server/" class="post-tag">#Server</a><a href="/tags/Nginx/" class="post-tag">#Nginx</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/2/" class="post-title hover-line">IndexedDB 中文教程（2）基本使用</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p><a href="https://www.hozen.site/archives/1/">IndexedDB
+中文教程（1）介绍</a></p>
+<p><a href="https://www.hozen.site/archives/2/">IndexedDB
+中文教程（2）基本使用</a></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a><a href="/tags/indexedDB/" class="post-tag">#indexedDB</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/1/" class="post-title hover-line">IndexedDB 中文教程（1）介绍</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p><a href="https://www.hozen.site/archives/1/">IndexedDB
+中文教程（1）介绍</a></p>
+<p><a href="https://www.hozen.site/archives/2/">IndexedDB
+中文教程（2）基本使用</a></p>
+<p>教程持续更新中……</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a><a href="/tags/indexedDB/" class="post-tag">#indexedDB</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/25/" class="post-title hover-line">Web 开发中如何终止一个 Http 请求</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>在前端开发中，终止一个已经开始的网路请求是有一定应用场景的。尤其是在
+<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Single-page_application">SPA
+(Signal Page Web Application)</a> 单页面 Web
+应用中，路由的跳转或场景的切换并不会像多页面跳转一样终止之前未被响应的网络请求。此时就可能会发生数据请求发生时的场景已经不存在，而网络请求成功后，数据被不正确的渲染在新的场景中的问题。因此应确保这些网络请求在场景变化后被终止或不被处理，以避免数据的混乱，提升部分性能。</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a><a href="/tags/XHR/" class="post-tag">#XHR</a><a href="/tags/Fetch-API/" class="post-tag">#Fetch API</a><a href="/tags/Axios/" class="post-tag">#Axios</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/24/" class="post-title hover-line">webpack4 打包“块”的分离</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>当不使用外部插件时，webpack 会把 <code>webpack.config.js</code>
+配置文件里每个入口打包一个 <code>[entry].js</code>
+文件，这意味着单页面应用（单入口）最终只会打包生成一个 <code>js</code>
+文件。而很多情况下，这种处理并不是最佳的处理方式。比如会造成单个
+<code>js</code> 文件体积过大，并且每次项目迭代都会造成全量
+<code>js</code>
+的更新，不能充分利用缓存。所以我们需要按照一些规则，对打包输出的“块”进行拆分，已达到优化性能的目的。</div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Node-js/" class="post-tag">#Node.js</a><a href="/tags/webpack4/" class="post-tag">#webpack4</a><a href="/tags/splitChunksPlugin/" class="post-tag">#splitChunksPlugin</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/23/" class="post-title hover-line">Git 子模块 submodule 的使用</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>Git 子模块具有一定的应用场景。</p>
+<p>比如在一个项目 P 中，该项目被分为两部分，由 A 和 B
+两个团队并行开发。而 B
+团队开发的内容属于公共支持类的项目，不止会被该项目使用，其他项目也可能会使用。因此
+B 团队开发的内容不可能和团队 A
+共用一个仓库。因为这样的话别人拉取该公共内容时会连带拉取不需要的内容。而
+A 团队项目的开发又依赖于 B 团队所做的内容，并希望能随时获得团队 B
+得最新成果。</p>
+<p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/Tools/" class="post-tag">#Tools</a><a href="/tags/Git/" class="post-tag">#Git</a>
+
+</div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/19/" class="post-title hover-line">我们为什么构建React</a>
+      
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>现在已经存在很多 JavaScript MVC 框架了，为什么我们还要创建 React
 并且你为什么会去用它？</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="post-tag">#转载</a>
-  
-    <a href="/tags/React/" class="post-tag">#React</a>
-  
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E8%BD%AC%E8%BD%BD/" class="post-tag">#转载</a><a href="/tags/React/" class="post-tag">#React</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/17/" class="post-title hover-line">JavaScript设计模式(1)——单例模式</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/17/" class="post-title hover-line">JavaScript设计模式(1)——单例模式</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>在 JavaScript
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>在 JavaScript
 中单例模式的应用场景还是比较多的，实现起来也比较简单。大体思路无非就是，第一次调用构造函数时，实例化示例并保存起来。再次调用时直接将第一次实例化的对象返回即可。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/ECMAScript/" class="post-tag">#ECMAScript</a>
-  
-    <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a>
-  
-    <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="post-tag">#单例模式</a>
-  
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/ECMAScript/" class="post-tag">#ECMAScript</a><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-tag">#设计模式</a><a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="post-tag">#单例模式</a>
 
 </div>
-          </div>
-        </div>
+    </div>
+  </div>
+
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/14/" class="post-title hover-line">为DOM2级事件函数传参——bind的应用</a>
       
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/14/" class="post-title hover-line">为DOM2级事件函数传参——bind的应用</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>在复杂的 web 开发中，我们应采用 DOM 2 级事件来绑定和移除函数。即使用
+    </div>
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>在复杂的 web 开发中，我们应采用 DOM 2 级事件来绑定和移除函数。即使用
 <code>addEventListener</code> 和 <code>removeEventListener</code> 方法为
 DOM 节点绑定和解绑函数。因为 DOM 1
 级事件不支持多个函数的绑定。这意味着，当你使用 DOM 1 级为 DOM
 绑定新函数时，旧的函数会被取代。这在很多情况下是不被希望看到的。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a>
-  
-    <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" class="post-tag">#DOM事件</a>
-  
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/ClientScript/" class="post-tag">#ClientScript</a><a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" class="post-tag">#DOM事件</a>
 
 </div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/12/" class="post-title hover-line">排序算法（二）——交换排序（冒泡排序+快速排序）</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><h2 id="冒泡排序">冒泡排序</h2>
-<h3 id="算法分析">算法分析</h3>
-<p>冒泡排序可能是排序算法中最简单最好理解的算法了。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Algorithm/" class="post-tag">#Algorithm</a>
-  
-    <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" class="post-tag">#冒泡排序</a>
-  
-    <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="post-tag">#排序算法</a>
-  
-    <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" class="post-tag">#快速排序</a>
-  
+    </div>
+  </div>
 
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/11/" class="post-title hover-line">排序算法（一）——插入排序（直接插入+希尔排序）</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><h2 id="思路">思路</h2>
-<p>插入排序的基本思路是，每次将一个待排序的记录按照其关键码的大小插入到已经排好序的有序序列中，直到记录全部有序。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Algorithm/" class="post-tag">#Algorithm</a>
-  
-    <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="post-tag">#排序算法</a>
-  
-    <a href="/tags/%E5%B8%8C%E5%B0%94%E6%8E%92%E5%BA%8F/" class="post-tag">#希尔排序</a>
-  
 
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/10/" class="post-title hover-line">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p><a target="_blank" rel="noopener" href="https://certbot.eff.org/">certbot</a>
-是一个提供命令行来自动配置网站 SSL 证书的工具。访问其<a
-target="_blank" rel="noopener" href="https://certbot.eff.org/">官网</a>可以获得不同操作系统以及不同 Web
-服务器下的使用教程。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Server/" class="post-tag">#Server</a>
-  
-    <a href="/tags/SSL/" class="post-tag">#SSL</a>
-  
-    <a href="/tags/HTTPS/" class="post-tag">#HTTPS</a>
-  
-
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/9/" class="post-title hover-line">为 CentOS 添加回收站功能</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>在 centos 中删除文件时会使用 <code>rm -rf</code>
-命令，然而该命令往往造成不可挽回的后果，比如手抖删错目录然后过段时间再想恢复几乎时不可能的。在很多桌面发行版本中已经有了回收站功能，在服务器端的
-centos 中这个功能更为重要。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Server/" class="post-tag">#Server</a>
-  
-    <a href="/tags/CentOS/" class="post-tag">#CentOS</a>
-  
-    <a href="/tags/bash/" class="post-tag">#bash</a>
-  
-
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/8/" class="post-title hover-line">谨以此文祭奠我的前博客</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>当我在云服务器控制台重装了
-CentOS，部署完崭新的博客系统，在网站首页再次写下“积跬步以至千里，积小流以成江海”这句话时，我知道我兢兢业业积累了六个多月，近百篇涉猎甚广的博客已经一去不返了。</div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/Server/" class="post-tag">#Server</a>
-  
-    <a href="/tags/%E8%BF%90%E7%BB%B4/" class="post-tag">#运维</a>
-  
-
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/27/" class="post-title hover-line">CSS 实现水平垂直居中布局</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><blockquote>
-<p>居中的实现是 CSS 布局中很典型（poster
-child）的问题。本文试图从不同的应用场景（水平居中、垂直居中、水平垂直居中）入手，尽可能列举常见的解决方案。</p>
-</blockquote></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/CSS/" class="post-tag">#CSS</a>
-  
-    <a href="/tags/CSS-%E5%B8%83%E5%B1%80/" class="post-tag">#CSS 布局</a>
-  
-
-</div>
-          </div>
-        </div>
-      
-        <div class="post-card">
-          <div class="post__head">
-            <a href="/archives/28/" class="post-title hover-line">CSS3 制作常见几何图形</a>
-          </div>
-          <div class="post__body">
-            
-            <div class="post-excerpt"><p>通过 CSS3
-提供一些新的属性和标准，可以实现一些常见的几何图形。避免使用贴图等其他手段，减少网络请求和资源大小，同时自适应和缩放效果会更好。</p></div>
-          </div>
-          <div class="post__foot">
-            <div class="post-tags">
-  
-    <a href="/tags/CSS/" class="post-tag">#CSS</a>
-  
-    <a href="/tags/CSS-%E7%89%B9%E6%95%88/" class="post-tag">#CSS 特效</a>
-  
-
-</div>
-          </div>
-        </div>
-      
     
-    <div class="paginator"><a class="page-number" href="/developer/">1</a><a class="page-number" href="/developer/page/2/">2</a><span class="page-number current">3</span></div>
+    <div class="paginator"><a class="page-number" href="/developer/">1</a><a class="page-number" href="/developer/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/developer/page/4/">4</a></div>
   </div>
 
     </div>
@@ -361,11 +341,31 @@ child）的问题。本文试图从不同的应用场景（水平居中、垂直
         <div class="foot__head">
           
             <div class="foot-line">
-              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+              
+                <div class="matts">海</div>
+              
+                <div class="matts">内</div>
+              
+                <div class="matts">存</div>
+              
+                <div class="matts">知</div>
+              
+                <div class="matts">己</div>
+              
             </div>
           
             <div class="foot-line">
-              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+              
+                <div class="matts">天</div>
+              
+                <div class="matts">涯</div>
+              
+                <div class="matts">若</div>
+              
+                <div class="matts">比</div>
+              
+                <div class="matts">邻</div>
+              
             </div>
           
         </div>
@@ -376,34 +376,22 @@ child）的问题。本文试图从不同的应用场景（水平居中、垂直
               <div class="foot-item__body">
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
                   </div>
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
                   </div>
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
                   </div>
                 
                 <div class="text">
-                  <img alt="link"
-                       height="20px"
-                       width="20px"
-                       src="/images/icon/icon-link+.svg"/>
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg"/>
                   <a class="foot-link"
                      href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
                   申请友链</a>
@@ -438,10 +426,7 @@ child）的问题。本文试图从不同的应用场景（水平居中、垂直
             <div class="foot-item__head">联系</div>
             <div class="foot-item__body">
               <div class="text">
-                <img alt="link"
-                     height="20px"
-                     width="20px"
-                     src="/images/icon/icon-email.svg"/>
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg"/>
                 <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
               </div>
             </div>
@@ -450,22 +435,17 @@ child）的问题。本文试图从不同的应用场景（水平居中、垂直
         <div class="copyright">
           <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
           <svg width="20" height="20" viewBox="0 0 725 725">
-            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
-            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
-            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
-            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
-            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
-            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z"/>
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z"/>
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z"/>
           </svg>
           <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
         </div>
       </div>
     </div>
     
-      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
-    
-    
+  
+
   </body>
 </html>

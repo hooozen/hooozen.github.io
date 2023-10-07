@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
-    <meta charset="utf8" />
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <meta charset="utf8"/>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
     <title>
       
         Hexo 主题「致远」发布 | hozen.site
       
     </title>
-    <meta name="description" content="开发者，数理知识和文学创作"/>
-    <meta name="keywords" content="李浩然的博客,李浩然,hozen,Web,统计学,前端,自由开发者,文字,博客"/>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
     
       <link rel="apple-touch-icon"
             sizes="180x180"
@@ -33,28 +33,52 @@
             color=""/>
     
     
-    <link rel="stylesheet" type="text/css" href="/css/layout.css"/>
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/regular.ttf);
+        font-weight: regular;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
     
       <script>
         var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
         })();
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/post.css" />
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
 
   <meta name="generator" content="Hexo 6.3.0"></head>
   <body>
     <div class="head">
       <div class="nav">
-        <a href="/" class="nav-logo">
-          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
         </a>
         <input id="navBtn" type="checkbox"/>
         <div class="nav-menu">
@@ -66,6 +90,7 @@
             
               <a class="nav-menu-item" href="/life">生活</a>
             
+          
           
         </div>
         <label class="nav-btn" for="navBtn"></label>
@@ -79,110 +104,23 @@
         <div class="post-title">Hexo 主题「致远」发布</div>
         <div class="post-info">
           
-  
-    <a href="/tags/app/" class="post-tag">#app</a>
-  
+  <a href="/tags/app/" class="post-tag">#app</a>
 
 
           <span class="post-date">2022-12-22</span>
         </div>
       </div>
-      <aside class="toc-outer">
-        <ol class="post-toc">
-          
-        </ol>
-      </aside>
+      
       <div class="post-content__body">
         
           <div class="post-gallery">
             
           </div>
         
-        <div
-style="display: flex; justify-content: center; align-items: center">
-<img height="50px" src="/images/tranquility.svg"/> 致远
-</div>
-<p align="center">
-致远是一款 Hexo 主题，主要为个人主页及多学科领域博主设计。
-</p>
-<span id="more"></span>
-<p align="center">
-<p><a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility/raw/main/doc/images/index.png"><img src="https://github.com/hooozen/hexo-theme-tranquility/raw/main/doc/images/index.png"></a></p>
-<img src="./doc/images/index.png"/>
-</p>
-<p>演示站：<a href="https://www.hozen.site">浩然的主页</a></p>
-<h2 id="安装">安装</h2>
-<p>下载本仓库的文件到你的 Hexo 目录的 <code>themes\tranquility</code>
-文件夹下：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-built_in">cd</span> hexo<br>git <span class="hljs-built_in">clone</span> https://github.com/hooozen/hexo-theme-tranquility.git themes/next<br></code></pre></td></tr></table></figure>
-<p>并配置根目录下 <code>_config.yml</code> 中的 <code>theme</code>
-字段为 <code>tranquility</code>。</p>
-<p>参考 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/themes">主题 |
-Hexo</a>。</p>
-<h2 id="设计逻辑">设计逻辑</h2>
-<p>本主题改变了 Hexo 的默认设计逻辑，所以与大多数的 Hexo
-主题的用法不同，请参考下文。</p>
-<p>大多数的 Hexo
-主题的设计目的是在于<strong>纯粹的博客记录</strong>，并且博主的博客内容往往集中于单一学科领域（如互联网技术）。因此在这个需求驱动下，大多数
-Hexo
-主题被设计为主页展示文章列表，并使用繁多的分类（Category）为文章进行细分。这种设计很好的满足了需求。</p>
-<p>当用户需要一个能够展示个人特点的主页，并且需要对博客的内容进行<strong>明确</strong>的领域划分时，这些主题并不能很好的满足这些需求。因此“致远”主题被设计出来，也被规定了目标群体。</p>
-<h3 id="改变">改变</h3>
-<p>主页并不展示文章列表，而是展示具有个人特点的内容，如“关于”和“时间线”功能。</p>
-<p>引入“子页”的概念来取代“分类”（Category），所有的子页都在导航栏具有一级入口。基于此，子页的概念应该更广，往往为某一个学科大类或者领域，例如所有的互联网技术博文应该被划分为一个“子页”中，不管它属于“前端技术”还是“服务端技术”。</p>
-<p>对于同属一个“子页”的文章，借鉴了微信公众号的分类逻辑，使用标签（Tag）来对文章进行分类和聚合。因此主题中（几乎<sup>注</sup>）没有了默认的
-Category
-的概念和入口，取而代之的是“子页”（Subpage）与“标签”（Tag）的概念。<br />
-（<em>注：虽然“子页”的概念取代了“分类”，但底层的实现仍然是基于分类的。并且虽然分类的入口被取消，但仍然可以通过
-URL
-进行访问。之所以这么做是出于兼容性考虑，但不推荐用户使用时仍采用“分类”的概念去部署文章。</em>）</p>
-<p>有关该主题的设计理念，如果这里的描述不够清楚，打开<a
-href="https://www.hozen.site">演示站</a>浏览一下应该就明白了。如果仍无法理解，可能是因为你并没有这种需求。</p>
-<h2 id="主题配置">主题配置</h2>
-<p>主题目录中的默认配置是完全兼容 Hexo
-的默认设计的。如果想要发挥该主题的设计初衷，需要开启“子页”配置。</p>
-<h3 id="子页功能-subpage">子页功能 subpage</h3>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">subpage:</span> <span class="hljs-comment"># 开启“子页”功能，详见 README</span><br>  <span class="hljs-attr">enable:</span> <span class="hljs-literal">false</span><br>  <span class="hljs-attr">pages:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-comment"># 文章的分类（category）名，如 developer</span><br>      <span class="hljs-attr">path:</span> <span class="hljs-comment"># 若不设置则默认使用 name</span><br>      <span class="hljs-attr">title:</span> <span class="hljs-comment"># 菜单名，如 开发者</span><br>      <span class="hljs-attr">icon:</span> <span class="hljs-comment"># 图标的路径</span><br>      <span class="hljs-attr">description:</span> <span class="hljs-comment"># 描述</span><br></code></pre></td></tr></table></figure>
-<p>若关闭子页功能（<code>enbale:
-false</code>），则导航栏只会有一个“博客”按钮，点击该按钮就会进入所有文章列表。</p>
-<p>若开启子夜功能（<code>enbale: true</code>），则必须配置
-<code>pages</code> 数组。该数组中的 <code>name</code>
-字段即为要被设置为子页的<strong>文章分类名</strong>。<code>path</code>
-指定子页的路径，默认使用 <code>name</code>。该数组的 <code>title</code>
-会展示在导航栏的菜单中。配置完毕后，<code>pages</code>
-数组中的所有项都会以 <code>title</code>
-为名展示在网页的头部导航栏，点击每一项进入相应的子页。</p>
-<p>“子页”实际上就是原来的“分类页”，在该页下会展示属于该分类（<code>name</code>字段）的文章列表。<code>icon</code>
-和 <code>description</code> 用于配置子页中的图标和表述。</p>
-<h3 id="时间线">时间线</h3>
-<p>为文章添加 <code>selected</code> 字段并设置为 <code>true</code>
-即可添加至首页时间线中。如：</p>
-<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs md">---<br>id: 57<br>title: 多少冬天<br>date: 2022-11-30 23:23:48<br>tags: <br><span class="hljs-bullet">-</span> 散文<br>categories: life<br>cover: /assets/images/57-1.jpg<br><span class="hljs-section">selected: true</span><br><span class="hljs-section">---</span><br></code></pre></td></tr></table></figure>
-<p>目前主题支持 3
-种时间线事件，分别为“文章”、“事件”、“App”。文章则通过上述配置
-<code>selected:true</code> 来添加到时间线。“事件”则需要在文章种配置
-<code>type: event</code>，“APP”则配置为 <code>type: app</code>。</p>
-<p>这 3
-种时间线事件会在主页时间线使用不同的颜色和图标展示，并默认展示“事件”和“App”，通过点击“时间线”旁边的
-Radio 可以进行筛选。</p>
-<p><em>这三种事件的命名是常量，不可配置的，因此你不必受其名称影响，例如你可以使用
-app 来标记其他类型的事件。这里后续会考虑进行配置化处理。</em></p>
-<h3 id="其他">其他</h3>
-<p>其他配置参考主题目录下 <code>_config.yml</code> 的注释，包括：</p>
-<ul>
-<li>数学公式的支持 （依赖 <code>hexo-renderer-pandoc</code> 和
-pandoc）</li>
-<li>首页内容配置</li>
-<li>友链和社交媒体</li>
-<li>相关文章（依赖 <code>hexo-related-popular-posts</code>）</li>
-<li>文章赞赏</li>
-<li>gitalk 文章评论</li>
-<li>百度 SEO</li>
-<li>等</li>
-</ul>
+        <p>查看 <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility"
+class="uri">https://github.com/hooozen/hexo-theme-tranquility</a></p>
 
       </div>
-
     </div>
   </article>
   <div class="post__foot">
@@ -194,12 +132,12 @@ pandoc）</li>
          width="100px"
          id="front-face"
          alt="author face"
-         src="/assets/images/author-face.jpg"/>
+         src="/assets/images/author-face.jpg" />
     <img height="100px"
          width="100px"
          id="back-face"
          alt="like code"
-         src="/assets/images/pay-code.jpg"/>
+         src="/assets/images/pay-code.jpg" />
   </div>
   <div class="like-text">“又摘桃花换酒钱”</div>
   <label for="likeCode" class="like-btn">
@@ -207,7 +145,7 @@ pandoc）</li>
          width="20px"
          style="margin-right: 10px"
          height="20px">
-      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242"/>
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
     </svg>
     喜欢作者
   </label>
@@ -252,9 +190,7 @@ pandoc）</li>
     
       <div class="related-post">
   <div class="related__head">
-  
-    <a href="/tags/app/" class="post-tag">#app</a>
-  
+  <a href="/tags/app/" class="post-tag">#app</a>
 
 </div>
   <div class="realated__body">
@@ -265,9 +201,7 @@ pandoc）</li>
 </div>
 
     
-    
-      <div id="gitalk-container"></div>
-    
+    <div id="gitalk-container"></div>
   </div>
 
     </div>
@@ -276,11 +210,31 @@ pandoc）</li>
         <div class="foot__head">
           
             <div class="foot-line">
-              <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+              
+                <div class="matts">海</div>
+              
+                <div class="matts">内</div>
+              
+                <div class="matts">存</div>
+              
+                <div class="matts">知</div>
+              
+                <div class="matts">己</div>
+              
             </div>
           
             <div class="foot-line">
-              <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+              
+                <div class="matts">天</div>
+              
+                <div class="matts">涯</div>
+              
+                <div class="matts">若</div>
+              
+                <div class="matts">比</div>
+              
+                <div class="matts">邻</div>
+              
             </div>
           
         </div>
@@ -291,34 +245,22 @@ pandoc）</li>
               <div class="foot-item__body">
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
                   </div>
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
                   </div>
                 
                   <div class="text">
-                    <img alt="link"
-                         height="20px"
-                         width="20px"
-                         src="/images/icon/icon-link.svg"/>
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
                     <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
                   </div>
                 
                 <div class="text">
-                  <img alt="link"
-                       height="20px"
-                       width="20px"
-                       src="/images/icon/icon-link+.svg"/>
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg"/>
                   <a class="foot-link"
                      href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
                   申请友链</a>
@@ -353,10 +295,7 @@ pandoc）</li>
             <div class="foot-item__head">联系</div>
             <div class="foot-item__body">
               <div class="text">
-                <img alt="link"
-                     height="20px"
-                     width="20px"
-                     src="/images/icon/icon-email.svg"/>
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg"/>
                 <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
               </div>
             </div>
@@ -365,20 +304,14 @@ pandoc）</li>
         <div class="copyright">
           <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
           <svg width="20" height="20" viewBox="0 0 725 725">
-            <path fill-rule="evenodd" fill="rgb(221, 221, 221)"
-            d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
-            <path fill-rule="evenodd" fill="rgb(159, 159, 159)"
-            d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
-            <path fill-rule="evenodd" fill="rgb(0, 0, 0)"
-            d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z"/>
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z"/>
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z"/>
           </svg>
           <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
         </div>
       </div>
     </div>
-    
-      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     
   <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
@@ -389,7 +322,6 @@ pandoc）</li>
   gitalk.render('gitalk-container')
 </script>
 
-  
 
   </body>
 </html>
