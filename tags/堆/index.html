@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
     <title>
       
-        数学老师 | hozen.site
+        堆 | hozen.site
       
     </title>
     <meta name="description" content="开发者,数理知识和文学创作"/>
@@ -70,8 +70,9 @@
       </script>
     
     
-  <link rel="stylesheet" type="text/css" href="/css/post.css" />
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="/css/category.css" />
 
   <meta name="generator" content="Hexo 6.3.0"></head>
   <body>
@@ -98,112 +99,31 @@
     </div>
     <div class="body">
       
-  <article class="post-content">
-    <div class="post-inner">
-      <div class="post-content__head">
-        <div class="post-title">数学老师</div>
-        <div class="post-info">
-          
-  <a href="/tags/%E6%95%A3%E6%96%87/" class="post-tag">#散文</a><a href="/tags/%E9%9A%8F%E7%AC%94/" class="post-tag">#随笔</a>
-
-
-          <span class="post-date">2023-04-15</span>
-        </div>
-      </div>
+  <div class="tag-page-title">#堆</div>
+  <div class="post-list">
+    
+  
+  <div class="post-card">
+    <div class="post__head">
+      <a href="/archives/76/" class="post-title hover-line">堆(优先队列)的实现原理</a>
       
-      <div class="post-content__body">
-        
-          <div class="post-gallery">
-            
-          </div>
-        
-        <p>上学时做暑期兼职，带六个年级的小学数学。从二年级到初一的数学，一天正好上满六节课，不得休息。在城中村中，工资很低，老板是一对上了年纪的夫妇，班级就设在他们的两层楼房里。孩子多来自附近村里，父母托管过来，交个饭钱，不求学到什么，直消能有个地儿管束下孩子，吃顿午饭，不影响自己上班。
-<span id="more"></span></p>
-<p>有的孩子好像爱上我的课，我也爱教他们，我一直以为我教的不错，孩子们会喜欢我。直到后来在“办公室”里和其他老师聊天，才发现孩子们最害怕上数学课，“因为数学老师最严厉”。我竟一直不觉。</p>
-<p>暑期班快结束时，七年级语文试卷的作文题目是“我的老师”。有一些失落，全班只有一个孩子写了数学老师。那是一个胖胖的男孩，老板阿姨在午饭时总是调侃他太能吃，让他多交钱，他只嘿嘿笑。他上数学课时反应总是慢别人一拍，做题很慢，班里的女生不喜欢他，甚至恶语相向，说到急处他也会骂回去。有时上课会走神，刚讲过的知识点也答不出，我常罚他站着听课。我没想到选我写进作文的是这个孩子。我看了他的作文，字写得很大，每个都挤出了方格。他说，他最喜欢数学老师，虽然别的同学都觉得数学老师很严厉，但只有数学老师在课堂上当他没弄懂时会等着他。</p>
-
-      </div>
     </div>
-  </article>
-  <div class="post__foot">
-    
-      <div class="like-author">
-  <input type="checkbox" id="likeCode" />
-  <div class="author-face">
-    <img height="100px"
-         width="100px"
-         id="front-face"
-         alt="author face"
-         src="/assets/images/author-face.jpg" />
-    <img height="100px"
-         width="100px"
-         id="back-face"
-         alt="like code"
-         src="/assets/images/pay-code.jpg" />
+    <div class="post__body">
+      
+      <div class="post-excerpt"><p>堆(优先队列)是数据结构与算法中非常经典的结构，被广泛应用到计算机科学当中.
+例如在堆排和优先级调度中堆便是核心的数据结构.
+本文介绍堆的基本实现原理，力求清晰易懂.</p></div>
+    </div>
+    <div class="post__foot">
+      <div class="post-tags">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a><a href="/tags/%E5%A0%86/" class="post-tag">#堆</a>
+
+</div>
+    </div>
   </div>
-  <div class="like-text">“又摘桃花换酒钱”</div>
-  <label for="likeCode" class="like-btn">
-    <svg viewBox="0 0 1024 1024"
-         width="20px"
-         style="margin-right: 10px"
-         height="20px">
-      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
-    </svg>
-    喜欢作者
-  </label>
-</div>
+
 
     
-    <div class="post-nav">
-  
-    <a class="post-nav-item-left" href="/archives/67/">
-      <div class="text-align">
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
-        </svg>
-        <span class="text-small">上一篇</span>
-      </div>
-      <div>Hexo 的多主题自动化部署</div>
-    </a>
-  
-  <div class="vhr"></div>
-  
-    <a class="post-nav-item-right" href="/archives/66/">
-      <div class="text-align">
-        <span class="text-small">下一篇</span>
-        <svg t="1670570876164"
-             class="icon"
-             viewBox="0 0 1024 1024"
-             transform="scale(-1,-1)"
-             width="16"
-             height="16">
-          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
-        </svg>
-      </div>
-      读书
-    </a>
-  
-</div>
-
-    
-      <div class="related-post">
-  <div class="related__head">
-  <a href="/tags/%E6%95%A3%E6%96%87/" class="post-tag">#散文</a><a href="/tags/%E9%9A%8F%E7%AC%94/" class="post-tag">#随笔</a>
-
-</div>
-  <div class="realated__body">
-    
-      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/66/" title="读书" rel="bookmark">读书</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/71/" title="平凡的世界" rel="bookmark">平凡的世界</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/13/" title="我与明二" rel="bookmark">我与明二</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/22/" title="别君去兮何时还" rel="bookmark">别君去兮何时还</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/18/" title="捕梦 - 尼尔·盖曼" rel="bookmark">捕梦 - 尼尔·盖曼</a></div></div></div>
-    
-  </div>
-</div>
-
-    
-    <div id="gitalk-container"></div>
   </div>
 
     </div>
@@ -316,14 +236,5 @@
     </div>
     
     
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
-  param.id = location.pathname
-  const gitalk = new Gitalk(param)
-  gitalk.render('gitalk-container')
-</script>
-
-
   </body>
 </html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8"/>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+    <title>
+      
+        堆(优先队列)的实现原理 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/regular.ttf);
+        font-weight: regular;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css" />
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div class="head">
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-menu">
+          
+            
+              <a class="nav-menu-item" href="/developer">开发者</a>
+            
+              <a class="nav-menu-item" href="/science">数理科学</a>
+            
+              <a class="nav-menu-item" href="/life">生活</a>
+            
+          
+          
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">堆(优先队列)的实现原理</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a><a href="/tags/%E5%A0%86/" class="post-tag">#堆</a>
+
+
+          <span class="post-date">2023-10-12</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="post-toc-text">1. 基础概念</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%A0%B8%E5%BF%83%E7%AE%97%E6%B3%95"><span class="post-toc-text">2. 核心算法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%8A%82%E7%82%B9%E4%B8%8B%E6%B2%89-sink"><span class="post-toc-text">2.1 节点下沉 (sink)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%8A%82%E7%82%B9%E4%B8%8A%E6%B5%AE-swim"><span class="post-toc-text">2.2 节点上浮 (swim)</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#api-%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">3. API 实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A0"><span class="post-toc-text">3.1 插入元素</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%BC%B9%E5%87%BA%E5%85%83%E7%B4%A0"><span class="post-toc-text">3.2 弹出元素</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%BB%BA%E5%A0%86"><span class="post-toc-text">3.3 初始化建堆</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%AE%8C%E6%95%B4%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">3.4 完整实现</span></a></li></ol></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>堆(优先队列)是数据结构与算法中非常经典的结构，被广泛应用到计算机科学当中.
+例如在堆排和优先级调度中堆便是核心的数据结构.
+本文介绍堆的基本实现原理，力求清晰易懂.</p>
+<span id="more"></span>
+<h2 id="基础概念">1. 基础概念</h2>
+<blockquote>
+<p>In computer science, a heap is a specialized tree-based data
+structure that satisfies the heap property: In a max heap, for any given
+node C, if P is a parent node of C, then the key (the value) of P is
+greater than or equal to the key of C. In a min heap, the key of P is
+less than or equal to the key of C.</p>
+</blockquote>
+<p>堆(优先队列)的这种结构是为了在堆进行操作时能够尽可能降低算法的复杂度，从使用角度讲，堆(优先队列)支持<strong>初始化</strong>、<strong>队头弹出</strong>、<strong>插入</strong>等操作。并保证从队头取出的元素具有最高的优先级。例如以元素大小作为优先级则可构造大(小)根堆，保证每次从队头取出的都是最大(小)的元素。</p>
+<p>堆的实现一般是由<strong>数组</strong>模拟<strong>完全二叉树</strong>的数据结构实现。用数组存储的完全二叉树中，下标为
+<code>i</code> 的节点的孩子节点(如果存在)下标分别为 <code>2i + 1</code>
+和 <code>2i + 2</code>. 同理，节点 <code>i</code> 的父节点(如果存在)为
+<code>(i - 1) / 2</code>。</p>
+<p>定义优先队列 <code>Heap</code> 的 API，其中 <code>cmp</code>
+用以比较两个元素的优先级：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Heap</span>&lt;T&gt; &#123;<br>  <span class="hljs-attr">q</span>: T[];<br>  <span class="hljs-attr">cmp</span>: <span class="hljs-function">(<span class="hljs-params">a: T, b: T</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>;<br><br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">data: T[], cmp?: (a: T, b: T) =&gt; <span class="hljs-built_in">boolean</span></span>) &#123;&#125;<br><br>  <span class="hljs-keyword">get</span> <span class="hljs-title function_">size</span>() &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>.<span class="hljs-property">length</span><br>  &#125;<br><br>  <span class="hljs-title function_">pop</span>(): T | <span class="hljs-literal">undefined</span> &#123;&#125;<br>  <span class="hljs-title function_">push</span>(<span class="hljs-params">x: T</span>) &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="核心算法">2. 核心算法</h2>
+<h3 id="节点下沉-sink">2.1 节点下沉 (sink)</h3>
+<p>如果有一个二叉树，它的左子树和右子树都已经是大根堆，为了使该二叉树构成堆，需要把根节点“<strong>下沉
+(sink)</strong>“ 到合适的位置：</p>
+<ul>
+<li>将该二叉树根节点的值与左右子树的根节点做对比，</li>
+<li>如果它的值大于左右子树根节点则此二叉树也构成一个大根堆.
+算法结束.</li>
+<li>否则将它与比自身大的那个节点的位置进行交换</li>
+<li>此时继续考虑交换后节点所在的子树，<strong>递归</strong>执行上述操作</li>
+</ul>
+<p>通过以上算法，初始的根节点被“<strong>下沉</strong>”到合适的位置，最终形成一个大根堆。</p>
+<p>下沉算法的递归实现如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">sink</span>(<span class="hljs-params">i: <span class="hljs-built_in">number</span></span>) &#123;<br>  <span class="hljs-keyword">let</span> max = <span class="hljs-number">2</span> * i + <span class="hljs-number">1</span><br><br>  <span class="hljs-keyword">if</span> (max &gt;= <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>) <span class="hljs-keyword">return</span><br><br>  <span class="hljs-keyword">if</span> (max + <span class="hljs-number">1</span> &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> &amp;&amp; <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max + <span class="hljs-number">1</span>], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max])) &#123;<br>    ++max<br>  &#125;<br><br>  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max])) <span class="hljs-keyword">return</span>;<br><br>  [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max]] = [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i]]<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">sink</span>(max)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>实际上，下沉算法往往使用迭代实现：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">sink</span>(<span class="hljs-params">i: <span class="hljs-built_in">number</span></span>) &#123;<br>  <span class="hljs-keyword">while</span> (<span class="hljs-number">2</span> * i + <span class="hljs-number">1</span> &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>) &#123;<br>    <span class="hljs-keyword">let</span> max = <span class="hljs-number">2</span> * i + <span class="hljs-number">1</span><br><br>    <span class="hljs-keyword">if</span> (max + <span class="hljs-number">1</span> &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> &amp;&amp; <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max + <span class="hljs-number">1</span>], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max])) &#123;<br>      ++max<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max])) <span class="hljs-keyword">break</span>;<br><br>    [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max]] = [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i]]<br><br>    i = max<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="节点上浮-swim">2.2 节点上浮 (swim)</h3>
+<p>对于一个堆，如果在它的末尾插入一个元素，为了保证堆的性质需要把该节点“<strong>上浮
+(swim)</strong>”到合适的位置：</p>
+<ul>
+<li>将该元素与它的父节点进行比较，如果满足堆的定义，则此时二叉树构成堆，算法结束</li>
+<li>否则将他与父元素交换</li>
+<li>递归执行上述操作</li>
+</ul>
+<p>当算法结束时，新插入的节点<strong>上浮 (swim)</strong>
+到合适的位置使堆的性质得以保证.</p>
+<p>上浮算法的递归实现如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">swim</span>(<span class="hljs-params">i: <span class="hljs-built_in">number</span></span>) &#123;<br>  <span class="hljs-keyword">const</span> p = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((i - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>)<br><br>  <span class="hljs-keyword">if</span> (p &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span><br><br>  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i])) <span class="hljs-keyword">return</span>;<br>  [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i]] = [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p]]<br><br>  <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">swim</span>(p)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>实际上，常用迭代实现上浮算法：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">swim</span>(<span class="hljs-params">i: <span class="hljs-built_in">number</span></span>) &#123;<br>  <span class="hljs-keyword">while</span> (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((i - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>) &gt;= <span class="hljs-number">0</span>) &#123;<br>    <span class="hljs-keyword">const</span> p = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((i - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i])) <span class="hljs-keyword">break</span>;<br><br>    [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i]] = [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p]]<br>    i = p<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="api-实现">3. API 实现</h2>
+<p>有了上浮和下沉算法，堆的 API 实现起来就非常简单直观了.</p>
+<h3 id="插入元素">3.1 插入元素</h3>
+<p>往一个堆里插入元素时，只需要把该元素放到堆的末尾，然后把该元素上浮到合适的位置即可：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">push</span>(<span class="hljs-params">x: T</span>) &#123;<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>.<span class="hljs-title function_">push</span>(x)<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">swim</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> - <span class="hljs-number">1</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="弹出元素">3.2 弹出元素</h3>
+<p>由于堆的性质，队首的元素一定是优先级最高的元素.
+因此直接把该元素弹出即可.
+为了保证剩下数据仍然符合堆的性质，需要把末尾的元素放到队首，然后把它下沉到合适的位置即可.</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">pop</span>(): T | <span class="hljs-literal">undefined</span> &#123;<br>  <span class="hljs-keyword">const</span> res = <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[<span class="hljs-number">0</span>]<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[<span class="hljs-number">0</span>] = <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[<span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> - <span class="hljs-number">1</span>]<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>.<span class="hljs-title function_">pop</span>()<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">sink</span>(<span class="hljs-number">0</span>)<br><br>  <span class="hljs-keyword">return</span> res<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="初始化建堆">3.3 初始化建堆</h3>
+<p>建堆是指对于一个空堆，给定一组元素把这些元素组织成一个堆.
+一个简单的思路是一次把这些元素 <code>push</code> 到堆中.
+但实际上往往使用一种更高效的方法,
+这种方法在原有的数组上进行调整，最后使之成为堆.</p>
+<p>对于给定的数组直接把它看成一个完全二叉树，显然这棵树的所有叶子节点都是一个堆.
+那么对于这些叶子节点的父节点满足下沉算法的初始条件，则对这些父节点执行下沉算法后，新的堆被建立.
+递归的考虑以这些堆的父节点为根节点的二叉树，对他们执行下沉算法，逐级完成堆的构建，直至抵达根节点.</p>
+<p>简而言之，从数组中的最后一个非叶子节点倒序遍历该数组并执行下沉算法，即完成堆的建立:</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">init</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((<span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> - <span class="hljs-number">2</span>) / <span class="hljs-number">2</span>); i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">sink</span>(i)<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="完整实现">3.4 完整实现</h3>
+<p>堆的实现主要依赖两个核心算法:
+<strong>下沉</strong>和<strong>上浮</strong>，具体 API
+的实现都是基于这两个算法的简单使用.</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Heap</span>&lt;T&gt; &#123;<br>  <span class="hljs-attr">q</span>: T[];<br>  <span class="hljs-attr">cmp</span>: <span class="hljs-function">(<span class="hljs-params">a: T, b: T</span>) =&gt;</span> <span class="hljs-built_in">boolean</span>;<br><br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">data: T[], cmp?: (a: T, b: T) =&gt; <span class="hljs-built_in">boolean</span></span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span> = data<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">cmp</span> = cmp || (<span class="hljs-function">(<span class="hljs-params">a: T, b: T</span>) =&gt;</span> (a <span class="hljs-keyword">as</span> <span class="hljs-built_in">number</span>) - (b <span class="hljs-keyword">as</span> <span class="hljs-built_in">number</span>) &gt; <span class="hljs-number">0</span>);<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">init</span>()<br>  &#125;<br><br>  <span class="hljs-keyword">get</span> <span class="hljs-title function_">size</span>(): <span class="hljs-built_in">number</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>.<span class="hljs-property">length</span><br>  &#125;<br><br>  <span class="hljs-title function_">init</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((<span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> - <span class="hljs-number">2</span>) / <span class="hljs-number">2</span>); i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>      <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">sink</span>(i)<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-title function_">sink</span>(<span class="hljs-params">i: <span class="hljs-built_in">number</span></span>) &#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">2</span> * i + <span class="hljs-number">1</span> &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>) &#123;<br>      <span class="hljs-keyword">let</span> max = <span class="hljs-number">2</span> * i + <span class="hljs-number">1</span><br><br>      <span class="hljs-keyword">if</span> (max + <span class="hljs-number">1</span> &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> &amp;&amp; <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max + <span class="hljs-number">1</span>], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max])) &#123;<br>        ++max<br>      &#125;<br><br>      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max])) <span class="hljs-keyword">break</span>;<br><br>      [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max]] = [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[max], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i]]<br><br>      i = max<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-title function_">pop</span>(): T | <span class="hljs-literal">undefined</span> &#123;<br>    <span class="hljs-keyword">const</span> res = <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[<span class="hljs-number">0</span>]<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[<span class="hljs-number">0</span>] = <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[<span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> - <span class="hljs-number">1</span>]<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>.<span class="hljs-title function_">pop</span>()<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">sink</span>(<span class="hljs-number">0</span>)<br><br>    <span class="hljs-keyword">return</span> res<br>  &#125;<br><br>  <span class="hljs-title function_">push</span>(<span class="hljs-params">x: T</span>) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>.<span class="hljs-title function_">push</span>(x)<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">swim</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> - <span class="hljs-number">1</span>)<br>  &#125;<br><br>  <span class="hljs-title function_">swim</span>(<span class="hljs-params">i: <span class="hljs-built_in">number</span></span>) &#123;<br>    <span class="hljs-keyword">while</span> (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((i - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>) &gt;= <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-keyword">const</span> p = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((i - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>)<br>      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">cmp</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i])) <span class="hljs-keyword">break</span>;<br><br>      [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i]] = [<span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[i], <span class="hljs-variable language_">this</span>.<span class="hljs-property">q</span>[p]]<br>      i = p<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+      </div>
+    </div>
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg" />
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/75/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596"/>
+        </svg>
+      </div>
+      Vue3 响应式(4)-Wacth 的实现原理
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag">#数据结构</a><a href="/tags/%E5%A0%86/" class="post-tag">#堆</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/36/" title="数据结构基础（1）数据结构的基本概念" rel="bookmark">数据结构基础（1）数据结构的基本概念</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/37/" title="数据结构基础（2）算法及算法分析" rel="bookmark">数据结构基础（2）算法及算法分析</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/38/" title="数据结构基础（3）线性表的逻辑结构" rel="bookmark">数据结构基础（3）线性表的逻辑结构</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    <div id="gitalk-container"></div>
+  </div>
+
+    </div>
+    <div class="foot">
+      <div class="foot-inner">
+        <div class="foot__head">
+          
+            <div class="foot-line">
+              
+                <div class="matts">海</div>
+              
+                <div class="matts">内</div>
+              
+                <div class="matts">存</div>
+              
+                <div class="matts">知</div>
+              
+                <div class="matts">己</div>
+              
+            </div>
+          
+            <div class="foot-line">
+              
+                <div class="matts">天</div>
+              
+                <div class="matts">涯</div>
+              
+                <div class="matts">若</div>
+              
+                <div class="matts">比</div>
+              
+                <div class="matts">邻</div>
+              
+            </div>
+          
+        </div>
+        <div class="foot__body">
+          
+            <div class="foot-item">
+              <div class="foot-item__head">朋友</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/icon/icon-link.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+                  </div>
+                
+                <div class="text">
+                  <img alt="link" height="20px" width="20px" src="/images/icon/icon-link+.svg"/>
+                  <a class="foot-link"
+                     href="mailto:Hozen@live.com?subject=%E7%94%B3%E8%AF%B7%20Hozen.site%20%E7%9A%84%E5%8F%8B%E9%93%BE%E4%BD%8D%E7%BD%AE">
+                  申请友链</a>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="foot-item">
+              <div class="foot-item__head">账号</div>
+              <div class="foot-item__body">
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-github.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-wx.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+                  </div>
+                
+                  <div class="text">
+                    <img alt="link" height="20px" width="20px" src="/images/logo-zh.svg"/>
+                    <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+                  </div>
+                
+              </div>
+            </div>
+          
+          <div class="foot-item">
+            <div class="foot-item__head">联系</div>
+            <div class="foot-item__body">
+              <div class="text">
+                <img alt="link" height="20px" width="20px" src="/images/icon/icon-email.svg"/>
+                <a class="foot-link" href="mailto:Hozen@live.com">Hozen@live.com</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <a href="http://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+          <svg width="20" height="20" viewBox="0 0 725 725">
+            <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z"/>
+            <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z"/>
+            <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z"/>
+          </svg>
+          <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+        </div>
+      </div>
+    </div>
+    
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  param.id = location.pathname
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+
+  </body>
+</html>
