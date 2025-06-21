@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8"/>
+    
+      <meta name="google-adsense-account" content="ca-pub-7713704413230895"/>
+    
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+    <title>
+      
+        Vue3 响应式(2)-分支切换、嵌套、和无限递归 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/developer">开发者</a>
+              
+                <a class="nav-menu-item" href="/science">数理科学</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">Vue3 响应式(2)-分支切换、嵌套、和无限递归</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+
+          <span class="post-date">2023-09-19</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%88%86%E6%94%AF%E5%88%87%E6%8D%A2"><span class="post-toc-text">分支切换</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%88%86%E6%94%AF%E5%88%87%E6%8D%A2%E9%97%AE%E9%A2%98%E7%9A%84%E6%8F%8F%E8%BF%B0"><span class="post-toc-text">分支切换问题的描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%88%86%E6%94%AF%E5%88%87%E6%8D%A2%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="post-toc-text">分支切换问题的解决方法</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%B5%8C%E5%A5%97%E7%9A%84%E5%89%AF%E4%BD%9C%E7%94%A8%E5%87%BD%E6%95%B0"><span class="post-toc-text">嵌套的副作用函数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B5%8C%E5%A5%97%E9%97%AE%E9%A2%98%E7%9A%84%E6%8F%8F%E8%BF%B0"><span class="post-toc-text">嵌套问题的描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B5%8C%E5%A5%97%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3"><span class="post-toc-text">嵌套问题的解决</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%97%A0%E9%99%90%E9%80%92%E5%BD%92%E9%97%AE%E9%A2%98"><span class="post-toc-text">无限递归问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%97%A0%E9%99%90%E9%80%92%E5%BD%92%E9%97%AE%E9%A2%98%E7%9A%84%E6%8F%8F%E8%BF%B0"><span class="post-toc-text">无限递归问题的描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%97%A0%E9%99%90%E9%80%92%E5%BD%92%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3"><span class="post-toc-text">无限递归问题的解决</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%BB%A3%E7%A0%81%E5%92%8C%E6%B5%8B%E8%AF%95"><span class="post-toc-text">代码和测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="post-toc-text">参考资料</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>上文<a href="https://www.hozen.site/archives/72/">Vue3
+响应式(1)-基础原理</a>介绍了响应式系统的基本原理并利用 Proxy
+进行了简单的实现，能够应对简单的响应式场景。但该系统仍然面临着一些问题，比如当副作用函数中既包含对响应式对象的读取操作也包含设置操作时会使系统进入无限递归的死循环、当代码分支切换时冗余的关联没有被及时清理等问题。本文就来一一介绍这些问题以及解决方法。</p>
+<span id="more"></span>
+<h2 id="分支切换">分支切换</h2>
+<h3 id="分支切换问题的描述">分支切换问题的描述</h3>
+<p>对于原有的响应式系统，我们考虑这样一个场景：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> data = <span class="hljs-title function_">reactive</span>(&#123;<br>  <span class="hljs-attr">isShow</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Hi!&#x27;</span><br>&#125;)<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">fn</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Debug: update text&#x27;</span>)<br>  <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">innerText</span> = data.<span class="hljs-property">isShow</span> ? data.<span class="hljs-property">text</span> : <span class="hljs-string">&#x27;&#x27;</span><br>&#125;<br><br><span class="hljs-title function_">effect</span>(fn)<br><br>data.<span class="hljs-property">isShow</span> = <span class="hljs-literal">false</span><br>data.<span class="hljs-property">text</span> = <span class="hljs-string">&#x27;Hello World!&#x27;</span><br><br></code></pre></td></tr></table></figure>
+<p>根据原有的实现，当执行 <code>effect</code> 时会立即调用
+<code>fn</code>，由于 <code>data.isShow</code> 为
+<code>true</code>，因此会读取 <code>data.text</code> 的值，此时代理的
+<code>get</code> 拦截器会把 <code>fn</code> 分别与
+<code>data.isShow</code> 和 <code>data.text</code> 关联。因此当执行
+<code>data.isShow = false</code> 时，会重新执行
+<code>fn</code>，将页面的文本置空。至此都没有任何问题，但是由于此时
+<code>data.isShow</code> 为 <code>false</code>，副作用函数
+<code>fn</code> 并不依赖于 <code>data.text</code> 了，也就是说无论
+<code>data.text</code> 的值发生什么变化都不产生任何副作用，无需再次调用
+<code>fn</code> 了。但由于开始时已经将 <code>fn</code> 与
+<code>data.text</code> 相关联了，所以任何时候设置 <code>data.text</code>
+时都会重新调用 <code>fn</code>，即使这样是没有意义的。</p>
+<p>对于这种副作用函数中包含分支切换的情况，每次分支切换时所依赖的响应式变量可能发生变化。由于每次调用副作用函数时都会触发
+<code>get</code>
+拦截器，所以并不担心由于分支切换带来的新增依赖。但对于已经无用的依赖代码中还没有任何清理的操作，这就会导致冗余的副作用函数依然被执行。这样虽然不会对系统产生额外的副作用，但当副作用函数执行开销较大时会对性能产生影响。</p>
+<h3 id="分支切换问题的解决方法">分支切换问题的解决方法</h3>
+<p>对于以上问题，解决方法非常简单，那就是在每次副作用函数执行前把该副作用函数从所有与之相关的依赖集合中移除。然后根据此时的分支情况重新收集副作用函数。例如对于上述例子，第一次收集依赖时，集合
+<code>bucket[data].isShow</code> 和集合 <code>bucket[data].text</code>
+中都有副作用函数 <code>fn</code>。当分支切换时，首先将 <code>fn</code>
+从这两个集合中删除，然后根据 <code>data.isShow</code> 为
+<code>false</code>，本次执行将只会把 <code>fn</code> 收集到集合
+<code>bucket[data].isShow</code> 中。因此<code>data.text</code>
+的变化将不会再调用 <code>fn</code>。</p>
+<p>为了方便的知道副作用函数 <code>fn</code>
+都存在于哪些集合中，我们需要对副作用函数增加一个数组属性来保存与之关联的集合，并在
+<code>track</code>
+中把相关的集合放入副作用函数数组中。然后在每次副作用函数执行对依赖进行清理。具体的修改如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn</span>) &#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-title function_">cleanup</span>(effectFn)  <span class="hljs-comment">// 为了调用 cleanup 需要重新包装 fn</span><br>    activeEffect = effectFn  <span class="hljs-comment">// 设置为包装后的 effectFn</span><br>    <span class="hljs-title function_">fn</span>()<br>  &#125; <br>  effectFn.<span class="hljs-property">depSets</span> = []  <span class="hljs-comment">// 保存相关的集合 </span><br>  <span class="hljs-title function_">effectFn</span>()<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">track</span>(<span class="hljs-params">target, key</span>) &#123;<br>   <span class="hljs-keyword">if</span> (!activeEffect) <span class="hljs-keyword">return</span><br>  <span class="hljs-keyword">let</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target)<br>  <span class="hljs-keyword">if</span> (!depsMap) &#123;<br>    bucket.<span class="hljs-title function_">set</span>(target, (depsMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()))<br>  &#125;<br>  <span class="hljs-keyword">let</span> deps = depsMap.<span class="hljs-title function_">get</span>(key)<br>  <span class="hljs-keyword">if</span> (!deps) &#123;<br>    depsMap.<span class="hljs-title function_">set</span>(key, (deps = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>()))<br>  &#125;<br>  deps.<span class="hljs-title function_">add</span>(activeEffect)<br>  activeEffect.<span class="hljs-property">depSets</span>.<span class="hljs-title function_">push</span>(deps)  <span class="hljs-comment">// 记录相关的集合</span><br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">cleanup</span> (<span class="hljs-params">effectFn</span>) &#123;<br>  effectFn.<span class="hljs-property">depSets</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">deps</span> =&gt;</span> &#123;<br>    deps.<span class="hljs-title function_">delete</span>(effectFn)<br>  &#125;)<br>  effectFn.<span class="hljs-property">depSets</span>.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>  <span class="hljs-comment">// 清理完毕，数组置空</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>但请注意</strong>，通过以上修改虽然完成了对冗余依赖的清理，但是运行时发现系统会进入死循环！这是由于在
+<code>trigger</code> 中有这么一段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>)&#123;<br>  <span class="hljs-comment">// ...</span><br>  deps.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> <span class="hljs-title function_">fn</span>())<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在执行该代码时，每次执行 <code>fn</code> 时都会触发
+<code>cleanup</code> 将 <code>fn</code> 从集合 <code>deps</code>
+中清除，然后又触发 <code>track</code> 把 <code>fn</code>
+又重新收集到集合 <code>deps</code>
+中，就相当于执行以下代码造成死循环：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> s = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([<span class="hljs-number">1</span>])<br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> x <span class="hljs-keyword">of</span> s) &#123;<br>  s.<span class="hljs-title function_">delete</span>(<span class="hljs-number">1</span>)<br>  s.<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>因此，我们还要对 <code>trigger</code>
+做一点修改。只需要把要运行的副作用函数集合做一个“快照”，使得接下来的
+<code>cleanup</code> 不影响本次的运行即可：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>)&#123;<br>  <span class="hljs-comment">// ...</span><br>  <span class="hljs-comment">// deps.forEach(fn =&gt; fn())</span><br>  <span class="hljs-keyword">const</span> depsToRun = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>(deps)<br>  depsToRun.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> <span class="hljs-title function_">fn</span>())<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="嵌套的副作用函数">嵌套的副作用函数</h2>
+<h3 id="嵌套问题的描述">嵌套问题的描述</h3>
+<p>如果副作用函数发生嵌套会发生什么呢？例如对于下面的代码，我们希望
+<code>data.foo</code> 与外层的副作用函数发生绑定，而
+<code>data.bar</code> 与内层的副作用函数绑定。但执行
+<code>data.foo = false</code>
+时发现，并没有触发外部的副作用函数而是仅仅触发了内部的副作用函数，这是怎么回事呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> data = <span class="hljs-title function_">reactive</span>(&#123;<br>  <span class="hljs-attr">foo</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-attr">bar</span>: <span class="hljs-literal">false</span><br>&#125;)<br><br><span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;inner effect&#x27;</span>, data.<span class="hljs-property">bar</span>)<br>  &#125;)<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;out effect&#x27;</span>, data.<span class="hljs-property">foo</span>)<br>&#125;)<br><br>data.<span class="hljs-property">foo</span> = <span class="hljs-literal">false</span><br></code></pre></td></tr></table></figure>
+<p>问题出在 <code>activeEffect</code>
+变量的处理上，当开始执行外部的副作用函数时，先把
+<code>activeEffect</code> 指向外部函数，然后进入内部的副作用函数，此时
+<code>activeEffect</code> 指向内部的函数，当内部的函数执行完后。运行到
+<code>console.log('out effect', data foo)</code> 时，<code>track</code>
+开始收集依赖，但此时的 <code>activeEffect</code>
+指向的是内部的副作用函数，因此将 <code>data.foo</code>
+与内部的副作用函数发生了绑定。导致 <code>data.foo</code>
+本应该与外部副作用函数进行关联的预期没有实现，也就导致了上面的运行结果。</p>
+<h3 id="嵌套问题的解决">嵌套问题的解决</h3>
+<p>对于嵌套的副作用函数导致外层函数丢失的问题，可以通过栈来解决。修改
+<code>effect</code>
+函数，每当开始执行副作用函数时，把当前的副作用函数入栈，并把
+<code>activeEffect</code>
+标记为当前函数。执行完毕后，把栈顶副作用函数出栈，并把
+<code>activeEffect</code> 指回栈顶的副作用函数 (如果有的话)。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> effectStack = []<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn</span>) &#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-title function_">cleanup</span>(effectFn)<br>    activeEffect = effectFn<br>    effectStack.<span class="hljs-title function_">push</span>(effectFn)  <span class="hljs-comment">// 入栈，防止执行 fn 时使 effectFn 丢失</span><br>    <span class="hljs-title function_">fn</span>()<br>    effectStack.<span class="hljs-title function_">pop</span>()  <span class="hljs-comment">// 执行完毕，出栈</span><br>    activeEffect = effectStack[effectStack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]  <span class="hljs-comment">// 将 activeEffect 指回栈顶</span><br>  &#125; <br>  effectFn.<span class="hljs-property">depSets</span> = []  <span class="hljs-comment">// 保存相关的集合 </span><br>  <span class="hljs-title function_">effectFn</span>()<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>经过如此修改后，在执行外部副作用函数时会把当前副作用函数入栈，进入内部副作用函数时虽然会把
+<code>activeEffect</code> 指向内部副作用函数，但当它执行完毕后，会将
+<code>activeEffect</code>
+指回栈顶的外部副作用函数。因此可以实现正确的关联。</p>
+<p>这里可能会有疑问，对栈的更符合直觉的使用应该是在
+<code>effectFn</code> 中将其入栈，然后在消费它的地方 (<code>track</code>
+方法处) 直接出栈使用即可。为什么全部放在 <code>effectFn</code>
+里手动管理呢？这是因为，一个 <code>effectFn</code>
+里可能涉及多个响应式变量及属性，会触发多次 <code>track</code>，在
+<code>track</code>
+里多次弹出使用会导致绑定错误的副作用函数，以及栈的下溢。</p>
+<h2 id="无限递归问题">无限递归问题</h2>
+<h3 id="无限递归问题的描述">无限递归问题的描述</h3>
+<p>考虑这样一个场景，我们可能会在副作用函数中先读取某个响应式变量的值，然后又改变它的值。例如下面的代码，当执行
+<code>data.cnt++</code> (即 <code>data.cnt = data.cnt + 1</code>)
+时，首先读取 <code>data.cnt</code> 触发 <code>track</code> 将该函数与
+<code>data.cnt</code> 进行关联。然后为 <code>data.cnt</code>
+设置新值时，又会触发该副作用函数，继续执行
+<code>data.cnt++</code>。导致以上过程无限递归执行。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> data = <span class="hljs-title function_">reactive</span>(&#123;<br>  <span class="hljs-attr">cnt</span>: <span class="hljs-number">0</span><br>&#125;)<br><br><span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data.<span class="hljs-property">cnt</span>++)<br>&#125;)<br></code></pre></td></tr></table></figure>
+<p>再考虑下面的场景同样是在副作用函数中既读值又赋值，为什么不会发生无限递归？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> data = <span class="hljs-title function_">reactive</span>(&#123;<br>  <span class="hljs-attr">cnt</span>: <span class="hljs-number">0</span><br>&#125;)<br><br><span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  data.<span class="hljs-property">cnt</span> = <span class="hljs-number">0</span><br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data.<span class="hljs-property">cnt</span>)<br>&#125;)<br></code></pre></td></tr></table></figure>
+<p>这个例子不同的是先赋值后取值。由于副作用函数执行前会先调用
+<code>cleanup</code> 清除所有关联，所以当赋值 <code>data.cnt</code>
+还没有把副作用函数关联起来，因此不会无限递归。</p>
+<h3 id="无限递归问题的解决">无限递归问题的解决</h3>
+<p>对于上面无限递归的例子，其本质是当响应式数据发生变化时，我们希望能够通过某种方法通知所有与之相关的函数，让它们重新执行以达到更新状态的目的。但是我们<strong>不需要通知使得数据发生变化的函数本身</strong>，因为函数本身能够获得到此时数据的变化。因此解决方法就很明确了，那就是在
+<code>trigger</code> 中不要去“通知” <code>activeEffect</code> 自身。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, value</span>) &#123;<br>  <span class="hljs-comment">// ...</span><br>  <span class="hljs-keyword">const</span> depsToRun = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>(deps)<br>  <span class="hljs-comment">//  depsToRun.forEach(fn =&gt; fn())</span><br>  depsToRun.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (fn !== activeEffect) <span class="hljs-title function_">fn</span>()<br>  &#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>其实这里还有一个小问题，那就是如何保证全局变量
+<code>activeEffect</code> 指向的是触发 <code>trigger</code>
+的副作用函数本身？其实并不能保证，因为大多数情况下在
+<code>trigger</code> 中 <code>activeEffect</code> 都是
+<code>undefined</code>。但是只要能保证在可能发生无限递归的情况下，<code>activeEffect</code>
+指向的是触发 <code>trigger</code>
+的副作用本身即可。而这一点是显然可以保证的。</p>
+<h2 id="代码和测试">代码和测试</h2>
+<p>经过对以上三个问题的分析和解决，最终版本的代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">let</span> activeEffect;<br><span class="hljs-keyword">const</span> effectStack = [];<br><span class="hljs-keyword">const</span> bucket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>();<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">reactive</span>(<span class="hljs-params">obj</span>) &#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(obj, &#123;<br>    <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key</span>) &#123;<br>      <span class="hljs-title function_">track</span>(target, key); <span class="hljs-comment">// 搜集依赖函数</span><br>      <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key);<br>    &#125;,<br>    <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, value</span>) &#123;<br>      <span class="hljs-keyword">const</span> res = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(target, key, value);<br>      <span class="hljs-title function_">trigger</span>(target, key); <span class="hljs-comment">// 触发关联的依赖函数</span><br>      <span class="hljs-keyword">return</span> res;<br>    &#125;<br>  &#125;);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">track</span>(<span class="hljs-params">target, key</span>) &#123;<br>  <span class="hljs-keyword">if</span> (!activeEffect) <span class="hljs-keyword">return</span>;<br>  <span class="hljs-keyword">let</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target);<br>  <span class="hljs-keyword">if</span> (!depsMap) &#123;<br>    bucket.<span class="hljs-title function_">set</span>(target, (depsMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()));<br>  &#125;<br>  <span class="hljs-keyword">let</span> deps = depsMap.<span class="hljs-title function_">get</span>(key);<br>  <span class="hljs-keyword">if</span> (!deps) &#123;<br>    depsMap.<span class="hljs-title function_">set</span>(key, (deps = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>()));<br>  &#125;<br>  deps.<span class="hljs-title function_">add</span>(activeEffect);<br>  activeEffect.<span class="hljs-property">depSets</span>.<span class="hljs-title function_">push</span>(deps); <span class="hljs-comment">// 记录相关的集合</span><br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>) &#123;<br>  <span class="hljs-keyword">let</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target);<br>  <span class="hljs-keyword">if</span> (!depsMap) <span class="hljs-keyword">return</span>;<br>  <span class="hljs-keyword">let</span> deps = depsMap.<span class="hljs-title function_">get</span>(key);<br>  <span class="hljs-keyword">if</span> (!deps) <span class="hljs-keyword">return</span>;<br>  <span class="hljs-keyword">const</span> depsToRun = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>(deps);<br>  <span class="hljs-comment">//  depsToRun.forEach(fn =&gt; fn())</span><br>  depsToRun.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">fn</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (fn !== activeEffect) <span class="hljs-title function_">fn</span>();<br>  &#125;);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn</span>) &#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-title function_">cleanup</span>(effectFn);<br>    activeEffect = effectFn;<br>    effectStack.<span class="hljs-title function_">push</span>(effectFn); <span class="hljs-comment">// 入栈，防止执行 fn 时使 effectFn 丢失</span><br>    <span class="hljs-title function_">fn</span>();<br>    effectStack.<span class="hljs-title function_">pop</span>(); <span class="hljs-comment">// 执行完毕，出栈</span><br>    activeEffect = effectStack[effectStack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]; <span class="hljs-comment">// 将 activeEffect 指回栈顶</span><br>  &#125;;<br>  effectFn.<span class="hljs-property">depSets</span> = []; <span class="hljs-comment">// 保存相关的集合</span><br>  <span class="hljs-title function_">effectFn</span>();<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">cleanup</span>(<span class="hljs-params">effectFn</span>) &#123;<br>  effectFn.<span class="hljs-property">depSets</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">deps</span>) =&gt;</span> &#123;<br>    deps.<span class="hljs-title function_">delete</span>(effectFn);<br>  &#125;);<br>  effectFn.<span class="hljs-property">depSets</span>.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>; <span class="hljs-comment">// 清理完毕，数组置空</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>点击<a
+target="_blank" rel="noopener" href="https://codepen.io/Hozen/pen/rNoYLqZ">这里</a>在线运行和测试。</p>
+<h2 id="小结">小结</h2>
+<p>至此就基本上实现了一个比较完整的响应式系统，其实在使用 Vue
+的过程中我们几乎不会去调用 <code>effect</code>
+方法，我们只是声明响应式变量，并把它应用到模板中。Vue 会解析模板来通过
+<code>effect</code> 绑定数据与渲染函数。</p>
+<p>下一章将介绍如何在已有的响应式系统上实现 <code>computed</code>
+方法。</p>
+<p>另外，对于第二个问题<a
+href="#嵌套的副作用函数">嵌套的副作用函数</a>，仍然有一个问题。那就是由于内部的副作用函数是由闭包创建的，在依赖集合中无法去重。这样导致每次执行一次外部函数都会创建一个新的内部副作用函数并将其与依赖的变量绑定。当该变量更新时，会把所有绑定的副作用函数都执行一遍，虽然它们的效果是一样的。</p>
+<h2 id="参考资料"><em>参考资料</em></h2>
+<p>[1] vuejs/core: 🖖 Vue.js is a progressive, incrementally-adoptable
+JavaScript framework for building UI on the web.[EB/OL]. [2023-09-22].
+<a target="_blank" rel="noopener" href="https://github.com/vuejs/core"
+class="uri">https://github.com/vuejs/core</a>.</p>
+<p>[2] Vue.js - 渐进式 JavaScript 框架 | Vue.js[EB/OL]. [2023-09-22]. <a
+target="_blank" rel="noopener" href="https://cn.vuejs.org/" class="uri">https://cn.vuejs.org/</a>.</p>
+<p>[3] 霍春阳. Vue.js设计与实现[M/OL]. 人民邮电出版社, 2022[2023-09-19].
+<a target="_blank" rel="noopener" href="https://book.douban.com/subject/35768338/"
+class="uri">https://book.douban.com/subject/35768338/</a>.</p>
+<p>[4] JavaScript | MDN[EB/OL]. <a href="2023-09-22">2023-04-10</a>. <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript"
+class="uri">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript</a>.</p>
+
+      </div>
+    </div>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg" />
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/74/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Vue3 响应式(3)-计算属性 computed</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/72/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      Vue3 响应式(1)-基础原理
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/72/" title="Vue3 响应式(1)-基础原理" rel="bookmark">Vue3 响应式(1)-基础原理</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/74/" title="Vue3 响应式(3)-计算属性 computed" rel="bookmark">Vue3 响应式(3)-计算属性 computed</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/75/" title="Vue3 响应式(4)-Wacth 的实现原理" rel="bookmark">Vue3 响应式(4)-Wacth 的实现原理</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  <div class="foot-link-group">
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link+.svg" />
+        <a class="foot-link" href="mailto:Hozen@live.com?subject=申请https://www.hozen.site的友链">申请友链</a>
+      </div>
+    
+  </div>
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  <div class="foot-link-group">
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-github.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-wx.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-zh.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+      </div>
+    
+  </div>
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  <div class="foot-link-group">
+    
+  </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>
+        searchInitialize("/search.json")
+      </script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8"/>
+    
+      <meta name="google-adsense-account" content="ca-pub-7713704413230895"/>
+    
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+    <title>
+      
+        Vue3 响应式(3)-计算属性 computed | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/developer">开发者</a>
+              
+                <a class="nav-menu-item" href="/science">数理科学</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">Vue3 响应式(3)-计算属性 computed</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+
+          <span class="post-date">2023-09-22</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%B0%83%E5%BA%A6%E5%99%A8-scheduler"><span class="post-toc-text">调度器 Scheduler</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7-computed"><span class="post-toc-text">计算属性 computed</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#computed-%E7%9A%84%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="post-toc-text">computed 的设计目标</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">返回值的实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#lazy-%E6%87%92%E6%89%A7%E8%A1%8C%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">lazy 懒执行的实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%8C%85%E8%A3%85-computed"><span class="post-toc-text">包装 computed</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%BC%93%E5%AD%98%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">缓存的实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="post-toc-text">最后一个问题</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="post-toc-text">参考资料</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>上文<a href="https://www.hozen.site/archives/73/">Vue3
+响应式(2)-分支切换、嵌套、和无限递归</a>解决了原有响应式系统的一些问题，实现了较为完善的数据绑定。本文在此基础上实现简单的计算属性功能
+<code>computed</code>。</p>
+<span id="more"></span>
+<h2 id="调度器-scheduler">调度器 Scheduler</h2>
+<p>在实现计算属性前，先介绍一下调度器
+Scheduler，它将在实现计算属性和监听等特性时使用。</p>
+<p>在原有的实现中，每次响应式数据发生变化时都会自动的调用副作用函数。但有时候我们可能希望控制副作用函数的调用时机，或者在调用前后做一些其他的事情，而不是让副作用函数直接执行。</p>
+<p>通过之前的代码我们知道，副作用函数的执行是在 <code>trigger</code>
+方法中的以下片段：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>) &#123;<br>  <span class="hljs-comment">// ...</span><br>  effectToRun.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (fn !== activeEffect) <span class="hljs-title function_">fn</span>()<br>  &#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果想要控制副作用函数的执行实际，则只需要传入一个回调函数，在上述代码片段中不直接执行
+<code>fn</code>，而是把 <code>fn</code>
+作为参数传给回调函数。具体如何执行副作用函数就可以通过传入不同的回调函数来决定了。这里可以通过给副作用函数绑定一个
+<code>scheduler</code> 参数来实现，代码改动如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn, options=&#123;&#125;</span>) &#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-comment">//...</span><br>  &#125;<br>  effectFn.<span class="hljs-property">depSets</span> = []<br>  effectFn.<span class="hljs-property">options</span> = options<br>  <span class="hljs-title function_">effectFn</span>()<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>) &#123;<br>  <span class="hljs-comment">// ...</span><br>  effectToRun.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (fn === activeEffect) <span class="hljs-keyword">return</span><br>    <span class="hljs-keyword">if</span> (fn.<span class="hljs-property">options</span>.<span class="hljs-property">scheduler</span>) &#123;<br>      <span class="hljs-comment">// 如果设置了调度器，则将副作用函数的执行交给调度器</span><br>      fn.<span class="hljs-property">options</span>.<span class="hljs-title function_">scheduler</span>(fn)<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-comment">// 否则默认直接执行副作用函数</span><br>      <span class="hljs-title function_">fn</span>()<br>    &#125;<br>  &#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="计算属性-computed">计算属性 computed</h2>
+<h3 id="computed-的设计目标">computed 的设计目标</h3>
+<p>我们希望设计这样的一个函数
+<code>computed</code>，该函数接受一个函数作为参数 (记为
+<code>getter</code>)，并返回一个对象 (记作
+<code>obj</code>)，该对象的值由 <code>getter</code> 计算获得。每当
+<code>getter</code> 中所依赖的数据发生变化时，<code>obj.value</code>
+都能被重新计算获得更新。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter</span>) &#123;<br>  <span class="hljs-comment">// ... </span><br>  <span class="hljs-keyword">return</span> &#123;<br>    <span class="hljs-attr">value</span>: <span class="hljs-comment">// computed by getter</span><br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">const</span> obj = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-comment">// ... depends on some value</span><br>  <span class="hljs-keyword">return</span> res<br>&#125;)<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(obj.<span class="hljs-property">value</span>)<br></code></pre></td></tr></table></figure>
+<p>并且在使用 Vue
+的过程中我们还会发现，当计算属性被定义后而没有被使用前，计算属性所依赖的变量变化是不会被触发计算的，即“懒”执行。因此我们总结设计的
+<code>computed</code> 要达到以下目标：</p>
+<ul>
+<li>响应式，当所依赖的响应式数据变化时能够更新状态</li>
+<li>返回一个由 <code>getter</code> 计算获得的值</li>
+<li>“懒”执行，只有 <code>obj.value</code> 被读取时才会触发计算</li>
+<li>缓存，当计算结果不变时，<code>computed</code>
+能够使用缓存值以减少重复的计算</li>
+</ul>
+<h3 id="返回值的实现">返回值的实现</h3>
+<p>首先对于响应式的要求，我们之前实现的 <code>effect</code>
+函数完全可以达到目的，直接调用 <code>effect(getter)</code> 就可以把
+<code>getter</code> 中的依赖与 <code>getter</code>
+绑定起来，每当依赖发生变化，<code>getter</code>
+就会被重新执行。但问题在于无法拿到 <code>getter</code>
+返回的值，为了达到这一目的可以对原有的 <code>effect</code>
+做如下改动:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn, options=&#123;&#125;</span>) &#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-title function_">cleanup</span>(effectFn)<br>    activeEffect = effectFn<br>    effectStack.<span class="hljs-title function_">push</span>(effectFn)<br><br>    <span class="hljs-keyword">const</span> res = <span class="hljs-title function_">fn</span>()  <span class="hljs-comment">// 获取副作用函数的结果</span><br><br>    effectStack.<span class="hljs-title function_">pop</span>()<br>    activeEffect = effectStack[effectStack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]<br><br>    <span class="hljs-keyword">return</span> res  <span class="hljs-comment">// 返回副作用函数结果</span><br>  &#125;<br>  effectFn.<span class="hljs-property">depSets</span> = []<br>  effectFn.<span class="hljs-property">options</span> = options<br>  <span class="hljs-title function_">effectFn</span>()  <br>  <span class="hljs-keyword">return</span> effectFn  <span class="hljs-comment">// 返回 effectFn</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过以上的改动，让 <code>effectFn</code> 函数从 <code>effect</code>
+中返回，那么就可以从外部调用 <code>effectFn</code> 了，并且任何时候调用
+<code>effectFn</code> 获得的返回值都是根据最新的依赖所计算的。</p>
+<h3 id="lazy-懒执行的实现"><code>lazy</code> 懒执行的实现</h3>
+<p>增加 <code>options.lazy</code> 来控制是否在调用 <code>effect</code>
+时立即执行 <code>effectFn</code>，非常简单:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn, options=&#123;&#125;</span>) &#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-title function_">cleanup</span>(effectFn)<br>    activeEffect = effectFn<br>    effectStack.<span class="hljs-title function_">push</span>(effectFn)<br><br>    <span class="hljs-keyword">const</span> res = <span class="hljs-title function_">fn</span>()  <span class="hljs-comment">// 获取副作用函数的结果</span><br><br>    effectStack.<span class="hljs-title function_">pop</span>()<br>    activeEffect = effectStack[effectStack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]<br><br>    <span class="hljs-keyword">return</span> res  <span class="hljs-comment">// 返回副作用函数结果</span><br>  &#125;<br>  effectFn.<span class="hljs-property">depSets</span> = []<br>  effectFn.<span class="hljs-property">options</span> = options<br>  <span class="hljs-keyword">if</span> (!options.<span class="hljs-property">lazy</span>) &#123;<br>    <span class="hljs-title function_">effectFn</span>()  <span class="hljs-comment">// 立即执行一次 effectFn 建立绑定</span><br>  &#125;<br>  <span class="hljs-keyword">return</span> effectFn  <span class="hljs-comment">// 返回 effectFn</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>有了 <code>lazy: true</code> 选项，当我们不调用 <code>effect</code>
+返回的 <code>effectFn</code> 时，<code>effectFn</code>
+永远不会执行，并且也不会发生数据的绑定。这样无论计算属性所依赖的值发生多少次变化都不会触发计算属性。</p>
+<p>但是，这里的“懒执行”其实仍然有一个问题
+(不够“懒”)，我将在下面介绍并解决它。</p>
+<h3 id="包装-computed">包装 <code>computed</code></h3>
+<p>有了以上基础，包装计算属性就顺理成章了。我们只需要在每次读取
+<code>obj.value</code> 时去执行一下 <code>effectFn</code>
+并把其返回值作为 <code>obj.value</code>
+返回给用户就可以了。这样自然而然想到使用对象的 <code>get</code>
+方法。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter</span>) &#123;<br>  <span class="hljs-keyword">const</span> effectFn = <span class="hljs-title function_">effect</span>(getter, &#123; <span class="hljs-attr">lazy</span>: <span class="hljs-literal">true</span> &#125;);<br>  <span class="hljs-keyword">return</span> &#123;<br>    <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-title function_">effectFn</span>();<br>    &#125;<br>  &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="缓存的实现">缓存的实现</h3>
+<p>当我们多次读取 <code>obj.value</code>
+时，即使依赖没有发生变化，还是会反复调用 <code>effectFn</code>
+中的副作用函数 <code>fn</code>
+来重新计算获得相同的结果。这显然是对性能的浪费。因此需要对其实现缓存的功能。缓存的实现也非常简单，在
+<code>computed</code>
+中缓存计算结果并设置标记，而在依赖发生变化时重置标记。当有标记时重新计算更新缓存，否则直接返回缓存。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter</span>) &#123;<br>  <span class="hljs-keyword">let</span> dirty = <span class="hljs-literal">true</span> <br>  <span class="hljs-keyword">let</span> cache  <span class="hljs-comment">// 缓存计算结果</span><br>  <span class="hljs-keyword">const</span> effectFn = <span class="hljs-title function_">effect</span>(getter, &#123; <span class="hljs-attr">lazy</span>: <span class="hljs-literal">true</span> &#125;);<br>  <span class="hljs-keyword">return</span> &#123;<br>    <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() &#123;<br>      <span class="hljs-keyword">if</span> (dirty) &#123;<br>        <span class="hljs-comment">// 需要重新计算</span><br>        cache = <span class="hljs-title function_">effectFn</span>()  <span class="hljs-comment">// 更新缓存</span><br>        dirty = <span class="hljs-literal">false</span>  <span class="hljs-comment">// 设置标记</span><br>      &#125;<br>      <span class="hljs-keyword">return</span> cache;<br>    &#125;<br>  &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但以上的修改只完成了“设置标记”的工作，还应该在依赖发生变化即在
+<code>trigger</code> 中调用 <code>effectFn</code> 时重置标记。此时调度器
+Scheduler 就派上了用场：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter</span>) &#123;<br>  <span class="hljs-keyword">let</span> dirty = <span class="hljs-literal">true</span>  <span class="hljs-comment">// 标记是否需要从新计算</span><br>  <span class="hljs-keyword">let</span> cache  <span class="hljs-comment">// 缓存计算结果</span><br>  <span class="hljs-keyword">const</span> effectFn = <span class="hljs-title function_">effect</span>(getter, &#123; <br>    <span class="hljs-attr">lazy</span>: <span class="hljs-literal">true</span>,<br>    <span class="hljs-attr">scheduler</span>: <span class="hljs-function">() =&gt;</span> &#123;<br>      dirty = <span class="hljs-literal">true</span><br>    &#125;<br>  &#125;);<br>  <span class="hljs-keyword">return</span> &#123;<br>    <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() &#123;<br>      <span class="hljs-keyword">if</span> (dirty) &#123;<br>        cache = <span class="hljs-title function_">effectFn</span>()<br>        dirty = <span class="hljs-literal">false</span><br>      &#125;<br>      <span class="hljs-keyword">return</span> cache;<br>    &#125;<br>  &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过调度器就完成了“清除标记”的工作。同时它还解决了“懒执行”中的遗留问题：在原来的代码中，一旦计算属性的依赖发生，无论有没有读取计算属性的值，都会触发它所关联的副作用函数
+(即 <code>getter</code>)，这并不“懒”。但通过调度器，跳过了
+<code>trigger</code> 中 <code>fn</code> 的执行，仅仅设置了
+<code>dirty</code>
+标记。因此依赖发生变化时，并不会执行副作用函数，除非真正的读取计算属性的值，真正实现了“懒”执行。</p>
+<h3 id="最后一个问题">最后一个问题</h3>
+<p>当我们使用 <code>effect</code>
+包裹一个依赖于计算属性的副作用函数时，当然希望当计算属性发生变化时会触发副作用函数。这就像使用
+Vue
+时把计算属性渲染到模板中，当计算属性发生变化时更新模板中的值。例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> data = <span class="hljs-title function_">reactive</span>(&#123; <span class="hljs-attr">foo</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">bar</span>: <span class="hljs-number">2</span>&#125;)<br><span class="hljs-keyword">const</span> sumRes = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> data.<span class="hljs-property">foo</span> + foo.<span class="hljs-property">bar</span>)<br><br><span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">innerText</span> = sumRes.<span class="hljs-property">value</span><br>&#125;)<br><br>data.<span class="hljs-property">foo</span> = <span class="hljs-number">100</span><br></code></pre></td></tr></table></figure>
+<p>当把 <code>data.foo</code> 的值更新为 <code>100</code>
+时，我们希望更新页面文本的副作用函数会被调用，从而重新计算
+<code>sumRes.value</code> 把最新的值 <code>202</code>
+更新到页面。但实际上这并没有发生。这是因为在定义计算属性时只会将
+<code>data.foo</code>, <code>foo.bar</code> 与包装 <code>getter</code>
+的副作用函数关联，而不会与包裹计算属性的外层副作用函数产生关联。这和我们在上一篇文章中介绍的嵌套的
+<code>effect</code>
+是一样的，即内部的副作用函数里依赖的变量发生变化，只会触发内部副作用函数而不会触发外部副作用函数。但在计算属性的需求下，我们需要它来触发外部的副作用函数。</p>
+<p>为了修复上面的问题，需要在 <code>computed</code> 的实现中通过手动调用
+<code>track</code> 和 <code>trigger</code> 添加关联：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter</span>) &#123;<br>  <span class="hljs-keyword">let</span> dirty = <span class="hljs-literal">true</span>  <span class="hljs-comment">// 标记是否需要从新计算</span><br>  <span class="hljs-keyword">let</span> cache  <span class="hljs-comment">// 缓存计算结果</span><br>  <span class="hljs-keyword">const</span> effectFn = <span class="hljs-title function_">effect</span>(getter, &#123; <br>    <span class="hljs-attr">lazy</span>: <span class="hljs-literal">true</span>,<br>    <span class="hljs-attr">scheduler</span>: <span class="hljs-function">() =&gt;</span> &#123;<br>      dirty = <span class="hljs-literal">false</span> <br>      <span class="hljs-title function_">trigger</span>(obj, <span class="hljs-string">&#x27;value&#x27;</span>)  <span class="hljs-comment">// 2.发生变化时触发副作用函数</span><br>    &#125;<br>  &#125;);<br>  <span class="hljs-keyword">const</span> obj = &#123;<br>    <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() &#123;<br>      <span class="hljs-keyword">if</span> (dirty) &#123;<br>        cache = <span class="hljs-title function_">effectFn</span>()<br>        dirty = <span class="hljs-literal">false</span><br>      &#125;<br>      <span class="hljs-title function_">track</span>(obj, <span class="hljs-string">&#x27;value&#x27;</span>)  <span class="hljs-comment">// 1.读取值时添加关联</span><br>      <span class="hljs-keyword">return</span> cache;<br>    &#125;<br>  &#125;;<br>  <span class="hljs-keyword">return</span> obj<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当计算属性出现在 <code>effect</code> 内部时，此时
+<code>activeEffect</code>
+的值则为当前的副作用函数，因此读取计算属性的值时会调用
+<code>track</code> 把计算属性的 <code>value</code>
+与当前的副作用函数关联起来。自然地，当计算属性的值更新时，则会调用
+<code>trigger</code> 把相关的副作用函数执行。</p>
+<h2 id="小结">小结</h2>
+<p>本文主要介绍了调度器和计算属性的实现，其中计算属性涉及“懒”执行和缓存等问题。最终的代码实现如下。可以<a
+target="_blank" rel="noopener" href="https://codepen.io/Hozen/pen/mdaXboj">点击这里</a>在线运行测试。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;code: Vue3_reactive_3_computed&quot;</span>);<br><br><span class="hljs-keyword">let</span> activeEffect;<br><span class="hljs-keyword">const</span> effectStack = [];<br><span class="hljs-keyword">const</span> bucket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>();<br><br><span class="hljs-keyword">const</span> data = <span class="hljs-title function_">reactive</span>(&#123; <span class="hljs-attr">foo</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">bar</span>: <span class="hljs-number">2</span> &#125;);<br><span class="hljs-keyword">const</span> sumRes = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> data.<span class="hljs-property">foo</span> + data.<span class="hljs-property">bar</span>);<br><br><span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">innerText</span> = sumRes.<span class="hljs-property">value</span>;<br>&#125;);<br><br><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  data.<span class="hljs-property">foo</span> = <span class="hljs-number">100</span>;<br>&#125;, <span class="hljs-number">2000</span>);<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter</span>) &#123;<br>  <span class="hljs-keyword">let</span> dirty = <span class="hljs-literal">true</span>;<br>  <span class="hljs-keyword">let</span> cache;<br>  <span class="hljs-keyword">const</span> effectFn = <span class="hljs-title function_">effect</span>(getter, &#123;<br>    <span class="hljs-attr">lazy</span>: <span class="hljs-literal">true</span>,<br>    <span class="hljs-attr">scheduler</span>: <span class="hljs-function">() =&gt;</span> &#123;<br>      dirty = <span class="hljs-literal">true</span>;<br>      <span class="hljs-title function_">trigger</span>(obj, <span class="hljs-string">&quot;value&quot;</span>);<br>    &#125;<br>  &#125;);<br>  <span class="hljs-keyword">const</span> obj = &#123;<br>    <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() &#123;<br>      <span class="hljs-keyword">if</span> (dirty) &#123;<br>        cache = <span class="hljs-title function_">effectFn</span>();<br>        dirty = <span class="hljs-literal">false</span>;<br>      &#125;<br>      <span class="hljs-title function_">track</span>(obj, <span class="hljs-string">&quot;value&quot;</span>);<br>      <span class="hljs-keyword">return</span> cache;<br>    &#125;<br>  &#125;;<br>  <span class="hljs-keyword">return</span> obj;<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">reactive</span>(<span class="hljs-params">obj</span>) &#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(obj, &#123;<br>    <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key</span>) &#123;<br>      <span class="hljs-title function_">track</span>(target, key);<br>      <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key);<br>    &#125;,<br>    <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, value</span>) &#123;<br>      <span class="hljs-keyword">const</span> res = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(target, key, value);<br>      <span class="hljs-title function_">trigger</span>(target, key);<br>      <span class="hljs-keyword">return</span> res;<br>    &#125;<br>  &#125;);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">track</span>(<span class="hljs-params">target, key</span>) &#123;<br>  <span class="hljs-keyword">if</span> (!activeEffect) <span class="hljs-keyword">return</span>;<br>  <span class="hljs-keyword">let</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target);<br>  <span class="hljs-keyword">if</span> (!depsMap) &#123;<br>    bucket.<span class="hljs-title function_">set</span>(target, (depsMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()));<br>  &#125;<br>  <span class="hljs-keyword">let</span> deps = depsMap.<span class="hljs-title function_">get</span>(key);<br>  <span class="hljs-keyword">if</span> (!deps) &#123;<br>    depsMap.<span class="hljs-title function_">set</span>(key, (deps = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>()));<br>  &#125;<br>  deps.<span class="hljs-title function_">add</span>(activeEffect);<br>  activeEffect.<span class="hljs-property">depSets</span>.<span class="hljs-title function_">push</span>(deps);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>) &#123;<br>  <span class="hljs-keyword">let</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target);<br>  <span class="hljs-keyword">if</span> (!depsMap) <span class="hljs-keyword">return</span>;<br>  <span class="hljs-keyword">let</span> deps = depsMap.<span class="hljs-title function_">get</span>(key);<br>  <span class="hljs-keyword">if</span> (!deps) <span class="hljs-keyword">return</span>;<br>  <span class="hljs-keyword">const</span> depsToRun = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>(deps);<br>  <span class="hljs-comment">//  depsToRun.forEach(fn =&gt; fn())</span><br>  depsToRun.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">fn</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (fn === activeEffect) <span class="hljs-keyword">return</span>;<br>    <span class="hljs-keyword">if</span> (fn.<span class="hljs-property">options</span>.<span class="hljs-property">scheduler</span>) &#123;<br>      <span class="hljs-comment">// 如果设置了调度器，则将副作用函数的执行交给调度器</span><br>      fn.<span class="hljs-property">options</span>.<span class="hljs-title function_">scheduler</span>(fn);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-comment">// 否则默认直接执行副作用函数</span><br>      <span class="hljs-title function_">fn</span>();<br>    &#125;<br>  &#125;);<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn, options = &#123;&#125;</span>) &#123;<br>  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; &#123;<br>    <span class="hljs-title function_">cleanup</span>(effectFn);<br>    activeEffect = effectFn;<br>    effectStack.<span class="hljs-title function_">push</span>(effectFn);<br><br>    <span class="hljs-keyword">const</span> res = <span class="hljs-title function_">fn</span>(); <span class="hljs-comment">// 获取副作用函数的结果</span><br><br>    effectStack.<span class="hljs-title function_">pop</span>();<br>    activeEffect = effectStack[effectStack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>];<br><br>    <span class="hljs-keyword">return</span> res; <span class="hljs-comment">// 返回副作用函数结果</span><br>  &#125;;<br>  effectFn.<span class="hljs-property">depSets</span> = [];<br>  effectFn.<span class="hljs-property">options</span> = options;<br>  <span class="hljs-keyword">if</span> (!options.<span class="hljs-property">lazy</span>) &#123;<br>    <span class="hljs-title function_">effectFn</span>(); <span class="hljs-comment">// 立即执行一次 effectFn 建立绑定</span><br>  &#125;<br>  <span class="hljs-keyword">return</span> effectFn; <span class="hljs-comment">// 返回 effectFn</span><br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">cleanup</span>(<span class="hljs-params">effectFn</span>) &#123;<br>  effectFn.<span class="hljs-property">depSets</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">deps</span>) =&gt;</span> &#123;<br>    deps.<span class="hljs-title function_">delete</span>(effectFn);<br>  &#125;);<br>  effectFn.<span class="hljs-property">depSets</span>.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="参考资料"><em>参考资料</em></h2>
+<p>[1] vuejs/core: 🖖 Vue.js is a progressive, incrementally-adoptable
+JavaScript framework for building UI on the web.[EB/OL]. [2023-09-22].
+<a target="_blank" rel="noopener" href="https://github.com/vuejs/core"
+class="uri">https://github.com/vuejs/core</a>.</p>
+<p>[2] Vue.js - 渐进式 JavaScript 框架 | Vue.js[EB/OL]. [2023-09-22]. <a
+target="_blank" rel="noopener" href="https://cn.vuejs.org/" class="uri">https://cn.vuejs.org/</a>.</p>
+<p>[3] 霍春阳. Vue.js设计与实现[M/OL]. 人民邮电出版社, 2022[2023-09-19].
+<a target="_blank" rel="noopener" href="https://book.douban.com/subject/35768338/"
+class="uri">https://book.douban.com/subject/35768338/</a>.</p>
+<p>[4] JavaScript | MDN[EB/OL]. <a href="2023-09-22">2023-04-10</a>. <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript"
+class="uri">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript</a>.</p>
+
+      </div>
+    </div>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg" />
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/75/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Vue3 响应式(4)-Wacth 的实现原理</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/73/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      Vue3 响应式(2)-分支切换、嵌套、和无限递归
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/72/" title="Vue3 响应式(1)-基础原理" rel="bookmark">Vue3 响应式(1)-基础原理</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/73/" title="Vue3 响应式(2)-分支切换、嵌套、和无限递归" rel="bookmark">Vue3 响应式(2)-分支切换、嵌套、和无限递归</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/75/" title="Vue3 响应式(4)-Wacth 的实现原理" rel="bookmark">Vue3 响应式(4)-Wacth 的实现原理</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  <div class="foot-link-group">
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link+.svg" />
+        <a class="foot-link" href="mailto:Hozen@live.com?subject=申请https://www.hozen.site的友链">申请友链</a>
+      </div>
+    
+  </div>
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  <div class="foot-link-group">
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-github.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-wx.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-zh.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+      </div>
+    
+  </div>
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  <div class="foot-link-group">
+    
+  </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>
+        searchInitialize("/search.json")
+      </script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8"/>
+    
+      <meta name="google-adsense-account" content="ca-pub-7713704413230895"/>
+    
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+    <title>
+      
+        Vue3 响应式(1)-基础原理 | hozen.site
+      
+    </title>
+    <meta name="description" content="开发者,数理知识和文学创作"/>
+    <meta name="keywords" content="浩然的主页,李浩然的博客,李浩然,hozen,前端,个人开发者,文字,博客"/>
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png"/>
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png"/>
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color=""/>
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css'/>
+    
+      <script>
+        var _hmt = _hmt || [];
+        (function () {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8d743e27225a2343c672ba69f82b35b7";
+          var s = document.getElementsByTagName("script")[0];
+          s
+            .parentNode
+            .insertBefore(hm, s);
+        })();
+      </script>
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"/>
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
+        </a>
+        <input id="navBtn" type="checkbox"/>
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/developer">开发者</a>
+              
+                <a class="nav-menu-item" href="/science">数理科学</a>
+              
+                <a class="nav-menu-item" href="/life">生活</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">Vue3 响应式(1)-基础原理</div>
+        <div class="post-info">
+          
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+
+          <span class="post-date">2023-09-19</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="post-toc-text">系统设计</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="post-toc-text">设计目标</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86"><span class="post-toc-text">技术原理</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">编码实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#reactive"><span class="post-toc-text">reactive</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#effect"><span class="post-toc-text">effect</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B5%8B%E8%AF%95%E5%92%8C%E5%B0%8F%E7%BB%93"><span class="post-toc-text">测试和小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="post-toc-text">参考资料</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>Vue 之所以能够实现声明式的 UI，是因为 Vue 通过响应式将数据和 UI
+进行了绑定，当数据发生变化时 Vue
+会自动调用相应的函数来重新渲染受到影响的 UI。本系列文章就来简单分析下
+Vue
+响应式系统的实现。本文先从响应式的基础原理开始，实现一个简单的响应式系统。</p>
+<span id="more"></span>
+<h2 id="系统设计">系统设计</h2>
+<h3 id="设计目标">设计目标</h3>
+<p>我们希望实现这样的系统：能够将某些变量包装成响应式的变量，当该变量的值发生变化时，依赖于该变量的函数能够重新执行以达到刷新状态的目的，例如重新渲染
+UI。</p>
+<p>具体地，我们需要实现以下函数：</p>
+<ul>
+<li><code>reactive()</code>: 包装响应式变量</li>
+<li><code>effect()</code>:
+包装能够响应数据变化的副作用函数，使其能够在所涉及的响应式变量发生变化时重新执行</li>
+</ul>
+<p>例如，对于以下代码，首先使用 <code>reactive()</code> 方法将
+<code>obj</code> 包装成响应式对象，然后使用 <code>effect()</code>
+方法包装渲染页面文字内容的函数 <code>fn</code>，使得当
+<code>data.text</code> 发生变化时，能够自动调用 <code>fn</code>
+来更新页面的文字内容。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> obj = &#123;<br>  <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Hi&#x27;</span><br>&#125;<br><span class="hljs-keyword">const</span> data = <span class="hljs-title function_">reactive</span>(obj)<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">fn</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-property">innerText</span> = data.<span class="hljs-property">text</span><br>&#125;<br><br><span class="hljs-title function_">effect</span>(fn)<br><br><span class="hljs-title function_">setTiemout</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  data.<span class="hljs-property">text</span> = <span class="hljs-string">&#x27;Hello World&#x27;</span><br>&#125;, <span class="hljs-number">2000</span>)<br></code></pre></td></tr></table></figure>
+<h3 id="技术原理">技术原理</h3>
+<p>对于以上的设计目标，我们可以通过 <code>Proxy</code>
+对象来实现。整体的思路是这样：</p>
+<ul>
+<li>当调用 <code>reactive(obj)</code> 时，返回一个对原始数据
+<code>obj</code> 的代理 <code>data</code>。并拦截它的 <code>get</code>
+和 <code>set</code> 操作。</li>
+<li>在拦截 <code>get</code> 时，记录读取该属性的函数，例如
+<code>fn</code> 中读取了 <code>data.text</code>，则将 <code>fn</code>
+函数收集起来</li>
+<li>在拦截 <code>set</code> 操作时，将上一步收集起来的函数重新执行</li>
+<li><code>effect</code> 方法则用来处理对副作用函数 <code>fn</code>
+的标记管理</li>
+</ul>
+<p>简而言之，对于响应式数据，当读取某个属性时收集依赖于该属性的副作用函数，当修改该属性的值时把之前收集的副作用函数重新执行。</p>
+<h2 id="编码实现">编码实现</h2>
+<h3 id="reactive"><code>reactive</code></h3>
+<p>首先实现 <code>reactive</code> 方法:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">reactive</span>(<span class="hljs-params">obj</span>) &#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(obj, &#123;<br>    <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key</span>) &#123;<br>      <span class="hljs-title function_">track</span>(target, key)  <span class="hljs-comment">// 收集依赖函数</span><br>      <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key)<br>    &#125;,<br>    <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, value</span>) &#123;<br>      <span class="hljs-keyword">const</span> res = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(target, key, value)<br>      <span class="hljs-title function_">trigger</span>(target, key)  <span class="hljs-comment">// 触发关联的依赖函数</span><br>      <span class="hljs-keyword">return</span> res<br>    &#125;<br>  &#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>下面实现追踪和触发方法 <code>tarck</code> 和
+<code>trigger</code>。注意这两个方法里使用到了全局变量
+<code>activeEffect</code> 和 <code>bucket</code>，其中</p>
+<ul>
+<li><code>activeEffect</code>
+是用来标记当前由哪个副作用函数读取了响应式变量，它在 <code>effect</code>
+方法里被设置</li>
+<li><code>bucket</code>
+是一个哈希结构，用来关联响应式变量和与之相关的副作用函数</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">let</span> activeEffect<br><span class="hljs-keyword">const</span> bucket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>()<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">track</span>(<span class="hljs-params">target, key</span>) &#123;<br>  <span class="hljs-keyword">if</span> (!activeEffect) <span class="hljs-keyword">return</span><br>  <span class="hljs-keyword">let</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target)<br>  <span class="hljs-keyword">if</span> (!depsMap) &#123;<br>    bucket.<span class="hljs-title function_">set</span>(target, (depsMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()))<br>  &#125;<br>  <span class="hljs-keyword">let</span> deps = depsMap.<span class="hljs-title function_">get</span>(key)<br>  <span class="hljs-keyword">if</span> (!deps) &#123;<br>    depsMap.<span class="hljs-title function_">set</span>(key, (deps = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>()))<br>  &#125;<br>  deps.<span class="hljs-title function_">add</span>(activeEffect)  <span class="hljs-comment">// 将读取该属性的副作用函数收集到对应的集合中</span><br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>) &#123;<br>  <span class="hljs-keyword">let</span> depsMap = bucket.<span class="hljs-title function_">get</span>(target)<br>  <span class="hljs-keyword">if</span> (!depsMap) <span class="hljs-keyword">return</span> <br>  <span class="hljs-keyword">let</span> deps = depsMap.<span class="hljs-title function_">get</span>(key)<br>  <span class="hljs-keyword">if</span> (!deps) <span class="hljs-keyword">return</span> <br>  deps.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">fn</span> =&gt;</span> <span class="hljs-title function_">fn</span>())  <span class="hljs-comment">// 把与之关联的副作用函数依次执行</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="effect"><code>effect</code></h3>
+<p>如上文所述 <code>effect()</code> 方法主要用来设置
+<code>activeEffect</code>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn</span>) &#123;<br>  activeEffect = fn<br>  <span class="hljs-title function_">fn</span>()  <span class="hljs-comment">// 立即调用副作用函数来设置初始值并收集依赖</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>注意到这里 <code>bucket</code> 使用了 <code>WeakMap</code>
+数据结构主要是从性能出发考虑的，参考<a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/WeakMap">WeakMap</a>。</p>
+<h3 id="测试和小结">测试和小结</h3>
+<p>使用<a href="#设计目标">设计目标</a>一节中代码进行测试可以发现，2
+秒后页面的文本会自动更新。</p>
+<p class="codepen" data-height="300" data-default-tab="js,result" data-slug-hash="KKbyddW" data-user="Hozen" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+<span>See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/Hozen/pen/KKbyddW">
+v1_basic</a> by Hozen (<a target="_blank" rel="noopener" href="https://codepen.io/Hozen"><span
+class="citation" data-cites="Hozen">@Hozen</span></a>) on
+<a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
+<p>由于 Proxy
+的拦截是同步进行的，所以代码的执行过程很容易最终和分析，具体如下：</p>
+<ol type="1">
+<li>首先包装响应式对象，对数据的读取和设置进行拦截。</li>
+<li>在 <code>effect</code> 函数包装的副作用函数中，由于读取了
+<code>data.text</code>，并设置了 <code>activeEffect</code>。被代理对象
+<code>data</code> 的 <code>get</code>
+所拦截。将当前副作用函数收集到了集合 <code>bucket[data].text</code>
+中。</li>
+<li>当 2 秒后执行 <code>data.text = 'Hello World'</code> 时，被
+<code>set</code> 拦截触发 <code>trigger</code>，将
+<code>bucket[data].text</code>
+集合中所有的副作用函数依次执行。页面的文本被更新。</li>
+</ol>
+<h2 id="参考资料"><em>参考资料</em></h2>
+<p>[1] vuejs/core: 🖖 Vue.js is a progressive, incrementally-adoptable
+JavaScript framework for building UI on the web.[EB/OL]. [2023-09-22].
+<a target="_blank" rel="noopener" href="https://github.com/vuejs/core"
+class="uri">https://github.com/vuejs/core</a>.</p>
+<p>[2] Vue.js - 渐进式 JavaScript 框架 | Vue.js[EB/OL]. [2023-09-22]. <a
+target="_blank" rel="noopener" href="https://cn.vuejs.org/" class="uri">https://cn.vuejs.org/</a>.</p>
+<p>[3] 霍春阳. Vue.js设计与实现[M/OL]. 人民邮电出版社, 2022[2023-09-19].
+<a target="_blank" rel="noopener" href="https://book.douban.com/subject/35768338/"
+class="uri">https://book.douban.com/subject/35768338/</a>.</p>
+<p>[4] JavaScript | MDN[EB/OL]. <a href="2023-09-22">2023-04-10</a>. <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript"
+class="uri">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript</a>.</p>
+
+      </div>
+    </div>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/images/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/images/pay-code.jpg" />
+  </div>
+  <div class="like-text">“又摘桃花换酒钱”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/archives/73/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>Vue3 响应式(2)-分支切换、嵌套、和无限递归</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/archives/71/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      平凡的世界
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  <a href="/tags/%E5%93%8D%E5%BA%94%E5%BC%8F/" class="post-tag">#响应式</a><a href="/tags/Vue/" class="post-tag">#Vue</a>
+
+</div>
+  <div class="realated__body">
+    
+      <div class="null"><div class="null-item"><div class="null-title"><a href="/archives/73/" title="Vue3 响应式(2)-分支切换、嵌套、和无限递归" rel="bookmark">Vue3 响应式(2)-分支切换、嵌套、和无限递归</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/74/" title="Vue3 响应式(3)-计算属性 computed" rel="bookmark">Vue3 响应式(3)-计算属性 computed</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/75/" title="Vue3 响应式(4)-Wacth 的实现原理" rel="bookmark">Vue3 响应式(4)-Wacth 的实现原理</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/1/" title="IndexedDB 中文教程（1）介绍" rel="bookmark">IndexedDB 中文教程（1）介绍</a></div></div><div class="null-item"><div class="null-title"><a href="/archives/10/" title="CentOS 下使用 certbot 配置 Let's Encrypt SSL证书" rel="bookmark">CentOS 下使用 certbot 配置 Let's Encrypt SSL证书</a></div></div></div>
+    
+  </div>
+</div>
+
+    
+    
+      <div id="gitalk-container"></div>
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+        <div class="foot-item">
+          <div class="foot-item__head">朋友</div>
+          <div class="foot-item__body">
+            
+            
+
+
+  <div class="foot-link-group">
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://lileitech.github.io/">Lei's Research</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://yangtiancoder.github.io/">Yangtian's blog site</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://bugwz.com/">咕咕</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/icon/icon-link+.svg" />
+        <a class="foot-link" href="mailto:Hozen@live.com?subject=申请https://www.hozen.site的友链">申请友链</a>
+      </div>
+    
+  </div>
+
+
+          </div>
+        </div>
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  <div class="foot-link-group">
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-github.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-wx.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+      </div>
+    
+      <div class="text">
+        <img alt="link"
+             height="20px"
+             width="20px"
+             src="/images/logo-zh.svg" />
+        <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+      </div>
+    
+  </div>
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  <div class="foot-link-group">
+    
+  </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="https://www.hozen.site">hozen.site</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>
+        searchInitialize("/search.json")
+      </script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  const param = JSON.parse('{"enable":true,"owner":"hooozen","admin":"hooozen","repo":"hooozen.github.io","clientID":"2dd3e808150d02b6810b","clientSecret":"35312c390f46acf9b1ac500f0f99f508b8c7ffd1","distractionFreeMode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN"}')
+  let title = location.pathname.substr(0, 50); 
+  param.id = title
+  const gitalk = new Gitalk(param)
+  gitalk.render('gitalk-container')
+</script>
+
+  
+
+  </body>
+</html>
